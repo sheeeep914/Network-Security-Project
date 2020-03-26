@@ -13,12 +13,15 @@ import csv
 #open the csv file 
 with open ('NUSW-1000.csv', newline='') as csvfile:
 
-    #read the content
-    rows = csv.reader(csvfile)
+    packets = pd.read_csv(csvfile)
 
-    #print out each row using a loop
-    for row in rows:
-        print(row)
+
+#save label and attack_cat in an array (for comparison) 
+label = packets['Label'].to_numpy()
+attack_cat = packets['attack_cat'].to_numpy()
+del packets['Label']
+del packets['attack_cat']
+
 
 
 
