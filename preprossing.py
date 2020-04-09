@@ -5,6 +5,8 @@
 4. feature based with time weight
 5. time slot + feature based
 """
+from IPython.display import Math
+
 #important features
 def get_imp():
     imp_features_n = len(imp_features)
@@ -109,9 +111,47 @@ def service_to_value():
     #print(packets.keys())
     
 
+def del_tcp_features():
+    del packets['swin']
+    del packets['dwin']
+    del packets['stcpb']
+    del packets['dtcpb']
+    del packets['tcprtt']
+    del packets['synack']
+    del packets['ackdat']
 
 
-imp_features = ['srcip','sport','dstip','dsport','proto','state','dur','sbytes']
+#Standardization -> mean = 0, var = 1
+#Normalization -> min = 0, max = 1
+def time_normalization():
+    #Math(r'x^{(i)}_{norm}=\frac{x^{(i)}-x_{min}}{x_{max}-x_{min}}')
+    packets['Stime'] = (packets['Stime'] - packets['Stime'].min())/\
+        (packets['Stime'].max() - packets['Stime'].min())
+    #packets['Ltime'] = (packets['Ltime'] - packets['Ltime'].min()) /\
+    #    (packets['Ltime'].max() - packets['Ltime'].min())
+    #print(packets['Stime'].head())
+
+
+def load_normalization():
+    packets['Sload'] = (packets['Sload'] - packets['Sload'].min()) /\
+        (packets['Sload'].max() - packets['Sload'].min())
+    packets['Dload'] = (packets['Dload'] - packets['Dload'].min()) /\
+        (packets['Dload'].max() - packets['Dload'].min())
+
+"""
+def time_standardization():
+    #Math(r'x^{(i)}_{norm}=\frac{x^{(i)}-x_{min}}{x_{max}-x_{min}}')
+    packets['Stime'] = (packets['Stime'] - packets['Stime'].mean()) /\
+        (packets['Stime'].std())
+    packets['Ltime'] = (packets['Ltime'] - packets['Ltime'].mean()) /\
+        (packets['Ltime'].std())
+    print(packets['Stime'].head())
+"""
+
+
+
+
+imp_features = ['srcip','sport','dstip','dsport','proto','state','dur','sbytes','Stime']
 proto = ['tcp', 'udp', 'arp', 'ospf']
 states = ['FIN','CON']
 service = ['http','dns','ftp-data']
@@ -132,12 +172,18 @@ del packets['Label']
 del packets['attack_cat']
 
 
-packets_imp = get_imp()
+packets = get_imp()
 
+#del_tcp_features()
 ip_to_value()
 proto_to_value()
 state_to_value()
 service_to_value()
+time_normalization()
+#time_standardization()
+#load_normalization()
+
+#print(packets.keys())
 
 
 """ for rows in packets: 
@@ -180,35 +226,37 @@ plt.xlabel('k')
 plt.ylabel('Distortion')
 plt.title('The Elbow Method showing the optimal k')
 plt.show()  
-"""  
+
+"""
 
 #Kmeans Algorithm - silhouette
 silhouette_avg = []
-K2 = range(2, 10)
+K2 = range(2, 20)
 for k in K2:
     model = KMeans(n_clusters = k)
     km = model.fit(packets)
     silhouette_avg.append(silhouette_score(packets, km.labels_))
 
-plt.plot(range(2, 10), silhouette_avg)
+plt.plot(range(2, 20), silhouette_avg)
 plt.show()
 
+
 """
-#Kmeans Algorithm - silhouette for k = 7
+#Kmeans Algorithm - silhouette for k = 6
 group_number = []
 #K2 = range(2, 10)
 #for k in K2:
-model = KMeans(n_clusters=7)
+model = KMeans(n_clusters=5)
 km = model.fit(packets)
 
 group_number = km.labels_
 print(group_number[:1000])
+print(group_number[1000:2000])
+print(group_number[2000:3000])
 #print(group_number[100 :200])
 
 
 #plt.plot(range(2, 10), silhouette_avg)
 #plt.show()
+
 """
-
-
-
