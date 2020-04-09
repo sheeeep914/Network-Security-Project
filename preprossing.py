@@ -27,7 +27,7 @@ def get_imp():
 
 def ip_to_value():
     #ip is stored as string
-    print(type(packets.loc[1]['srcip']))
+    #print(type(packets.loc[1]['srcip']))
 
     n = len(packets)
 
@@ -40,11 +40,11 @@ def ip_to_value():
         srcip_split = srcip[i].split(".")
         dstip_split = dstip[i].split(".")
 
-        srcip1.append(srcip_split[0])
-        srcip2.append(srcip_split[1])
+        srcip1.append(int(srcip_split[0], base = 10))
+        srcip2.append(int(srcip_split[1], base = 10))
 
-        dstip1.append(dstip_split[0])
-        dstip2.append(dstip_split[1])
+        dstip1.append(int(dstip_split[0], base = 10))
+        dstip2.append(int(dstip_split[1], base = 10))
 
 
     packets['srcip1'], packets['srcip2'] = srcip1, srcip2
@@ -87,7 +87,7 @@ def state_to_value():
         
     del packets['state']
 
-    print(packets.keys())
+    #print(packets.keys())
 
 
 def service_to_value():
@@ -110,6 +110,7 @@ def service_to_value():
     
 
 
+
 imp_features = ['srcip','sport','dstip','dsport','proto','state','dur','sbytes']
 proto = ['tcp', 'udp', 'arp', 'ospf']
 states = ['FIN','CON']
@@ -119,8 +120,9 @@ service = ['http','dns','ftp-data']
 
 import csv
 import pandas as pd
+import numpy as np
 
-with open('NUSW-1000.csv',  newline='') as csvfile:
+with open('NUSW10000.csv',  newline='') as csvfile:
 
     packets = pd.read_csv(csvfile)
 
@@ -137,9 +139,76 @@ proto_to_value()
 state_to_value()
 service_to_value()
 
-print(packets.keys())
+
+""" for rows in packets: 
+    for object in rows:
+        int(object, base = 10)
+
+for x in packets.head(1):
+    print(type(x)) """
+
+
+#print(packets.dtypes)
+
+
+#print(type(packets.keys()))
 
 """
 preprossing done
 
 """
+
+#from sklearn.preprocessing import MinMaxScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_samples, silhouette_score
+import matplotlib.pyplot as plt
+#scaler = MinMaxScaler()
+#data_transform = scaler.fit_transform(packets)
+
+"""
+#Kmeans Algorithm - elbow
+sum_of_squared_dis = []
+K = range(1, 10)
+for k in K:
+    model = KMeans(n_clusters = k)
+    km = model.fit(packets)
+    sum_of_squared_dis.append(km.inertia_)     #SSE
+
+# Plot the elbow
+plt.plot(K, sum_of_squared_dis, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method showing the optimal k')
+plt.show()  
+"""  
+
+#Kmeans Algorithm - silhouette
+silhouette_avg = []
+K2 = range(2, 10)
+for k in K2:
+    model = KMeans(n_clusters = k)
+    km = model.fit(packets)
+    silhouette_avg.append(silhouette_score(packets, km.labels_))
+
+plt.plot(range(2, 10), silhouette_avg)
+plt.show()
+
+"""
+#Kmeans Algorithm - silhouette for k = 7
+group_number = []
+#K2 = range(2, 10)
+#for k in K2:
+model = KMeans(n_clusters=7)
+km = model.fit(packets)
+
+group_number = km.labels_
+print(group_number[:1000])
+#print(group_number[100 :200])
+
+
+#plt.plot(range(2, 10), silhouette_avg)
+#plt.show()
+"""
+
+
+
