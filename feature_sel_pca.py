@@ -1,11 +1,14 @@
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import numpy as np
 
-def pca(number):
+def pca(packets, number):
     pca = PCA(n_components=number)
     model = pca.fit(packets)
     X_pcs = model.transform(packets)
     #pca.fit_transform(packets)
 
-    n_pcs = model.components_.shape[0]  # -> 總共幾維 == number
+    n_pcs = model.components_.shape[0]  # -> ç¸½å…±å¹¾ç¶­ == number
     #print(n_pcs)
 
     most_imp = [np.abs(model.components_[i]).argmax() for i in range(n_pcs)]

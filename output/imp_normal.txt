@@ -1,0 +1,36 @@
+number of packets in each cluster:  [6, 10, 10, 8, 12, 7, 8]
+0 :
+[120, 122, 3883, 3884, 3885, 3886]
+[0, 0, 0, 0, 0, 0]
+[nan, nan, nan, nan, nan, nan]
+ratio0:  1.0  ratio1:  0.0
+1 :
+[2217, 2219, 3623, 3624, 3625, 3626, 6325, 6326, 9086, 9087]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[nan, nan, nan, nan, nan, nan, nan, nan, nan, nan]
+ratio0:  1.0  ratio1:  0.0
+2 :
+[4972, 4973, 4979, 4980, 6324, 6327, 7757, 7759, 9085, 9088]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[nan, nan, nan, nan, nan, nan, nan, nan, nan, nan]
+ratio0:  1.0  ratio1:  0.0
+3 :
+[4987, 4988, 4989, 4990, 4991, 4992, 4993, 4994]
+[1, 1, 1, 1, 1, 1, 1, 1]
+['Exploits', 'Exploits', 'Reconnaissance', ' Fuzzers', 'Exploits', 'Exploits', 'Reconnaissance', ' Fuzzers']
+ratio0:  0.0  ratio1:  1.0
+4 :
+[6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, 6111, 6112]
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+['Exploits', 'Exploits', 'Exploits', 'DoS', ' Fuzzers', 'Generic', 'Exploits', 'Exploits', 'Exploits', 'DoS', ' Fuzzers', 'Generic']
+ratio0:  0.0  ratio1:  1.0
+5 :
+[6903, 6910, 6914, 6915, 6916, 6917, 6922]
+[0, 0, 0, 0, 0, 0, 0]
+[nan, nan, nan, nan, nan, nan, nan]
+ratio0:  1.0  ratio1:  0.0
+6 :
+[8009, 8010, 8017, 8018, 9380, 9381, 9382, 9383]
+[0, 0, 0, 0, 0, 0, 0, 0]
+[nan, nan, nan, nan, nan, nan, nan, nan]
+ratio0:  1.0  ratio1:  0.0
