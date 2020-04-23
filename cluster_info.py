@@ -9,6 +9,7 @@ def packets_in_cluster(labels, n):
     print('number of packets in each cluster: ', packets_num)
 
 
+#Get what's in every cluster
 def print_cluster(pkt, labels, cluster_index):
     print_list = []
     label_list = []
@@ -51,3 +52,20 @@ def print_cluster(pkt, labels, cluster_index):
     pd.set_option('display.max_rows', None)
 
     #print(print_df)
+
+def print_outlier(pkt, labels):
+    
+    outlier_info =[]
+    index_info = []
+
+    for i in range(len(labels)):
+        label = labels[i]
+        if label == -1:
+            outlier_info.append(list(pkt.iloc[i, :]))
+            index_info.append(i)
+
+    outlier_df = pd.DataFrame(outlier_info, columns= pkt.keys())
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+    print(index_info)
+    print(outlier_df)

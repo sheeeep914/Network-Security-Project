@@ -1,7 +1,7 @@
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'state', 'dur', 'sbytes', 'Stime', 'Ltime', 'service']
 proto = ['tcp', 'udp', 'arp', 'ospf']
-states = ['FIN', 'CON']
-service = ['http', 'dns', 'ftp-data']
+states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS', 'PAR',  'RST', 'TST', 'TXD',  'URN']
+service = ['http', 'dns', 'ftp-data', 'smtp', 'ssh', 'irc']
 
 
 def proto_to_value(packets):

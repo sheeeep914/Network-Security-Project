@@ -1,3 +1,11 @@
+"""
+useful lib
+"""
+import pandas as pd
+
+"""
+function
+"""
 import read_data as rd
 import preprocessing as prep
 import cluster_info as c_info
@@ -35,8 +43,14 @@ def init(file):
 
 
 # number = input("Input the number of datasets: ")
-number = 10000
+number = 20000
 init('dataset/NUSW' + str(number) + '.csv')
+
+
+""" pd.set_option('display.max_columns', None)
+print(packets.head()) """
+#print(type(packets.keys()) == int)
+
 
 # method_k.Elbow(packets)     -> plot result for elbow
 # method_k.Silh(packets)      -> plot result for silh
@@ -58,6 +72,8 @@ def Dbscan_fixed_eps_info(eps):
 
     for i in range(db_max_label+1):
         c_info.print_cluster(pkt, db_group_number_list, i)
+
+    c_info.print_outlier(pkt, db_group_number_list)
 
 
 """
