@@ -20,6 +20,7 @@
 - **4/10**
     - 用feature inverse回去看pca的重要feature有哪些?\
     *(實驗後發現 pca和我們理解的不一樣 不能選重要feature)*
+    -  DBSCAN分群效果不錯
 - **4/17**  
     - 把time feature拿掉看看
     - 
