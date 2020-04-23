@@ -21,6 +21,10 @@ feature selection
 """
 import feature_sel_pca as f_sel_pac
 
+"""
+reduce dimension/visualized
+"""
+import reduce_dimension as reduce_d
 
 
 def init(file):
@@ -36,14 +40,12 @@ def init(file):
 
     prep.ip_to_value(packets)
 
-    label = packets['Label'].to_numpy()
-    attack_cat = packets['attack_cat'].to_numpy()
-    del packets['Label']
-    del packets['attack_cat']
+    label, att_cat = prep.seperate_att_label(packets)
+
 
 
 # number = input("Input the number of datasets: ")
-number = 20000
+number = 10000
 init('dataset/NUSW' + str(number) + '.csv')
 
 
@@ -74,6 +76,8 @@ def Dbscan_fixed_eps_info(eps):
         c_info.print_cluster(pkt, db_group_number_list, i)
 
     c_info.print_outlier(pkt, db_group_number_list)
+
+#reduce_d.LDA(packets, db_group_number_list)
 
 
 """
@@ -135,8 +139,4 @@ def imp_data(normalize):
 
 
 raw_data('db', 'n', 'y')
-
-
-
-
 
