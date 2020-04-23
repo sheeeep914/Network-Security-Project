@@ -73,6 +73,8 @@ def Dbscan_fixed_eps_info(eps):
     for i in range(db_max_label+1):
         c_info.print_cluster(pkt, db_group_number_list, i)
 
+    c_info.print_outlier(pkt, db_group_number_list)
+
 
 """
 Method
