@@ -18,11 +18,21 @@
 ---
 # 進度
 - **4/10**
-    - 用feature inverse回去看pca的重要feature有哪些?\
-    *(實驗後發現 pca和我們理解的不一樣 不能選重要feature)*
-- **4/17**  
-    - 把time feature拿掉看看
-    - 
+
+    - [x] 用feature inverse回去看pca的重要feature有哪些?\
+    *(實驗後發現 pca和我們理解的不一樣 不能選重要feature **所以先不管PCA了**)*
+
+    - [x] 嘗試用不同的cluster演算法\
+    *(發現 **DBSCAN** 能分出很多群 好像是我們想要的？)*
+
+- **4/17**
+    - [ ] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
+
+    - [ ] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
+
+    - [ ] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
+
+    - [ ] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
 
 
 
