@@ -3,6 +3,14 @@ proto = ['tcp', 'udp', 'arp', 'ospf']
 states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS', 'PAR',  'RST', 'TST', 'TXD',  'URN']
 service = ['http', 'dns', 'ftp-data', 'smtp', 'ssh', 'irc']
 
+def seperate_att_label(packets):
+
+    label = packets['Label'].to_numpy()
+    attack_cat = packets['attack_cat'].to_numpy()
+    del packets['Label']
+    del packets['attack_cat']
+    return label, attack_cat
+
 
 def proto_to_value(packets):
     index = 0
