@@ -17,7 +17,18 @@ def DBscan_fixed_eps(packets, eps):
     #max_label + 1 -> 分幾群
     #print(max_label)
 
-    return max_label, group_number_list
+    return dbscan, max_label, group_number_list
 
     
+def DBscan_predict(model, packets):
+    testing_data = model.fit_predict(packets)
+    t_group_number_list = testing_data
+
+    max_label = 0
+    for label in t_group_number_list:
+        if label > max_label:
+            max_label = label
+
+    return max_label, t_group_number_list
+
 
