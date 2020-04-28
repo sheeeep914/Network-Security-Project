@@ -71,15 +71,12 @@ def Kmeans_fixed_k_info(packets, pkt):
     for i in range(km_max_label+1):
         c_info.print_cluster(pkt, km_group_number_list, i)
 
-def Dbscan_fixed_eps_info(eps, packets_tr, packets_t, pkt_tr, pkt_t):
-    db_model_train, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(
-        packets_tr, eps)
-    
-    t_db_max_label, t_db_group_number_list = method_db.DBscan_predict(
-        db_model_train, packets_t)
+def Dbscan_fixed_eps_info(eps):
+    dbscan, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(
+        packets, eps)
 
-    c_info.packets_in_cluster(db_group_number_list, db_max_label+1)
-    c_info.packets_in_cluster(t_db_group_number_list, t_db_max_label+1)
+
+    """  c_info.packets_in_cluster(db_group_number_list, db_max_label+1)
 
     print("db train data")
     for i in range(db_max_label+1):
@@ -90,9 +87,8 @@ def Dbscan_fixed_eps_info(eps, packets_tr, packets_t, pkt_tr, pkt_t):
     for i in range(t_db_max_label+1):
         c_info.print_cluster(pkt_t, t_db_group_number_list, i)
 
-
-    #c_info.print_outlier(pkt_tr, db_group_number_list)
-
+    c_info.print_outlier(pkt, db_group_number_list)
+"""
 #reduce_d.LDA(packets, db_group_number_list)
 
 
