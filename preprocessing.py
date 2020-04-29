@@ -1,10 +1,12 @@
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'state', 'dur', 'sbytes', 'Stime', 'Ltime', 'service']
+http_features = ['srcip', 'sport', 'dstip', 
+'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
 proto = ['tcp', 'udp', 'arp', 'ospf']
 states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS', 'PAR',  'RST', 'TST', 'TXD',  'URN']
 service = ['http', 'dns', 'ftp-data', 'smtp', 'ssh', 'irc']
 
 def seperate_att_label(packets):
-
+    
     label = packets['Label'].to_numpy()
     attack_cat = packets['attack_cat'].to_numpy()
     del packets['Label']
@@ -99,6 +101,25 @@ def ip_to_value(packets):
 
 
 #important features
+def get_http(packets):
+    http_features_n = len(http_features)
+    #cnt = 0
+
+    packets_http = packets.copy()
+    for col in (packets_http.columns):
+        for i in range(http_features_n):
+
+            #important features, check the next column
+            if (col == http_features[i]):
+                break
+
+            #no important features match, and last feature has been checked
+            elif ((col != http_features[i]) & (i == http_features_n-1)):
+                del packets_http[col]
+
+    return packets_http
+
+#important http feature
 def get_imp(packets):
     imp_features_n = len(imp_features)
     cnt = 0
@@ -116,7 +137,6 @@ def get_imp(packets):
                 del packets_imp[col]
 
     return packets_imp
-
 
 def del_tcp_features(packets):
     del packets['swin']
