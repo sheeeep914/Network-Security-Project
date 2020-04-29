@@ -1,6 +1,6 @@
 import pandas as pd
 
-file_name = 'NUSW10000.csv'
+file_name = 'NUSW20000.csv'
 path = 'dataset/'+file_name
 
 with open(path,  newline='') as csvfile:
@@ -19,6 +19,6 @@ for label in packets['Label']:
 df0 = pd.DataFrame(label0, columns=packets.keys())
 df1 = pd.DataFrame(label1, columns=packets.keys())
 
-df0.to_csv('dataset/NUSW10000-label0.csv')
-df1.to_csv('dataset/NUSW10000-label1.csv')
+df0.to_csv('dataset/NUSW20000-label0-http.csv')
+df1.to_csv('dataset/NUSW20000-label1-http.csv')
 
