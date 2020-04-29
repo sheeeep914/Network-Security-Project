@@ -71,10 +71,10 @@ def Kmeans_fixed_k_info(packets, pkt):
     for i in range(km_max_label+1):
         c_info.print_cluster(pkt, km_group_number_list, i)
 
-def Dbscan_fixed_eps_info(eps):
+""" def Dbscan_fixed_eps_info(packets, eps):
     dbscan, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(
         packets, eps)
-
+ """
 
     """  c_info.packets_in_cluster(db_group_number_list, db_max_label+1)
 
@@ -147,11 +147,11 @@ data_train = raw_data(packets_train, 'db', 'n', 'y')
 data_test = raw_data(packets_test, 'db', 'n', 'y')
 
 
-def db_train_and_predict(data_tr, data_t):
+""" def db_train_and_predict(data_tr, data_t):
     Dbscan_fixed_eps_info(0.5, data_tr, data_t, pkt_train, pkt_test)
 
 
-db_train_and_predict(data_train, data_test)
+db_train_and_predict(data_train, data_test) """
 """ 
 def imp_data(normalize):
     imp_packets = prep.get_imp(packets)
