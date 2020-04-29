@@ -18,7 +18,9 @@ def DBscan_fixed_eps(packets, eps):
     #max_label + 1 -> 分幾群
     #print(dbscan.components_)
 
+    
     return dbscan, max_label, group_number_list
+    #dbscan -> model, max_label -> how many groups, group_number_list -> label for each instance  
 
 def DBscan_predict(packets_test, eps, dbscan):
 

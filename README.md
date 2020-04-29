@@ -10,9 +10,7 @@
     * **myfeature** -> 新功能 （由 **develop** 直接分支，開發新功能。最後merge回 **develop branch**）
 
 2. 兩個人開發時，記得先`git checkout -b myfeature`，切換到自己的分支(**feature**)，每次寫code...
-<<<<<<< HEAD
-    1. **PULL** -> `git pull develop`，更新本機code 
-=======
+
     1. **PULL** -> `git pull origin develop`，更新本機code 
     2. **Coding** -> 修改完一個新功能，就記得`git add` `git commit`
     3. **Push** -> 切換到**develop branch** (`git checkout develop`) 利用 –no-ff 合併分支 (`git merge --no-ff myfeature`) 再來刪除 **myfeature** 分支(`git branch -d myfeature`) 最後資料上傳 (`git push origin develop`)
@@ -29,13 +27,19 @@
     *(發現 **DBSCAN** 能分出很多群 好像是我們想要的？)*
 
 - **4/17**
-    - [ ] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
+    - **預計進度**
+        - [ ] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
 
-    - [ ] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
+        - [ ] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
 
-    - [ ] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
+        - [ ] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
 
-    - [ ] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
+        - [ ] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
+
+    - **問題**
+        1. DBSCAN離群值怎麼半
+        2. 怎麼predict testing data(沒有函式可以叫 dbscan也不能直接顯示群心 寫了一個func -> DBscan_predict 但是不確定那樣對不對)
+        3. PCA降為前後的group number怎麼對應
 
 
 
