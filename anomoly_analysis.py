@@ -41,12 +41,16 @@ def init_http(file):
     packets = rd.read(file)
 
     packets = prep.get_http(packets)
+
+    #packets = prep.state_to_value(packets)
     packets = prep.proto_to_value(packets)
     pkt = packets.copy()
 
     packets = prep.ip_to_value(packets)
 
     label, att_cat = prep.seperate_att_label(packets)
+
+    #del packets['service']
 
     return packets, label, att_cat, pkt
 
@@ -91,12 +95,12 @@ if __name__ == "__main__":
     #trained by normal packets
     number = 10000
     packets_0, label0, att_cat0, pkt_0 = init('dataset/NUSW' + str(number) + '-label0.csv')
-    #packets_0, label0, att_cat0, pkt_0 = init_http('dataset/NUSW' + str(number) + '-label0.csv')
+    #packets_0, label0, att_cat0, pkt_0 = init_http('dataset/NUSW' + str(number) + '-label0-http.csv')
 
     #mix packets, see outlier as abnormal packets
     number = 20000
     packets, label, att_cat, pkt = init('dataset/NUSW' + str(number) + '.csv')
-    #packets, label, att_cat, pkt = init_http('dataset/NUSW' + str(number) + '.csv')
+    #packets, label, att_cat, pkt = init_http('dataset/NUSW' + str(number) + '-http.csv')
     
 
     normalize_features = normalize_tcp
@@ -107,13 +111,13 @@ if __name__ == "__main__":
     label_test = method_db.DBscan_predict(packets, eps, dbscan)
     method_db.DBscan_score(label_test, label)
 
-    """ normalize_features = normalize_http
+    """normalize_features = normalize_http
     prep.normalization(packets_0, normalize_features)
     prep.normalization(packets, normalize_features)
 
     dbscan, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(
         packets_0, eps)
     label_test = method_db.DBscan_predict(packets, eps, dbscan)
-    method_db.DBscan_score(label_test, label) """
+    method_db.DBscan_score(label_test, label)"""
 
 
