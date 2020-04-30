@@ -45,9 +45,13 @@
 - **4/24**
     - **完成進度**
         - [ ] 延續上禮拜的clustering, 用DBSCAN做anolamy analysis
+        
         - [ ] 對http封包跟http特徵做anolamy analysis
+        
         - [ ] prepossing, 可以處理有些port value為16進位的問題, 及建造0, 1數量相等的大dataset, 以利training
+        
         - [ ] 簡單了解DL(透過李弘毅線上課程)
+        
         - [ ] 訓練DNN與testing
         
     - **問題與發現**
