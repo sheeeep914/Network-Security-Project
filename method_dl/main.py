@@ -88,7 +88,7 @@ if __name__ == "__main__":
     model.add(Dense(units=2, activation='softmax'))
 
     model.compile(loss='mse', optimizer=SGD(lr = 0.2), metrics = ['accuracy'])
-    model.fit(train_packets, train_labels, batch_size=100, epochs=25)
+    model.fit(train_packets, train_labels, batch_size=100, epochs=10)
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
