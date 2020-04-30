@@ -20,7 +20,7 @@ def load_data(file):
 
 def init(packets):
 
-    del packets['index']
+    #del packets['index']
     
 
     #print(packets.iloc[:,0])    
@@ -35,13 +35,14 @@ def init(packets):
     #packets = prep.feature_scaling(packets)  # normalize
     #print("after scaling : ", type(packets)) -> np
 
+    #print(packets)
     return packets
 
 
 if __name__ == "__main__":
 
-    train_path = '../dataset/NUSW10000-1.csv'
-    test_path = '../dataset/NUSW10000-label0.csv'
+    train_path = '../dataset/NUSW_mix.csv'
+    test_path = '../dataset/NUSW10000.csv'
 
     train_packets = init(load_data(train_path))
     test_packets = init(load_data(test_path))
@@ -78,8 +79,6 @@ if __name__ == "__main__":
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
 
-    print(feature_dim)
-
 
     #DNN model
     model = Sequential()
@@ -89,7 +88,7 @@ if __name__ == "__main__":
     model.add(Dense(units=2, activation='softmax'))
 
     model.compile(loss='mse', optimizer=SGD(lr = 0.2), metrics = ['accuracy'])
-    model.fit(train_packets, train_labels, batch_size=100, epochs=10)
+    model.fit(train_packets, train_labels, batch_size=100, epochs=25)
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
@@ -103,7 +102,7 @@ if __name__ == "__main__":
             predict_label0 += 1
         elif(r[0] < r[1]):
             predict_label1 += 1
-    print(predict_label0, predict_label1)
+    #print(predict_label0, predict_label1)
 
 
 
