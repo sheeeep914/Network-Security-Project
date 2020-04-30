@@ -11,6 +11,8 @@ from keras.optimizers import SGD, Adam
 
 import preprocessing as prep
 
+normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
+
 #import the training data
 def load_data(file):
     #file = "../dataset/NUSW10000.csv"
@@ -20,7 +22,7 @@ def load_data(file):
 
 def init(packets):
 
-    del packets['index']
+    #del packets['index']
     
 
     #print(packets.iloc[:,0])    
@@ -35,13 +37,14 @@ def init(packets):
     #packets = prep.feature_scaling(packets)  # normalize
     #print("after scaling : ", type(packets)) -> np
 
+    #print(packets)
     return packets
 
 
 if __name__ == "__main__":
 
-    train_path = '../dataset/NUSW10000-1.csv'
-    test_path = '../dataset/NUSW10000-label0.csv'
+    train_path = '../dataset/NUSW_mix.csv'
+    test_path = '../dataset/NUSW10000.csv'
 
     train_packets = init(load_data(train_path))
     test_packets = init(load_data(test_path))
@@ -49,11 +52,15 @@ if __name__ == "__main__":
     label_tr, attack_cat_tr, train_packets = prep.seperate_att_label(train_packets)
     label_ts, attack_cat_ts, test_packets = prep.seperate_att_label(test_packets)
 
-
-
-    #train_packets = prep.feature_scaling(train_packets)
+    #normalize
+    normalize_features = normalize_all
+    train_packets = prep.normalization(train_packets, normalize_features)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    #test_packets = prep.feature_scaling(test_packets)
+    test_packets = prep.normalization(test_packets, normalize_features)
+
+    """ #scaling
+    train_packets = prep.feature_scaling(train_packets)
+    test_packets = prep.feature_scaling(test_packets) """
 
     #create np array for label
 
@@ -78,8 +85,6 @@ if __name__ == "__main__":
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
 
-    print(feature_dim)
-
 
     #DNN model
     model = Sequential()
@@ -103,7 +108,7 @@ if __name__ == "__main__":
             predict_label0 += 1
         elif(r[0] < r[1]):
             predict_label1 += 1
-    print(predict_label0, predict_label1)
+    #print(predict_label0, predict_label1)
 
 
 
