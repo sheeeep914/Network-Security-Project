@@ -52,15 +52,15 @@ if __name__ == "__main__":
     label_tr, attack_cat_tr, train_packets = prep.seperate_att_label(train_packets)
     label_ts, attack_cat_ts, test_packets = prep.seperate_att_label(test_packets)
 
-    #normalize
+    """ #normalize
     normalize_features = normalize_all
     train_packets = prep.normalization(train_packets, normalize_features)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    test_packets = prep.normalization(test_packets, normalize_features)
+    test_packets = prep.normalization(test_packets, normalize_features) """
 
-    """ #scaling
+    #scaling
     train_packets = prep.feature_scaling(train_packets)
-    test_packets = prep.feature_scaling(test_packets) """
+    test_packets = prep.feature_scaling(test_packets)
 
     #create np array for label
 
