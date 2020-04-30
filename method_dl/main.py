@@ -19,6 +19,11 @@ def load_data(file):
     return dataset_train
 
 def init(packets):
+
+    del packets['index']
+    
+
+    #print(packets.iloc[:,0])    
     
     packets = prep.proto_to_value(packets)
     packets = prep.state_to_value(packets)
@@ -35,8 +40,8 @@ def init(packets):
 
 if __name__ == "__main__":
 
-    train_path = '../dataset/NUSW10000.csv'
-    test_path = '../dataset/NUSW20000-label1.csv'
+    train_path = '../dataset/NUSW10000-1.csv'
+    test_path = '../dataset/NUSW10000-label0.csv'
 
     train_packets = init(load_data(train_path))
     test_packets = init(load_data(test_path))
@@ -46,9 +51,9 @@ if __name__ == "__main__":
 
 
 
-    train_packets = prep.feature_scaling(train_packets)
+    #train_packets = prep.feature_scaling(train_packets)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    test_packets = prep.feature_scaling(test_packets)
+    #test_packets = prep.feature_scaling(test_packets)
 
     #create np array for label
 
@@ -73,8 +78,7 @@ if __name__ == "__main__":
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
 
-
-    #print(input_dim)
+    print(feature_dim)
 
 
     #DNN model
@@ -84,12 +88,12 @@ if __name__ == "__main__":
     model.add(Dense(units=500, activation='sigmoid'))
     model.add(Dense(units=2, activation='softmax'))
 
-    model.compile(loss='mse', optimizer=SGD(lr = 0.1), metrics = ['accuracy'])
-    model.fit(train_packets, train_labels, batch_size=100, epochs=20)
+    model.compile(loss='mse', optimizer=SGD(lr = 0.2), metrics = ['accuracy'])
+    model.fit(train_packets, train_labels, batch_size=100, epochs=10)
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
-    """ result = model.predict(test_packets)
+    result = model.predict(test_packets)
     print(result)
 
     predict_label0 = 0
@@ -99,7 +103,7 @@ if __name__ == "__main__":
             predict_label0 += 1
         elif(r[0] < r[1]):
             predict_label1 += 1
-    print(predict_label0, predict_label1) """
+    print(predict_label0, predict_label1)
 
 
 
