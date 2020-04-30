@@ -11,6 +11,8 @@ from keras.optimizers import SGD, Adam
 
 import preprocessing as prep
 
+normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
+
 #import the training data
 def load_data(file):
     #file = "../dataset/NUSW10000.csv"
@@ -50,11 +52,15 @@ if __name__ == "__main__":
     label_tr, attack_cat_tr, train_packets = prep.seperate_att_label(train_packets)
     label_ts, attack_cat_ts, test_packets = prep.seperate_att_label(test_packets)
 
-
-
-    #train_packets = prep.feature_scaling(train_packets)
+    #normalize
+    normalize_features = normalize_all
+    train_packets = prep.normalization(train_packets, normalize_features)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    #test_packets = prep.feature_scaling(test_packets)
+    test_packets = prep.normalization(test_packets, normalize_features)
+
+    """ #scaling
+    train_packets = prep.feature_scaling(train_packets)
+    test_packets = prep.feature_scaling(test_packets) """
 
     #create np array for label
 

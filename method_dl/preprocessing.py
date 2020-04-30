@@ -165,3 +165,10 @@ def feature_scaling(packets):
     return packets_scaled
 
 
+def normalization(packets, features):
+    for f in features:
+        packets[f] = (packets[f] - packets[f].min()) /\
+            (packets[f].max() - packets[f].min())
+
+    return packets
+
