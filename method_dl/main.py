@@ -23,12 +23,8 @@ def init(packets):
     packets = prep.proto_to_value(packets)
     packets = prep.state_to_value(packets)
     packets = prep.service_to_value(packets)
-
-    #pkt = packets.copy()
-
     packets = prep.ip_to_value(packets)
     
-    #label, attack_cat, packets = prep.seperate_att_label(packets)
     #print("before scaling : ", type(packets))  df
 
     #packets = prep.feature_scaling(packets)  # normalize
