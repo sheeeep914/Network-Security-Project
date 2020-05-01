@@ -103,7 +103,17 @@
 
                 **Testing Data**: NUSW10000  
 
+                *PS: Scaling 和 Normalizing 的差別只在於**對哪些特徵做normalize***  
 
+
+            **Scaling/Normalizing比較**
+            _        |使用函式        |選取特徵數|優缺點
+            :---------:|:-------------:|:------:|:---:
+            Scaling    |MinMaxScaler() |所有    |能將所有資料都固定在一定區間，但沒考慮到類別型態資料
+            Normalizing|normalization()|自己決定 |不normalize類別資料，不會造成資料失真 
+
+        
+            **使用在DL裡的結果**
             方法       |結果(正確率)  |其他發現
             :--------:|:-----------:|:----:
             Scaled    |0.985        |在5 - 7個epoch間正確率突然顯著上升(0.5-0.9)
