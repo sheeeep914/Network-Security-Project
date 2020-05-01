@@ -87,6 +87,7 @@ def ip_to_value(packets):
     srcip1, srcip2, dstip1, dstip2 = [], [], [], []
 
     for i in range(n):
+        #print(srcip[i])
         srcip_split = srcip[i].split(".")
         dstip_split = dstip[i].split(".")
 

@@ -17,7 +17,9 @@ normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', '
 def load_data(file):
     #file = "../dataset/NUSW10000.csv"
     dataset_train = pd.read_csv(file)
-    
+    """ msk = np.random.rand(len(dataset_train)) < 0.8
+    train = dataset_train[msk]
+    test = dataset_train[~msk] """
     return dataset_train
 
 def init(packets):
@@ -30,6 +32,7 @@ def init(packets):
     packets = prep.proto_to_value(packets)
     packets = prep.state_to_value(packets)
     packets = prep.service_to_value(packets)
+    
     packets = prep.ip_to_value(packets)
     
     #print("before scaling : ", type(packets))  df
@@ -43,9 +46,12 @@ def init(packets):
 
 if __name__ == "__main__":
 
-    train_path = '../dataset/NUSW_mix.csv'
-    test_path = '../dataset/NUSW10000.csv'
+    train_path = '../dataset/NUSW-train.csv'
+    test_path = '../dataset/NUSW-test.csv'
 
+    """    train_packets, test_packets  = load_data(train_path)
+    train_packets = init(train_packets)
+    test_packets = init(test_packets) """
     train_packets = init(load_data(train_path))
     test_packets = init(load_data(test_path))
 
@@ -88,12 +94,18 @@ if __name__ == "__main__":
 
     #DNN model
     model = Sequential()
-    model.add(Dense(input_dim=feature_dim, units=500, activation = 'sigmoid'))
-    model.add(Dense(units=500, activation='sigmoid'))
-    model.add(Dense(units=500, activation='sigmoid'))
+    model.add(Dense(input_dim=feature_dim, units=100, activation = 'sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(units=100, activation='sigmoid'))
     model.add(Dense(units=2, activation='softmax'))
 
-    model.compile(loss='mse', optimizer=SGD(lr = 0.2), metrics = ['accuracy'])
+    model.compile(loss='mse', optimizer='adam', metrics = ['accuracy'])
     model.fit(train_packets, train_labels, batch_size=100, epochs=10)
 
     result = model.evaluate(test_packets,  test_labels)
