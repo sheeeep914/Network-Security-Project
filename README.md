@@ -73,19 +73,16 @@
             選取全部特徵       |差        |差
             只選取http有關的特徵|好        |差
         
-        
+
      - **DL整理**
         1. 使用的dataset  
-        
-            Dataset            |描述     |
-            :-----------------:|:------:|---------
-            NUSW10000          |從大dataset取0-10000筆的資料(0多1少，無法為training使用)|
-            NUSW20000          |從大dataset取10001-20000筆的資料(0多1少，無法為training使用)|
-            NUSW10000-label0(1)|NUSW10000-label0(1) : NUSW10000中只有0(1)的檔案|
-            NUSW20000-label0(1)|NUSW20000中只有0(1)的檔案|
-            NUSW10000-0        |從大dataset取前10000筆label為0的資料|
-            NUSW10000-1        |從大dataset取前10000筆label為1的資料|
-            NUSW_mix           |NUSW10000-0 + NUSW10000-1，共兩萬筆資料|
+            - **NUSW10000**: 從大dataset取0-10000筆的資料(0多1少，無法為training使用)
+            - **NUSW20000**: 從大dataset取10001-20000筆的資料(0多1少，無法為training使用)
+            - **NUSW10000-label0(1)**: NUSW10000中只有0(1)的檔案
+            - **NUSW20000-label0(1)**: NUSW20000中只有0(1)的檔案
+            - **NUSW10000-0**: 從大dataset取前10000筆label為0的資料
+            - **NUSW10000-1**: 從大dataset取前10000筆label為1的資料
+            - **NUSW_mix**: NUSW10000-0 + NUSW10000-1，共兩萬筆資料
 
         2. 參數(value) `此次只調整過epochs`
             - initial
