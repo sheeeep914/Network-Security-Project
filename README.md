@@ -28,13 +28,13 @@
 
 - **4/17**
     - **預計進度**
-        - [ ] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
+        - [x] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
 
-        - [ ] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
+        - [x] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
 
-        - [ ] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
+        - [x] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
 
-        - [ ] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
+        - [x] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
 
     - **問題**
         1. DBSCAN離群值怎麼半
@@ -44,19 +44,19 @@
         
 - **4/24**
     - **完成進度**
-        - [ ] 延續上禮拜的clustering, 用DBSCAN做anolamy analysis
+        - [x] 延續上禮拜的clustering, 用DBSCAN做anolamy analysis
         
-        - [ ] 對http封包跟http特徵做anolamy analysis
+        - [x] 對http封包跟http特徵做anolamy analysis
         
-        - [ ] prepossing, 可以處理有些port value為16進位的問題, 及建造0, 1數量相等的大dataset, 以利training
+        - [x] prepossing, 可以處理有些port value為16進位的問題, 及建造0, 1數量相等的大dataset, 以利training
         
-        - [ ] 簡單了解DL(透過李弘毅線上課程)
+        - [x] 簡單了解DL(透過李宏毅線上課程)
         
-        - [ ] 訓練DNN與testing
+        - [x] 訓練DNN與testing
         
     - **問題與發現**
         1. DBSCAN之anolamy analysis正確率極差(放棄此法)
-        2. 剛開始怎麼train，在testing時表現都不佳(不管label_0或label_1 predict結果都是0)，後來發現在training data中，label 0&1 的比例不該差太多，且我們的testing dataset太小，改正這兩個問題後，結果就好超多!!
+        2. 剛開始怎麼train，在testing時表現都不佳(不管label_0或label_1 predict結果都是0)，後來發現在training data中，label 0&1 的比例不該差太多，且我們的testing dataset太小，改正這兩個問題後，**結果就好超多!!**
         3. epoch問題，由於initial value是隨機的，所以若epoch太小，可能會導致parameter無法optimize，故epoch值不能太大(會跑很慢)，也不能太小(可能無法converge)
 
         4. 每個epoch跑完的accuracy跟最後的[loss, accuracy]有甚麼差別?
