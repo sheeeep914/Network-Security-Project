@@ -66,7 +66,7 @@
      - **Anomaly anlysis整理**
         - 以label_0去train，testing data中，如果為離群值，歸類為攻擊封包
         - 分成四大項，選取全部封包、指選取http封包；參數選取全部特徵，參數指選取和http有關之特徵
-        - 結果
+        - ![結果](https://github.com/sheeeep914/Network-Security-Project/blob/develop/Pictures/anomoly_result.jpg)
         
      - **DL整理**
         1. 使用的dataset
