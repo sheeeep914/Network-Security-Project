@@ -28,22 +28,70 @@
 
 - **4/17**
     - **預計進度**
-        - [ ] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
+        - [x] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
 
-        - [ ] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
+        - [x] 把time feature拿掉看看 (驗證time 是否真的是重要的feature?)
 
-        - [ ] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
+        - [x] 看看DBSCAN的outlier有哪些 (驗證DBSCAN)
 
-        - [ ] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
+        - [x] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
 
     - **問題**
         1. DBSCAN離群值怎麼半
         2. 怎麼predict testing data(沒有函式可以叫 dbscan也不能直接顯示群心 寫了一個func -> DBscan_predict 但是不確定那樣對不對)
         3. PCA降為前後的group number怎麼對應
+        
+        
+- **4/24**
+    - **完成進度**
+        - [x] 延續上禮拜的clustering, 用DBSCAN做anolamy analysis
+        
+        - [x] 對http封包跟http特徵做anolamy analysis
+        
+        - [x] prepossing, 可以處理有些port value為16進位的問題, 及建造0, 1數量相等的大dataset, 以利training
+        
+        - [x] 簡單了解DL(透過李宏毅線上課程)
+        
+        - [x] 訓練DNN與testing
+        
+    - **問題與發現**
+        1. DBSCAN之anolamy analysis正確率極差(放棄此法)
+        2. 剛開始怎麼train，在testing時表現都不佳(不管label_0或label_1 predict結果都是0)，後來發現在training data中，label 0&1 的比例不該差太多，且我們的testing dataset太小，改正這兩個問題後，**結果就好超多!!**
+        3. epoch問題，由於initial value是隨機的，所以若epoch太小，可能會導致parameter無法optimize，故epoch值不能太大(會跑很慢)，也不能太小(可能無法converge)
 
-
-
-
+        4. 每個epoch跑完的accuracy跟最後的[loss, accuracy]有甚麼差別?
+        5. 參數該如何調? 應該建構哪樣的神經網路架構?
+        6. 有normalize類別變數的正確率高於沒有normalize類別變數的，但是若沒有normalize類別變數，他中間會有一次epoch突然飆升(會部會跟initial有關)
+        
+     - **Anomaly anlysis整理**
+        - 以label_0去train，testing data中，如果為離群值，歸類為攻擊封包
+        - 分成四大項，選取全部封包、指選取http封包；參數選取全部特徵，參數指選取和http有關之特徵
+        - 結果
+        
+     - **DL整理**
+        1. 使用的dataset
+            - NUSW10000 : 從大dataset取0-10000筆的資料(0多1少，無法為training使用)
+            - NUSW20000 : 從大dataset取10001-20000筆的資料(0多1少，無法為training使用)
+            - NUSW10000-label0(1) : NUSW10000中只有0(1)的檔案
+            - NUSW20000-label0(1) : NUSW20000中只有0(1)的檔案
+            - NUSW10000-0 : 從大dataset取前10000筆label為0的資料
+            - NUSW10000-1 : 從大dataset取前10000筆label為1的資料
+            - NUSW_mix : NUSW10000-0 + NUSW10000-1，共兩萬筆資料
+            
+        2. 參數(value) `此次只調整過epochs`
+            - initial
+            - learning rate
+            - batch size
+            - epochs
+            
+        3. 參數(function) `此次未調整`
+            - activation
+            - loss
+            - optimizer
+            
+        4.  此次model都用NUSW_mix下去train，再用NUSW10000和NUSW20000去test，若要進一步分析則可以使用NUSW10000-label0(1)/NUSW20000-label0(1)
+        
+        5. 結果
 ---
 ### *補充：Clone fork 差別*
 
