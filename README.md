@@ -55,13 +55,12 @@
         - [x] 訓練DNN與testing
         
     - **問題與發現**
-        1. DBSCAN之anolamy analysis正確率極差(放棄此法)
-        2. 剛開始怎麼train，在testing時表現都不佳(不管label_0或label_1 predict結果都是0)，後來發現在training data中，label 0&1 的比例不該差太多，且我們的testing dataset太小，改正這兩個問題後，**結果就好超多!!**
-        3. epoch問題，由於initial value是隨機的，所以若epoch太小，可能會導致parameter無法optimize，故epoch值不能太大(會跑很慢)，也不能太小(可能無法converge)
-
-        4. 每個epoch跑完的accuracy跟最後的[loss, accuracy]有甚麼差別?
-        5. 參數該如何調? 應該建構哪樣的神經網路架構?
-        6. 有normalize類別變數的正確率高於沒有normalize類別變數的，但是若沒有normalize類別變數，他中間會有一次epoch突然飆升(會部會跟initial有關)
+        1. **[異常測試]** DBSCAN之anolamy analysis正確率極差(放棄此法)
+        2. **[DL]** 剛開始怎麼train，在testing時表現都不佳(不管label_0或label_1 predict結果都是0)，後來發現在training data中，label 0&1 的比例不該差太多，且我們的testing dataset太小，改正這兩個問題後，**結果就好超多!!**
+        3. **[DL]** epoch問題，由於initial value是隨機的，所以若epoch太小，可能會導致parameter無法optimize，故epoch值不能太大(會跑很慢)，也不能太小(可能無法converge)
+        4. **[DL]** 每個epoch跑完的accuracy跟最後的[loss, accuracy]有甚麼差別?
+        5. **[DL]** 參數該如何調? 應該建構哪樣的神經網路架構?
+        6. **[DL]** 有normalize類別變數的正確率高於沒有normalize類別變數的，但是若沒有normalize類別變數，他中間會有一次epoch突然飆升(會部會跟initial有關)
         
      - **Anomaly anlysis整理**
         - 以label_0去train，testing data中，如果為離群值，歸類為攻擊封包
