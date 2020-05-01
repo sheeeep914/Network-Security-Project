@@ -67,6 +67,7 @@
         - 以label_0去train，testing data中，如果為離群值，歸類為攻擊封包
         - 分成四大項，選取全部封包、指選取http封包；參數選取全部特徵，參數指選取和http有關之特徵
         - 結果
+
             _                |選取全部封包|只選取http封包
             :---------------:|:--------:|:----------:
             選取全部特徵       |差        |差
@@ -74,6 +75,7 @@
         
      - **DL整理**
         1. 使用的dataset
+
             Dataset            |描述     |
             :-----------------:|:------:|---------
             NUSW10000          |從大dataset取0-10000筆的資料(0多1少，無法為training使用)|
@@ -98,9 +100,12 @@
         4.  此次model都用NUSW_mix下去train，再用NUSW10000和NUSW20000去test，若要進一步分析則可以使用NUSW10000-label0(1)/NUSW20000-label0(1)
         
         5. 結果
-            - **目的**: scaled, normalized, 和完全沒做數據整理的結果差別
-            **Training Data**: NUSW_mix
-            **Testing Data**: NUSW10000 
+            - **目的**: scaled, normalized, 和完全沒做數據整理的結果差別  
+
+                **Training Data**: NUSW_mix  
+
+                **Testing Data**: NUSW10000  
+
 
             方法       |結果(正確率)  |其他發現
             :--------:|:-----------:|:----:
@@ -108,8 +113,10 @@
             Normalized|0.908        |1 - 10個epoch之正確率接平滑上升
             Do Nothing|0.671        |最終結果不佳
 
-            - **目的**: 對不同Testing data的成果
-            **數據處理方式**: Scaling
+            - **目的**: 對不同Testing data的成果  
+
+                **數據處理方式**: Scaling  
+                 
 
             方法          |結果(正確率)  
             :-----------:|:-----------:
