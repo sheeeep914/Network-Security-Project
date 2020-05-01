@@ -66,18 +66,24 @@
      - **Anomaly anlysis整理**
         - 以label_0去train，testing data中，如果為離群值，歸類為攻擊封包
         - 分成四大項，選取全部封包、指選取http封包；參數選取全部特徵，參數指選取和http有關之特徵
-        - ![結果](https://github.com/sheeeep914/Network-Security-Project/blob/develop/Pictures/anomoly_result.jpg)
+        - 結果
+             -                 |選取全部封包|只選取http封包
+            :-----------------:|:--------:|:----------:
+            選取全部特徵         |差        |差
+            只選取http有關的特徵  |好        |差
         
      - **DL整理**
         1. 使用的dataset
-            - NUSW10000 : 從大dataset取0-10000筆的資料(0多1少，無法為training使用)
-            - NUSW20000 : 從大dataset取10001-20000筆的資料(0多1少，無法為training使用)
-            - NUSW10000-label0(1) : NUSW10000中只有0(1)的檔案
-            - NUSW20000-label0(1) : NUSW20000中只有0(1)的檔案
-            - NUSW10000-0 : 從大dataset取前10000筆label為0的資料
-            - NUSW10000-1 : 從大dataset取前10000筆label為1的資料
-            - NUSW_mix : NUSW10000-0 + NUSW10000-1，共兩萬筆資料
-            
+            Dataset            |描述     |
+            :-----------------:|:------:|---------
+            NUSW10000          |從大dataset取0-10000筆的資料(0多1少，無法為training使用)|
+            NUSW20000          |從大dataset取10001-20000筆的資料(0多1少，無法為training使用)|
+            NUSW10000-label0(1)|NUSW10000-label0(1) : NUSW10000中只有0(1)的檔案|
+            NUSW20000-label0(1)|NUSW20000中只有0(1)的檔案|
+            NUSW10000-0        |從大dataset取前10000筆label為0的資料|
+            NUSW10000-1        |從大dataset取前10000筆label為1的資料|
+            NUSW_mix           |NUSW10000-0 + NUSW10000-1，共兩萬筆資料|
+
         2. 參數(value) `此次只調整過epochs`
             - initial
             - learning rate
@@ -92,6 +98,23 @@
         4.  此次model都用NUSW_mix下去train，再用NUSW10000和NUSW20000去test，若要進一步分析則可以使用NUSW10000-label0(1)/NUSW20000-label0(1)
         
         5. 結果
+            - **目的**: scaled, normalized, 和完全沒做數據整理的結果差別
+            **Training Data**: NUSW_mix
+            **Testing Data**: NUSW10000 
+
+            方法       |結果(正確率)  |其他發現
+            :--------:|:-----------:|:----:
+            Scaled    |0.985        |在5 - 7個epoch間正確率突然顯著上升(0.5-0.9)
+            Normalized|0.908        |1 - 10個epoch之正確率接平滑上升
+            Do Nothing|0.671        |最終結果不佳
+
+            - **目的**: 對不同Testing data的成果
+            **數據處理方式**: Scaling
+
+            方法          |結果(正確率)  
+            :-----------:|:-----------:
+            mix_and_10000|0.985
+            mix_and_20000|0.957
 ---
 ### *補充：Clone fork 差別*
 
