@@ -17,9 +17,6 @@ normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', '
 def load_data(file):
     #file = "../dataset/NUSW10000.csv"
     dataset_train = pd.read_csv(file)
-    """ msk = np.random.rand(len(dataset_train)) < 0.8
-    train = dataset_train[msk]
-    test = dataset_train[~msk] """
     return dataset_train
 
 def init(packets):
@@ -46,8 +43,8 @@ def init(packets):
 
 if __name__ == "__main__":
 
-    train_path = '../dataset/NUSW-train.csv'
-    test_path = '../dataset/NUSW-test.csv'
+    train_path = '../dataset/NUSW_train.csv'
+    test_path = '../dataset/NUSW_test.csv'
 
     """    train_packets, test_packets  = load_data(train_path)
     train_packets = init(train_packets)

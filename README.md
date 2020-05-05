@@ -18,15 +18,15 @@
 
 ---
 # 進度
-- **4/10**
+- **4/10-4/17**
+    - **預計進度**
+        - [x] 用feature inverse回去看pca的重要feature有哪些?\
+        *(實驗後發現 pca和我們理解的不一樣 不能選重要feature **所以先不管PCA了**)*
 
-    - [x] 用feature inverse回去看pca的重要feature有哪些?\
-    *(實驗後發現 pca和我們理解的不一樣 不能選重要feature **所以先不管PCA了**)*
+        - [x] 嘗試用不同的cluster演算法\
+        *(發現 **DBSCAN** 能分出很多群 好像是我們想要的？)*
 
-    - [x] 嘗試用不同的cluster演算法\
-    *(發現 **DBSCAN** 能分出很多群 好像是我們想要的？)*
-
-- **4/17**
+- **4/17-4/24**
     - **預計進度**
         - [x] 做好preprocessing 讓它能處理任意資料 (主要是**state**的部分 因為之前只針對'FIN', 'CON'兩種state處理)
 
@@ -42,8 +42,8 @@
         3. PCA降為前後的group number怎麼對應
         
         
-- **4/24**
-    - **完成進度**
+- **4/24-5/1**
+    - **預計進度**
         - [x] 延續上禮拜的clustering, 用DBSCAN做anolamy analysis
         
         - [x] 對http封包跟http特徵做anolamy analysis
@@ -82,6 +82,7 @@
             - **NUSW10000-0**: 從大dataset取前10000筆label為0的資料
             - **NUSW10000-1**: 從大dataset取前10000筆label為1的資料
             - **NUSW_mix**: NUSW10000-0 + NUSW10000-1，共兩萬筆資料
+            - **NUSW_train/NUSW_test**: 由NUSW_mix切開的，testing 有5000筆，training 有15000筆
 
         2. 參數(value) `此次只調整過epochs`
             - initial
@@ -129,6 +130,17 @@
             :-----------:|:-----------:
             mix_and_10000|0.985
             mix_and_20000|0.957
+     - **Meeting 結論**   
+        1. 後來發現正確性會那麼高是因為training 和 testing data重複性很高。若用不相干的training和testing data測會發現accuracy很低。  
+        為了改進performance，**減少每一層的unit數**(`Dense(units=100, activation='sigmoid')` unit **由原本的500減為100**，如此一來可增加每個unit在back propagation的影響性)，還**增加深度**，並將**optimizer改成adam**，最終成果準確率來到0.98，看似還不錯。
+
+- **5/1-5/8**
+    - **預計進度**
+        - [ ] 寫好自動分training和testing的code
+        - [ ] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果
+        - [ ] Survey isolation function
+
+
 ---
 ### *補充：Clone fork 差別*
 
