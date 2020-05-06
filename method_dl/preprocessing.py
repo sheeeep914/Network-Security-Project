@@ -4,9 +4,9 @@ from sklearn.preprocessing import MinMaxScaler
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
                 'state', 'dur', 'sbytes', 'Stime', 'Ltime', 'service']
 http_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
-proto = ['tcp', 'udp', 'arp', 'ospf']
+proto = ['tcp', 'udp', 'arp', 'ospf', 'ip', 'icmp']
 states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS', 'PAR',  'RST', 'TST', 'TXD',  'URN']
-service = ['http', 'dns', 'ftp-data', 'smtp', 'ssh', 'irc']
+service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl', 'snmp', 'radius', 'irc']
 
 
 def seperate_att(packets):
@@ -18,10 +18,10 @@ def seperate_att(packets):
 
 
 def proto_to_value(packets):
-    proto = []
+    """ proto = []
     for p in packets['proto']:
         if(p not in proto):
-            proto.append(p)  
+            proto.append(p)   """
 
     #print(proto)
 
@@ -64,6 +64,12 @@ def state_to_value(packets):
 
 
 def service_to_value(packets):
+    """ service = []
+    for s in packets['service']:
+        if(s not in service):
+            service.append(s)   """
+    
+    #print(service)
 
     for element in service:
         service_list = []

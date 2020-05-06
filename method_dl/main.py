@@ -34,23 +34,26 @@ def init(packets):
 if __name__ == "__main__":
     data_path = '../dataset/NUSW_mix.csv'
 
-    """ train_path = '../dataset/NUSW_train.csv'
-    test_path = '../dataset/NUSW_test.csv' """
-    dataset_train, dataset_test, label_tr, label_ts = sep.seperate(
-        sep.load_data(data_path))
-    #print(dataset_train['proto'])
+    dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
     
 
     train_packets = init(dataset_train)
     test_packets = init(dataset_test)
     """ print(train_packets.shape)
     print(test_packets.shape) """
-    
-    
 
     attack_cat_tr, train_packets = prep.seperate_att(train_packets)
     attack_cat_ts, test_packets = prep.seperate_att(test_packets)
 
+    """ pd.set_option('display.max_rows', None)
+    print(train_packets.isnull().sum())
+    print(test_packets.isnull().sum())
+    train_packets.fillna(0)
+    test_packets.fillna(0)
+    print(train_packets.isnull().sum())
+    print(test_packets.isnull().sum()) """
+
+    #print(train_packets)
     """ #normalize
     normalize_features = normalize_all
     train_packets = prep.normalization(train_packets, normalize_features)
@@ -75,16 +78,14 @@ if __name__ == "__main__":
     train_labels = label_to_nparr(label_tr)
     test_labels = label_to_nparr(label_ts)
 
-    #print(test_labels)
 
     train_labels, train_packets = np.array(train_labels), np.array(train_packets)
     test_labels, test_packets = np.array(test_labels), np.array(test_packets)
 
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
-    #print("train feature = ",train_packets.shape[1], "test feature = ", test_packets.shape[1])
 
-    """
+    
     #DNN model
     model = Sequential()
     model.add(Dense(input_dim=feature_dim, units=100, activation = 'sigmoid'))
@@ -103,9 +104,13 @@ if __name__ == "__main__":
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
+
+
+"""
     result = model.predict(test_packets)
     print(result)
 
+ 
     predict_label0 = 0
     predict_label1 = 0
     for r in result:
@@ -113,9 +118,9 @@ if __name__ == "__main__":
             predict_label0 += 1
         elif(r[0] < r[1]):
             predict_label1 += 1
-    #print(predict_label0, predict_label1)
+    #print(predict_label0, predict_label1) """
 
-    """
+
 
 
 
