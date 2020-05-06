@@ -8,52 +8,48 @@ from keras.utils import np_utils
 from keras.layers import SimpleRNN
 from keras.layers.core import Activation, Dense, Dropout
 from keras.optimizers import SGD, Adam  
-
+"""
+preprocessing
+"""
 import preprocessing as prep
+import sep_train_test as sep
+
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
 
-#import the training data
-def load_data(file):
-    #file = "../dataset/NUSW10000.csv"
-    dataset_train = pd.read_csv(file)
-    return dataset_train
 
 def init(packets):
-
-    #del packets['index']
-    
-
-    #print(packets.iloc[:,0])    
     
     packets = prep.proto_to_value(packets)
-    packets = prep.state_to_value(packets)
-    packets = prep.service_to_value(packets)
     
+    packets = prep.state_to_value(packets)
+    
+    packets = prep.service_to_value(packets)
+
     packets = prep.ip_to_value(packets)
     
-    #print("before scaling : ", type(packets))  df
-
-    #packets = prep.feature_scaling(packets)  # normalize
-    #print("after scaling : ", type(packets)) -> np
-
-    #print(packets)
     return packets
 
 
 if __name__ == "__main__":
+    data_path = '../dataset/NUSW_mix.csv'
 
-    train_path = '../dataset/NUSW_train.csv'
-    test_path = '../dataset/NUSW_test.csv'
+    """ train_path = '../dataset/NUSW_train.csv'
+    test_path = '../dataset/NUSW_test.csv' """
+    dataset_train, dataset_test, label_tr, label_ts = sep.seperate(
+        sep.load_data(data_path))
+    #print(dataset_train['proto'])
+    
 
-    """    train_packets, test_packets  = load_data(train_path)
-    train_packets = init(train_packets)
-    test_packets = init(test_packets) """
-    train_packets = init(load_data(train_path))
-    test_packets = init(load_data(test_path))
+    train_packets = init(dataset_train)
+    test_packets = init(dataset_test)
+    """ print(train_packets.shape)
+    print(test_packets.shape) """
+    
+    
 
-    label_tr, attack_cat_tr, train_packets = prep.seperate_att_label(train_packets)
-    label_ts, attack_cat_ts, test_packets = prep.seperate_att_label(test_packets)
+    attack_cat_tr, train_packets = prep.seperate_att(train_packets)
+    attack_cat_ts, test_packets = prep.seperate_att(test_packets)
 
     """ #normalize
     normalize_features = normalize_all
@@ -66,7 +62,6 @@ if __name__ == "__main__":
     test_packets = prep.feature_scaling(test_packets)
 
     #create np array for label
-
     def label_to_nparr(label_list):
         label_np = []
         for i in range(label_list.shape[0]):
@@ -87,8 +82,9 @@ if __name__ == "__main__":
 
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
+    #print("train feature = ",train_packets.shape[1], "test feature = ", test_packets.shape[1])
 
-
+    """
     #DNN model
     model = Sequential()
     model.add(Dense(input_dim=feature_dim, units=100, activation = 'sigmoid'))
@@ -119,7 +115,7 @@ if __name__ == "__main__":
             predict_label1 += 1
     #print(predict_label0, predict_label1)
 
-
+    """
 
 
 
