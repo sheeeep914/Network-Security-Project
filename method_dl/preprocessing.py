@@ -1,5 +1,6 @@
 from sklearn.preprocessing import MinMaxScaler
-
+import os
+import sys
 
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
                 'state', 'dur', 'sbytes', 'Stime', 'Ltime', 'service']
@@ -180,9 +181,9 @@ def feature_scaling(packets):
 
 
 def normalization(packets, features):
-    for f in features:
+    for f in features:       
         packets[f] = (packets[f] - packets[f].min()) /\
             (packets[f].max() - packets[f].min())
-
+        
     return packets
 

@@ -14,14 +14,14 @@ def load_data(file):
 
     
     print(dataset.isnull().sum())
- """
+"""
 
 
 def seperate(dataset):
     
     #處理缺失值
-    dataset.fillna(0)   #好像沒用
-
+    dataset.fillna(value=0, inplace=True)  #缺失值全部填成0
+    #dataset.isnull().sum() -> 看每一個key是否有null值
 
     key_len = dataset.shape[1] #總共幾個features
     feature_name = dataset.keys().tolist()

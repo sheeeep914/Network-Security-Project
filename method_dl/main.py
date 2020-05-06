@@ -32,7 +32,7 @@ def init(packets):
 
 
 if __name__ == "__main__":
-    data_path = '../dataset/NUSW_mix.csv'
+    data_path = '../dataset/NUSW_mix_4.csv'
 
     dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
     
@@ -45,25 +45,22 @@ if __name__ == "__main__":
     attack_cat_tr, train_packets = prep.seperate_att(train_packets)
     attack_cat_ts, test_packets = prep.seperate_att(test_packets)
 
-    """ pd.set_option('display.max_rows', None)
-    print(train_packets.isnull().sum())
-    print(test_packets.isnull().sum())
-    train_packets.fillna(0)
-    test_packets.fillna(0)
-    print(train_packets.isnull().sum())
-    print(test_packets.isnull().sum()) """
+    """ pd.set_option('display.max_columns', None)
+    print(train_packets.head(5))
+     """
+    
 
-    #print(train_packets)
-    """ #normalize
+    
+    #normalize
     normalize_features = normalize_all
     train_packets = prep.normalization(train_packets, normalize_features)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    test_packets = prep.normalization(test_packets, normalize_features) """
+    test_packets = prep.normalization(test_packets, normalize_features)
 
-    #scaling
+    """ #scaling
     train_packets = prep.feature_scaling(train_packets)
-    test_packets = prep.feature_scaling(test_packets)
-
+    test_packets = prep.feature_scaling(test_packets) """
+""" 
     #create np array for label
     def label_to_nparr(label_list):
         label_np = []
@@ -104,7 +101,7 @@ if __name__ == "__main__":
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
-
+ """
 
 """
     result = model.predict(test_packets)
