@@ -9,18 +9,24 @@ states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS',
 service = ['http', 'dns', 'ftp-data', 'smtp', 'ssh', 'irc']
 
 
-def seperate_att_label(packets):
+def seperate_att(packets):
 
-    label = packets['Label'].to_numpy()
     attack_cat = packets['attack_cat'].to_numpy()
-    del packets['Label']
     del packets['attack_cat']
-    return label, attack_cat, packets
+
+    return attack_cat, packets
 
 
 def proto_to_value(packets):
-    index = 0
-    for element in proto:
+    proto = []
+    for p in packets['proto']:
+        if(p not in proto):
+            proto.append(p)  
+
+    #print(proto)
+
+    for element in proto:   
+
         proto_list = []
         for protocol in packets['proto']:
 
@@ -32,6 +38,7 @@ def proto_to_value(packets):
         packets[element] = proto_list
 
     del packets['proto']
+
 
     return packets
     #print(packets.keys())

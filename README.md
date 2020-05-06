@@ -132,13 +132,19 @@
             mix_and_20000|0.957
      - **Meeting 結論**   
         1. 後來發現正確性會那麼高是因為training 和 testing data重複性很高。若用不相干的training和testing data測會發現accuracy很低。  
-        為了改進performance，**減少每一層的unit數**(`Dense(units=100, activation='sigmoid')` unit **由原本的500減為100**，如此一來可增加每個unit在back propagation的影響性)，還**增加深度**，並將**optimizer改成adam**，最終成果準確率來到0.98，看似還不錯。
+        為了改進performance，**減少每一層的unit數**(`Dense(units=100, activation='sigmoid')` unit **由原本的500減為100**，如此一來可增加每個unit在back propagation的影響性)，還**增加深度**，並將**optimizer改成adam**，但最終成果準確率會一直浮動，模型有待加強。
 
 - **5/1-5/8**
     - **預計進度**
         - [ ] 寫好自動分training和testing的code
         - [ ] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果
         - [ ] Survey isolation function
+
+    - **問題與發現**
+        1. 使用`train_test_split`切分train和test後會改動到原本的data type(把dataframe 改成 numpy)
+        2. 由於是random切training和testing，所以如果在preprocessing時做one-hard-encoding 會有兩個不同的問題。
+            - 若是事先定好要轉換的項目，會有些項目沒有被one-hard encode到
+            - 若是沒事先定好要轉換的項目，可能會造成testing和training最終feature數不同，而model不能fit
 
 
 ---
