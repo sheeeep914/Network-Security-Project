@@ -136,8 +136,8 @@
 
 - **5/1-5/8**
     - **預計進度**
-        - [ ] 寫好自動分training和testing的code
-        - [ ] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果
+        - [x] 寫好自動分training和testing的code
+        - [ ] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果 (找epoch的threashold)
         - [ ] Survey isolation function
 
     - **問題與發現**
@@ -145,6 +145,8 @@
         2. 由於是random切training和testing，所以如果在preprocessing時做one-hard-encoding 會有兩個不同的問題。
             - 若是事先定好要轉換的項目，會有些項目沒有被one-hard encode到
             - 若是沒事先定好要轉換的項目，可能會造成testing和training最終feature數不同，而model不能fit
+        3. 用新的dataset測，發現連training都train不好
+    
 
 
 ---
