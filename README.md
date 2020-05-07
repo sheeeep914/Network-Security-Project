@@ -146,7 +146,62 @@
             - 若是事先定好要轉換的項目，會有些項目沒有被one-hard encode到
             - 若是沒事先定好要轉換的項目，可能會造成testing和training最終feature數不同，而model不能fit
         3. 用新的dataset測，發現連training都train不好
-    
+        
+    - **更改參數實驗結果**
+        1.
+        - **experiment**
+            - 參數：  
+
+            dataset|activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs 
+            :----:|:-------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
+            NUSW-mix|sigmoid/softmax|  dense      | 10           |100              |mse   | adam     | 100         | 10  
+                
+            - result:
+            
+             Scaled  | 結果(正確率)
+             :------:|:----:
+             y       | 99.8%!!!?
+
+        - **control - dataset**
+             dataset    | 結果(正確率)
+             :---------:|:----:
+             NUSW-mix-4 | 49.1%
+
+             ***PS: 所以後來就都用NUSW-mix-4當測試組了看看能不能把正確率提升***
+        - **control - loss function**
+            
+             Loss   | 結果(正確率) - Train | 結果(正確率) - Test
+            :------:|:-----:|:-----:
+            mse     | 50.2% | 49.1%
+            categorical_hinge | 50.2% | 49.1%       
+            squared_hinge |  50.2% | 49.1%       
+            hinge  |  50.2% | 49.1%
+            logcosh  |  50.2% | 49.1%
+            categorical_crossentropy|  50.2% | 49.1%     
+            binary_crossentropy     |        
+            sparse_categorical_crossentropy|   
+            kullback_leibler_divergence|       
+            poisson                 |        
+            cosine_proximity        |        
+                
+        - **control - activation function**
+
+                Activation       |結果(正確率) - Train | 結果(正確率) - Test
+                :----------------:|:------:|:----------:
+                sigmoid           |50.2% | 49.1%
+                hard_sigmoid      |50.2% | 49.1%     
+                tanh              |50.2% | 49.1%     
+                relu              |50.2% | 49.1% 
+                selu              |50.2% | 49.1% 
+                elu               |50.2% | 49.1% 
+                softplus          |50.2% | 49.1% 
+                softsign          |50.2% | 49.1% 
+                
+                
+        - **control - optimizer**
+                網路上都說adam好，還要試其他的嗎?
+                
+            
 
 
 ---

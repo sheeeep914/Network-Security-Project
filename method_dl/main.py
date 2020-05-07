@@ -85,19 +85,14 @@ if __name__ == "__main__":
     
     #DNN model
     model = Sequential()
-    model.add(Dense(input_dim=feature_dim, units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
-    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(input_dim=feature_dim, units=10,
+                    activation='relu'))
+    for i in range(10):
+        model.add(Dense(units=10, activation='relu'))
     
     model.add(Dense(units=2, activation='softmax'))
 
-    model.compile(loss='mse', optimizer='adam', metrics = ['accuracy'])
+    model.compile(loss='mse',optimizer='adam', metrics=['accuracy'])
     model.fit(train_packets, train_labels, batch_size=100, epochs=10)
 
     result = model.evaluate(test_packets,  test_labels)
