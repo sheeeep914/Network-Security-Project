@@ -150,14 +150,15 @@
     - **更改參數實驗結果**
         1. 
             - **experiment**
-                activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs 
-                :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
-                sigmoid and softmax|  dense   | 10           |100              |mse   | adam     | 100         | 25  
+            
+            activation         | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs 
+            :--------------   :|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
+            sigmoid and softmax|  dense      | 10           |100              |mse   | adam     | 100         | 25  
                 
-                - result 
-                 |Scaled  | Normalized | 發現
-                 :------:|:----------:|:------:
-                    d     |      |
+            - result 
+             |Scaled  | Normalized | 發現
+             :------:|:----------:|:------:
+                     |      |
                 
             - **control - loss function**
             
