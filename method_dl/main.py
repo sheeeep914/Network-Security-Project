@@ -19,13 +19,9 @@ normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', '
 
 
 def init(packets):
-    
-    packets = prep.proto_to_value(packets)
-    
-    packets = prep.state_to_value(packets)
-    
+    packets = prep.proto_to_value(packets)    
+    packets = prep.state_to_value(packets)    
     packets = prep.service_to_value(packets)
-
     packets = prep.ip_to_value(packets)
     
     return packets
@@ -46,21 +42,25 @@ if __name__ == "__main__":
     attack_cat_ts, test_packets = prep.seperate_att(test_packets)
 
     """ pd.set_option('display.max_columns', None)
-    print(train_packets.head(5))
-     """
+    pd.set_option('display.max_rows', None) """
     
+    #transforming datatype
+    train_packets = prep.trans_datatype(train_packets)
+    test_packets = prep.trans_datatype(test_packets)
 
-    
-    #normalize
+    #print(train_packets.info())
+  
+    """ normalize
     normalize_features = normalize_all
     train_packets = prep.normalization(train_packets, normalize_features)
     #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    test_packets = prep.normalization(test_packets, normalize_features)
-
-    """ #scaling
+    test_packets = prep.normalization(test_packets, normalize_features)  """
+    
+    #scaling
     train_packets = prep.feature_scaling(train_packets)
-    test_packets = prep.feature_scaling(test_packets) """
-""" 
+    test_packets = prep.feature_scaling(test_packets)
+  
+
     #create np array for label
     def label_to_nparr(label_list):
         label_np = []
@@ -85,15 +85,16 @@ if __name__ == "__main__":
     
     #DNN model
     model = Sequential()
-    model.add(Dense(input_dim=feature_dim, units=100, activation = 'sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
-    model.add(Dense(units=100, activation='sigmoid'))
+    model.add(Dense(input_dim=feature_dim, units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    model.add(Dense(units=100, activation='relu'))
+    
     model.add(Dense(units=2, activation='softmax'))
 
     model.compile(loss='mse', optimizer='adam', metrics = ['accuracy'])
@@ -101,7 +102,7 @@ if __name__ == "__main__":
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])
- """
+
 
 """
     result = model.predict(test_packets)
