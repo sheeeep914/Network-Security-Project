@@ -202,6 +202,11 @@
                 網路上都說adam好，還要試其他的嗎?
                 
             
+     - **Isolation forest**
+        - Dataset:
+            - train : NUSW_mix_4其中的40000筆label為0的data
+            - test : NUSW20000(0,1 mix)
+        - Result: 0.75-0.9 (結果會浮動)
 
 
 ---
