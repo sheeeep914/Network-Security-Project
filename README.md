@@ -149,9 +149,9 @@
         
     - **更改參數實驗結果**
         - **basic setting**
-             activation     | layer type  | layer num|input units per layer| loss | optimizer|
-            :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|
-            sigmoid and softmax|  dense   | 10       |100                  |mse       | adam |
+             activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs |
+            :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:|
+            sigmoid and softmax|  dense   | 10       |100                  |mse       | adam | 100 | 25 |
 
 
 ---
