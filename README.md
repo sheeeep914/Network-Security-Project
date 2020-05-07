@@ -148,10 +148,50 @@
         3. 用新的dataset測，發現連training都train不好
         
     - **更改參數實驗結果**
-        - **basic setting**
-             activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs |
-            :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:|
-            sigmoid and softmax|  dense   | 10       |100                  |mse       | adam | 100 | 25 |
+        1. 
+            - **experiment**
+                activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs |
+                :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
+                sigmoid and softmax|  dense   | 10           |100              |mse   | adam     | 100         | 25  |
+                
+                - result 
+                 |Scaled  | Normalized | 發現
+                 :------:|:----------:|:------:
+                         |      |
+                
+            - **control - loss function**
+            
+                 Loss                   |Scaled  | Normalized | 發現
+                :----------------------:|:------:|:----------:|:-----:
+                mse                     |        |              |  
+                squared_hinge           |        |              |
+                hinge                   |        |              |
+                categorical_hinge       |        |              |
+                logcosh                 |        |              |  
+                categorical_crossentropy|        |              |
+                binary_crossentropy     |        |              |
+                sparse_categorical_crossentropy|         |         |
+                kullback_leibler_divergence|        |              |  
+                poisson                 |        |              |
+                cosine_proximity        |        |              |
+                
+            - **control - activation function**
+                Activation       |Scaled  | Normalized | 發現
+                :----------------:|:------:|:----------:|:-----:
+                sigmoid           |        |              |
+                hard_sigmoid      |        |              |     
+                tanh              |        |              |
+                relu              |        |              |
+                selu              |        |              |
+                elu               |        |              |  
+                softplus          |        |              |
+                softsign          |        |              |  
+                
+                
+            - **control - optimizer**
+                網路上都說adam好，還要試其他的嗎?
+                
+            
 
 
 ---
