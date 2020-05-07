@@ -148,19 +148,19 @@
         3. 用新的dataset測，發現連training都train不好
         
     - **更改參數實驗結果**
-        1. 
-            - **experiment**
+        1.
+        - **experiment**
             
-            activation         | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs 
-            :-----------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
-            sigmoid and softmax|  dense      | 10           |100              |mse   | adam     | 100         | 25  
+            activation     | layer type  | layer num|input units per layer| loss | optimizer| batch size | epochs 
+            :-------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|:------------|:---:
+            sigmoid/softmax|  dense      | 10           |100              |mse   | adam     | 100         | 25  
                 
-            - result 
-             |Scaled  | Normalized | 發現
-             :------:|:----------:|:------:
-                     |      |
+            - result:
+            
+             Scaled  | Normalized | 發現
+             :------:|:----------:|:------:  
                 
-            - **control - loss function**
+        - **control - loss function**
             
                  Loss                   |Scaled  | Normalized | 發現
                 :----------------------:|:------:|:----------:|:-----:
