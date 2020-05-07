@@ -146,7 +146,12 @@
             - 若是事先定好要轉換的項目，會有些項目沒有被one-hard encode到
             - 若是沒事先定好要轉換的項目，可能會造成testing和training最終feature數不同，而model不能fit
         3. 用新的dataset測，發現連training都train不好
-    
+        
+    - **更改參數實驗結果**
+        - **basic setting**
+             activation     | layer type  | layer num|input units per layer| loss | optimizer|
+            :--------------:|:-----------:|:------------:|:---------------:|:----:|:--------:|
+            sigmoid and softmax|  dense   | 10       |100                  |mse       | adam |
 
 
 ---
