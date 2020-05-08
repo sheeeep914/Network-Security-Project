@@ -9,13 +9,6 @@ def load_data(file):
 
     return dataset_raw
 
-#處理缺失值
-""" def deal_na(dataset):
-
-    
-    print(dataset.isnull().sum())
-"""
-
 
 def seperate(dataset):
     
@@ -40,6 +33,49 @@ def seperate(dataset):
     return dataset_train, dataset_test, label_tr, label_ts
 
 
-def seperateRNN(dataset):
+def seperateRNN(data_tr, data_ts):
     #處理缺失值
-    dataset.fillna(value=0, inplace=True)  # 缺失值全部填成0
+    data_tr.fillna(value=0, inplace=True)  # 缺失值全部填成0
+    data_ts.fillna(value=0, inplace=True)  # 缺失值全部填成0
+    X_tr, X_ts, y_tr, y_ts = [], [], [], []
+    #indexes_tr, indexes_ts = [], []
+
+    feature_name = data_tr.keys().tolist()
+    feature_name.remove('Label')
+    n = 10  # 10個一組
+    temp_features = [feature_name for _ in range(n)]
+    #print(temp_features)
+
+    
+    for i in range(data_tr.shape[0] - n):
+        X_tr.append(data_tr.iloc[i:i+n].values)     #i - i+n-1
+        y_tr.append(data_tr['Label'].iloc[i+n-1])   #i+n-1
+        #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
+
+    for i in range(data_ts.shape[0] - n):
+        X_ts.append(data_ts.iloc[i:i+n].values)  # i - i+n-1
+        y_ts.append(data_ts['Label'].iloc[i+n-1])  # i+n-1
+        #indexes_ts.append(data_ts.index[i+n-1])  # i+n-1
+
+    """ X_tr = np.array(X_tr)
+    y_tr = np.array(y_tr)
+    X_ts = np.array(X_ts)
+    y_ts = np.array(y_ts) """
+
+    #print(X_tr[0].shape)
+    #print(y_tr.shape) 
+    print(X_tr[0])
+
+    """ X_tr = pd.DataFrame(X_tr, columns=temp_features)
+    X_ts = pd.DataFrame(X_ts, columns=temp_features) """
+
+    return X_tr, X_ts, y_tr, y_ts
+
+
+
+
+
+""" data_tr = load_data("../dataset/NUSW10000.csv")
+data_ts = load_data("../dataset/NUSW20000.csv")
+seperateRNN(data_tr, data_ts)  
+"""

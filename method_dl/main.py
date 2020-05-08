@@ -24,7 +24,7 @@ import sep_train_test as sep
 Keras Method
 """
 from keras.models import Sequential
-import models as models
+import model as models
 
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
@@ -40,10 +40,14 @@ def init(packets):
 
 
 if __name__ == "__main__":
-    data_path = '../dataset/NUSW_mix_4.csv'
+    #data_path = '../dataset/NUSW_mix_4.csv'
 
-    dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
-    
+    #dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
+
+    data_tr = sep.load_data("../dataset/NUSW10000.csv")
+    data_ts = sep.load_data("../dataset/NUSW20000.csv")
+    dataset_train, dataset_test, label_tr, label_ts = sep.seperateRNN(
+        data_tr, data_ts)
 
     train_packets = init(dataset_train)
     test_packets = init(dataset_test)
@@ -61,7 +65,7 @@ if __name__ == "__main__":
     test_packets = prep.trans_datatype(test_packets)
 
     #print(train_packets.info())
-  
+
     """ normalize
     normalize_features = normalize_all
     train_packets = prep.normalization(train_packets, normalize_features)
@@ -71,7 +75,7 @@ if __name__ == "__main__":
     #scaling
     train_packets = prep.feature_scaling(train_packets)
     test_packets = prep.feature_scaling(test_packets)
-  
+
 
     #create np array for label
     def label_to_nparr(label_list):
@@ -94,8 +98,13 @@ if __name__ == "__main__":
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
 
+    
+
     # simple(feature_dim, units, atv, loss, opt)
-    model = models.simpleDNN(feature_dim, 10, 'relu', 'mse', 'adam')
+    #model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
+
+    # simpleRNN(train_packets, atv, loss)
+    model = models.SimpleRNN(train_packets, 'linear', 'binary_crossentropy')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
