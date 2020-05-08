@@ -2,12 +2,13 @@ import numpy as np
 import pandas as pd
 """
 Import the Keras libraries and packages
-"""
+
 from keras.models import Sequential
 from keras.utils import np_utils
 from keras.layers import SimpleRNN
 from keras.layers.core import Activation, Dense, Dropout
 from keras.optimizers import SGD, Adam  
+"""
 """
 callback function
 """
@@ -19,6 +20,11 @@ preprocessing
 """
 import preprocessing as prep
 import sep_train_test as sep
+"""
+Keras Method
+"""
+from keras.models import Sequential
+import models as models
 
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
@@ -88,17 +94,8 @@ if __name__ == "__main__":
     dataset_size = train_packets.shape[0]  # 總共幾筆資料
     feature_dim = train_packets.shape[1] #總共幾個features
 
-    
-    #DNN model
-    model = Sequential()
-    model.add(Dense(input_dim=feature_dim, units=10,
-                    activation='relu'))
-    for i in range(10):
-        model.add(Dense(units=10, activation='relu'))
-    
-    model.add(Dense(units=2, activation='softmax'))
-
-    model.compile(loss='mse',optimizer='adam', metrics=['accuracy'])
+    # simple(feature_dim, units, atv, loss, opt)
+    model = models.simpleDNN(feature_dim, 10, 'relu', 'mse', 'adam')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
