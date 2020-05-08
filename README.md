@@ -137,8 +137,9 @@
 - **5/1-5/8**
     - **預計進度**
         - [x] 寫好自動分training和testing的code
-        - [ ] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果 (找epoch的threashold)
-        - [ ] Survey isolation function
+        - [x] 使用其他training和testing data去測試model，如果效果不彰，可以試著更改model的參數(unit, activation function, loss, optimizer)，觀察結果 (找epoch的threashold)
+        - [x] Survey isolation function
+        - [x] Add EarlyStopping Callbacks
 
     - **問題與發現**
         1. 使用`train_test_split`切分train和test後會改動到原本的data type(把dataframe 改成 numpy)
@@ -202,6 +203,11 @@
                 網路上都說adam好，還要試其他的嗎?
                 
             
+     - **Isolation forest**
+        - Dataset:
+            - train : NUSW_mix_4其中的40000筆label為0的data
+            - test : NUSW20000(0,1 mix)
+        - Result: 0.75-0.9 (結果會浮動)
 
 
 ---

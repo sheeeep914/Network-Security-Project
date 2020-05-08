@@ -14,6 +14,7 @@ import cluster_info as c_info
 method
 """
 import method_dbscan as method_db
+import method_isolationForest as method_iF
 
 """
 reduce dimension/visualized
@@ -93,23 +94,23 @@ if __name__ == "__main__":
     
     # number = input("Input the number of datasets: ")
     #trained by normal packets
-    number = 10000
-    packets_0, label0, att_cat0, pkt_0 = init('dataset/NUSW' + str(number) + '-label0.csv')
+    number = 40000
+    packets_0, label0, att_cat0, pkt_0 = init('../dataset/NUSW' + str(number) + '-label0.csv')
     #packets_0, label0, att_cat0, pkt_0 = init_http('dataset/NUSW' + str(number) + '-label0-http.csv')
 
     #mix packets, see outlier as abnormal packets
     number = 20000
-    packets, label, att_cat, pkt = init('dataset/NUSW' + str(number) + '.csv')
+    packets, label, att_cat, pkt = init('../dataset/NUSW' + str(number) + '.csv')
     #packets, label, att_cat, pkt = init_http('dataset/NUSW' + str(number) + '-http.csv')
     
 
-    normalize_features = normalize_tcp
+    normalize_features = normalize_all
     prep.normalization(packets_0, normalize_features)
     prep.normalization(packets, normalize_features)
 
-    dbscan, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(packets_0, eps)
+    """dbscan, db_max_label, db_group_number_list = method_db.DBscan_fixed_eps(packets_0, eps)
     label_test = method_db.DBscan_predict(packets, eps, dbscan)
-    method_db.DBscan_score(label_test, label)
+    method_db.DBscan_score(label_test, label)"""
 
     """normalize_features = normalize_http
     prep.normalization(packets_0, normalize_features)
@@ -119,5 +120,11 @@ if __name__ == "__main__":
         packets_0, eps)
     label_test = method_db.DBscan_predict(packets, eps, dbscan)
     method_db.DBscan_score(label_test, label)"""
+
+    for i in range (10):
+        forest = method_iF.isolation_forest(packets_0)
+        method_iF.outlier_predict(forest, packets, label)
+
+
 
 
