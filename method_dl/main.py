@@ -9,6 +9,12 @@ from keras.layers import SimpleRNN
 from keras.layers.core import Activation, Dense, Dropout
 from keras.optimizers import SGD, Adam  
 """
+callback function
+"""
+from keras.callbacks import CSVLogger
+from keras.callbacks import ModelCheckpoint
+from keras.callbacks import EarlyStopping
+"""
 preprocessing
 """
 import preprocessing as prep
@@ -93,7 +99,21 @@ if __name__ == "__main__":
     model.add(Dense(units=2, activation='softmax'))
 
     model.compile(loss='mse',optimizer='adam', metrics=['accuracy'])
-    model.fit(train_packets, train_labels, batch_size=100, epochs=10)
+
+    # Setting callback functions
+    csv_logger = CSVLogger('training.log')
+    checkpoint = ModelCheckpoint(filepath='best.h5',
+                                verbose=1,
+                                save_best_only=True,
+                                monitor='accuracy',
+                                mode='max')
+    earlystopping = EarlyStopping(monitor='accuracy',
+                                patience=3,
+                                verbose=1,
+                                mode='max')
+
+    #training
+    model.fit(train_packets, train_labels, batch_size=100, epochs=10, callbacks=[earlystopping, checkpoint, csv_logger])
 
     result = model.evaluate(test_packets,  test_labels)
     print("testing accuracy = ", result[1])

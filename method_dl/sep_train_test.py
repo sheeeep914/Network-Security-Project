@@ -28,7 +28,7 @@ def seperate(dataset):
     feature_name.remove('Label')
     
     dataset_temp, label = dataset.iloc[:, : key_len-1].values,  dataset.iloc[:,  key_len-1].values
-    dataset_train, dataset_test, label_tr, label_ts = train_test_split(dataset_temp, label, test_size=0.25, random_state=0)  # 隨機選25趴當測試，剩下當訓練
+    dataset_train, dataset_test, label_tr, label_ts = train_test_split(dataset_temp, label, test_size=0.25, random_state=2)  # 隨機選25趴當測試，剩下當訓練
     #print(dataset_train.dtype)
     dataset_train = pd.DataFrame(dataset_train, columns=feature_name)
     dataset_test = pd.DataFrame(dataset_test, columns=feature_name)
