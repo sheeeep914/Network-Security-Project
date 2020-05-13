@@ -18,7 +18,7 @@ def simpleDNN(feature_dim, units, atv, loss):
         model.add(Dense(units=units, activation=atv))
 
     model.add(Dense(units=2, activation='softmax'))
-    adam = Adam(0.00000006)
+    adam = Adam(0.00006)
     model.compile(loss=loss, optimizer=adam, metrics=['accuracy'])
 
     return model
@@ -30,7 +30,7 @@ def simpleRNN(train_packets, atv, loss):
     model = Sequential()
     model.add(LSTM(100, return_sequence = True, input_shape = train_packets[0].shape))
     model.add(LSTM(100))
-    #model.add(Dense(8))
+    model.add(Dense(8))
     model.add(Dense(units=2, kernel_initializer='uniform', activation=atv))
     
     adam = Adam(0.00006)
