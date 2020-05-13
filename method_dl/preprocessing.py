@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
-                'state', 'dur', 'sbytes', 'Stime', 'Ltime', 'service']
+                'state', 'dur', 'sbytes', 'sttl', 'Sload', 'Dload', 'swin', 'dwin', 'stcpb', 'res_body_len', 'Stime', 'service', 'Dintpkt', 'is_sm_ips_ports', 'is_ftp_login','attack_cat', 'Label']
 http_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
 proto = ['tcp', 'udp', 'arp', 'ospf', 'ip', 'icmp', 'unas']
 #proto = ['tcp', 'udp', 'sctp', 'sm', 'pnni', 'pgm', 'tcf', 'secure-vmtp', 'unas', 'ospf', 'st2', 'ipnip', 'scps', 'skip', 'aris', 'hmp', 'vmtp', 'arp', 'netblt', 'tp++', 'pipe', 'nvp', 'ip', 'ipip', 'ipx-n-ip', 'fc', 'nsfnet-igp', 'ddp', 'cbt', 'ipv6-frag', 'any', 'mobile', 'prm', 'bbn-rcc', 'ddx', 'uti', 'rsvp', 'xns-idp', 'trunk-1', 'stp', 'ifmp', 'wb-mon', 'smp', 'pim', 'sccopmce', 'leaf-1', 'xnet', 'pri-enc', 'iso-ip', 'gmtp', 'leaf-2', 'encap', 'gre', 'dgp', 'kryptolan', 'bna', 'ipv6-opts', 'ipv6-route', 'pup', 'igp', 'br-sat-mon', 'compaq-peer', 'irtp', 'snp','crtp', 'narp', 'rvd', 'sun-nd', 'idpr-cmtp', 'xtp', 'ipv6', 'mtp', 'ggp', 'vrrp', 'etherip', 'a/n', 'cpnx', 'eigrp', 'sprite-rpc', 'argus', 'wb-expak', 'ipcv', 'tlsp', 'mfe-nsp', 'micp', 'vines', 'cphb', 'iplt', 'sps', 'egp', 'ippc', 'fire', 'mux', 'i-nlsp', 'dcn', 'srp', 'swipe', 'zero', 'sat-expak', 'aes-sp3-d', 'crudp', 'larp', 'l2tp', 'ax.25', 'isis', 'rdp', 'merit-inp', 'cftp', 'emcon', 'il', 'pvp', 'wsn', 'sat-mon', 'ptp', 'idrp', 'chaos', 'sep', 'sdrp', 'ipv6-no', '3pc', 'mhrp', 'visa', 'ipcomp', 'qnx', 'iso-tp4', 'ttp', 'iatp', 'trunk-2', 'ib', 'idpr']

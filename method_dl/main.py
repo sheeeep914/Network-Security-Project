@@ -35,6 +35,9 @@ def init(packets):
     packets = prep.state_to_value(packets)    
     packets = prep.service_to_value(packets)
     packets = prep.ip_to_value(packets)
+
+    #if we want to do get only non-flow features
+    packets = prep.get_imp(packets)
     
     return packets
 
