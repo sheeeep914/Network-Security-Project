@@ -37,7 +37,7 @@ def init(packets):
     packets = prep.ip_to_value(packets)
 
     #if we want to do get only non-flow features
-    packets = prep.get_imp(packets)
+    #packets = prep.get_imp(packets)
     
     return packets
 
@@ -94,16 +94,16 @@ if __name__ == "__main__":
     train_labels, train_packets = np.array(train_labels), np.array(train_packets)
     test_labels, test_packets = np.array(test_labels), np.array(test_packets)
 
-    dataset_size = train_packets.shape[0]  # 總共幾筆資料
-    feature_dim = train_packets.shape[1] #總共幾個features
+    dataset_size = train_packets.shape[0]  # how many data
+    feature_dim = train_packets.shape[1] #how mant features
 
     
 
     # simple(feature_dim, units, atv, loss, opt)
-    model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
+    #model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
 
     # simpleRNN(train_packets, atv, loss)
-    #model = models.SimpleRNN(train_packets, 'linear', 'binary_crossentropy')
+    model = models.SimpleRNN(train_packets, 'relu', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
