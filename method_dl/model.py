@@ -30,7 +30,7 @@ def simpleRNN(train_packets, atv, loss):
     model = Sequential()
     model.add(LSTM(100, return_sequence = True, input_shape = train_packets[0].shape))
     model.add(LSTM(100))
-    model.add(Dense(8))
+    #model.add(Dense(8))
     model.add(Dense(units=2, kernel_initializer='uniform', activation=atv))
     
     adam = Adam(0.00006)

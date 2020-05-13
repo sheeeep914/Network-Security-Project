@@ -13,10 +13,10 @@ def load_data(file):
 def seperate(dataset):
     
     #處理缺失值
-    dataset.fillna(value=0, inplace=True)  #缺失值全部填成0
-    #dataset.isnull().sum() -> 看每一個key是否有null值
+    dataset.fillna(value=0, inplace=True)
+    #dataset.isnull().sum() -> see NULL in key
 
-    key_len = dataset.shape[1] #總共幾個features
+    key_len = dataset.shape[1] #how many features
     feature_name = dataset.keys().tolist()
     feature_name.remove('Label')
     
@@ -34,15 +34,15 @@ def seperate(dataset):
 
 
 def seperateRNN(data_tr, data_ts):
-    #處理缺失值
-    data_tr.fillna(value=0, inplace=True)  # 缺失值全部填成0
-    data_ts.fillna(value=0, inplace=True)  # 缺失值全部填成0
+    #deal with missing
+    data_tr.fillna(value=0, inplace=True)  # fill missing with 0
+    data_ts.fillna(value=0, inplace=True)  
     X_tr, X_ts, y_tr, y_ts = [], [], [], []
     #indexes_tr, indexes_ts = [], []
 
     feature_name = data_tr.keys().tolist()
     feature_name.remove('Label')
-    n = 10  # 10個一組
+    n = 10  # 10 packets per group
     temp_features = [feature_name for _ in range(n)]
     #print(temp_features)
 
