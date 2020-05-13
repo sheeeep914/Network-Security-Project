@@ -39,7 +39,7 @@ def init(packets):
 def label_to_nparr(label_list):
 
     label_np = []
-    for i in range(label_list.shape[0]):
+    for i in range (label_list.shape[0]):
         if(label_list[i] == 0):
             label_np.append([1, 0])
         elif(label_list[i] == 1):
@@ -75,9 +75,9 @@ if __name__ == "__main__":
     test_df = prep.feature_scaling(test_df)
 
     #create an one-hot list for label list
-    trainlabel_list = label_to_nparr(trainlabel_list)
-    trainlabel_list = label_to_nparr(testlabel_list)
 
+    trainlabel_list = label_to_nparr(trainlabel_list)
+    testlabel_list = label_to_nparr(testlabel_list)
 
     #turn dataframe and list to np array
     trainlabel_np, train_np = np.array(trainlabel_list), np.array(train_df)
