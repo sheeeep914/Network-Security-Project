@@ -47,8 +47,8 @@ if __name__ == "__main__":
 
     #dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
 
-    data_tr = sep.load_data("../dataset/NUSW_mix.csv")
-    data_ts = sep.load_data("../dataset/NUSW_mix_4.csv")
+    data_tr = sep.load_data("../dataset/NUSW_mix_4.csv")
+    data_ts = sep.load_data("../dataset/NUSW_mix.csv")
     #dataset_train, dataset_test, label_tr, label_ts = sep.seperateRNN(
     #    data_tr, data_ts)
 
@@ -100,10 +100,10 @@ if __name__ == "__main__":
     
 
     # simple(feature_dim, units, atv, loss, opt)
-    #model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
+    model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
 
     # simpleRNN(train_packets, atv, loss)
-    model = models.SimpleRNN(train_packets, 'relu', 'mse')
+    #model = models.SimpleRNN(train_packets, 'relu', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')

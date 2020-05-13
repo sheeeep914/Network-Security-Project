@@ -18,7 +18,7 @@ def simpleDNN(feature_dim, units, atv, loss):
         model.add(Dense(units=units, activation=atv))
 
     model.add(Dense(units=2, activation='softmax'))
-    adam = Adam(0.00006)
+    adam = Adam(0.00000006)
     model.compile(loss=loss, optimizer=adam, metrics=['accuracy'])
 
     return model
