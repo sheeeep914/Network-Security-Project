@@ -17,6 +17,7 @@ def seperate_att(packets):
     del packets['attack_cat']
 
     label = packets['Label'].to_numpy()
+    del packets['Label']
 
     return attack_cat, label, packets
 
