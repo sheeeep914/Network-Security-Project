@@ -44,18 +44,16 @@ if __name__ == "__main__":
 
     #dataset_train, dataset_test, label_tr, label_ts = sep.seperate(sep.load_data(data_path))
 
-    data_tr = sep.load_data("../dataset/NUSW10000.csv")
-    data_ts = sep.load_data("../dataset/NUSW20000.csv")
-    dataset_train, dataset_test, label_tr, label_ts = sep.seperateRNN(
-        data_tr, data_ts)
+    data_tr = sep.load_data("../dataset/NUSW_mix.csv")
+    data_ts = sep.load_data("../dataset/NUSW_mix_4.csv")
+    #dataset_train, dataset_test, label_tr, label_ts = sep.seperateRNN(
+    #    data_tr, data_ts)
 
-    train_packets = init(dataset_train)
-    test_packets = init(dataset_test)
-    """ print(train_packets.shape)
-    print(test_packets.shape) """
+    train_packets = init(data_tr)
+    test_packets = init(data_ts)
 
-    attack_cat_tr, train_packets = prep.seperate_att(train_packets)
-    attack_cat_ts, test_packets = prep.seperate_att(test_packets)
+    attack_cat_tr, label_tr, train_packets = prep.seperate_att(train_packets)
+    attack_cat_ts, label_ts, test_packets = prep.seperate_att(test_packets)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None) """
@@ -63,8 +61,6 @@ if __name__ == "__main__":
     #transforming datatype
     train_packets = prep.trans_datatype(train_packets)
     test_packets = prep.trans_datatype(test_packets)
-
-    #print(train_packets.info())
 
     """ normalize
     normalize_features = normalize_all
@@ -101,10 +97,10 @@ if __name__ == "__main__":
     
 
     # simple(feature_dim, units, atv, loss, opt)
-    #model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
+    model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
 
     # simpleRNN(train_packets, atv, loss)
-    model = models.SimpleRNN(train_packets, 'linear', 'binary_crossentropy')
+    #model = models.SimpleRNN(train_packets, 'linear', 'binary_crossentropy')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')

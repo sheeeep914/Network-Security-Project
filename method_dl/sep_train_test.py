@@ -64,7 +64,7 @@ def seperateRNN(data_tr, data_ts):
 
     #print(X_tr[0].shape)
     #print(y_tr.shape) 
-    print(X_tr[0])
+    #print(X_tr[0])
 
     """ X_tr = pd.DataFrame(X_tr, columns=temp_features)
     X_ts = pd.DataFrame(X_ts, columns=temp_features) """
