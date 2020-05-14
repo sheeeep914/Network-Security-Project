@@ -56,19 +56,9 @@ if __name__ == "__main__":
     train_df, trainlabel_list, train_att_cat = init(train_df)
     test_df, testlabel_list, test_att_cat = init(test_df)
 
-
-    """ pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None) """
-    
     #transforming datatype
     train_df = prep.trans_datatype(train_df)
     test_df = prep.trans_datatype(test_df)
-
-    """ #normalize
-    normalize_features = normalize_all
-    train_packets = prep.normalization(train_packets, normalize_features)
-    #train_packet.shape = (10000, 71) -> 10000筆資料 每一筆有71維
-    test_packets = prep.normalization(test_packets, normalize_features)  """
     
     #scaling
     train_df = prep.feature_scaling(train_df)
@@ -107,5 +97,3 @@ if __name__ == "__main__":
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
-
-
