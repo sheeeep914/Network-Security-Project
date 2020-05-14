@@ -36,7 +36,7 @@ def init(packets):
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
 
     #if we want to do get only non-flow features
-    #packets = prep.get_imp(packets)
+    packets = prep.get_imp(packets)
 
     return packets
 
