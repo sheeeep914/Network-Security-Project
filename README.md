@@ -187,6 +187,7 @@
                 
         - **control - activation function**
 
+
                 Activation       |結果(正確率) - Train | 結果(正確率) - Test
                 :----------------:|:------:|:----------:
                 sigmoid           |50.2% | 49.1%
@@ -208,7 +209,29 @@
             - train : NUSW_mix_4其中的40000筆label為0的data
             - test : NUSW20000(0,1 mix)
         - Result: 0.75-0.9 (結果會浮動)
-
+- **5/07-5/14**
+    - **進度**
+        - [x] 用上上次train的不錯的model去test
+        - [x] 將flow feature 拿掉看看
+        - [x] LSTM model
+        - [x] coding style
+        
+    - **Flow資訊**
+        - 用以前寫過的get_imp
+        - 經過篩選後只剩下```'srcip', 'sport', 'dstip', 'dsport', 'proto','state', 'dur', 'sbytes', 'sttl', 'Sload', 'Dload', 'swin', 'dwin', 'stcpb', 'res_body_len', 'Stime', 'service', 'Dintpkt', 'is_sm_ips_ports', 'is_ftp_login','attack_cat', 'Label'```
+        
+    - **變數命名**
+        - 類別(train/test/trainlabel/testlabel)_型態(df/np/list)
+    
+    - **資料集命名**
+        - NUSW-原始資料為第幾個資料集-起始-終點_筆數_label特性(mix/label0/label1)_時間特性(time)
+        ***筆數之後會以10000為單位***
+        
+    - **結論**
+        - 有沒有拿掉flow feature不影響結果，所以代表我們只能針對一個一個flow分析，無從針對單一封包。
+        - DNN -> 0.5
+        - RNN -> 0.87，但會把所有封包判給label0，很像以前資料集中0跟1不均等的情況，但在rnn time-based的概念下，我們的資料即無法取0跟1均等，應該是要依時間順序取
+        
 
 ---
 ### *補充：Clone fork 差別*

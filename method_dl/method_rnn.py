@@ -31,7 +31,7 @@ def defRNN(data_tr, data_ts):
     tempdata_ts = prep.trans_datatype(tempdata_ts)
 
     #scaling
-    tempdata_tr = prep.feature_scaling(tempdata_tr)
+    tempdata_tr = prep.feature_scaling(tempdata_tr)
     tempdata_ts = prep.feature_scaling(tempdata_ts)
     
     n = 10  # 10 packets per group
@@ -77,3 +77,30 @@ def simpleRNN(feature_dim, atv, loss):
 data_ts = pd.read_csv("../dataset/NUSW20000.csv", low_memory=False)
 defRNN(data_tr, data_ts)
  """
+
+def detailAccuracyRNN(predict, actual):
+    B_G, G_G, G_B, B_B = 0, 0, 0, 0
+    n = len(predict)
+
+    for i in range(len(predict)):
+        if (actual[i] == 0) & (predict[i] == 0):
+            G_G = G_G+1
+
+        elif (actual[i] == 0) & (predict[i] == 1):
+            G_B = G_B+1
+
+        elif (actual[i] == 1) & (predict[i] == 0):
+            B_G = B_G+1
+
+        elif (actual[i] == 1) & (predict[i] == 1):
+            B_B = B_B+1
+
+    print("===========================")
+    print("predict right:")
+    print("Good to Good: ", G_G/n)
+    print("Bad to Bad: ", B_B/n)
+    print("===========================")
+    print("predict wrong:")
+    print("Good to Bad: ", G_B/n)
+    print("Bad to Good: ", B_G/n)
+    
