@@ -31,16 +31,10 @@ def defRNN(data_tr, data_ts):
     tempdata_ts = prep.trans_datatype(tempdata_ts)
 
     #scaling
-    sc = MinMaxScaler(feature_range=(0, 1))
-    tempdata_tr = sc.fit_transform(tempdata_tr)
-    tempdata_ts = sc.fit_transform(tempdata_ts)
-
-    #feature_name = data_tr.keys().tolist()
-    #feature_name.remove('Label')
+    tempdata_tr = prep.feature_scaling(tempdata_tr)
+    tempdata_ts = prep.feature_scaling(tempdata_ts)
+    
     n = 10  # 10 packets per group
-    #temp_features = [feature_name for _ in range(n)]
-    #print(temp_features) 
-
     for i in range(data_tr.shape[0] - n):
         X_tr.append(tempdata_tr[i:i+n])  # i - i+n-1
         y_tr.append(data_tr['Label'].iloc[i+n-1])  # i+n-1
