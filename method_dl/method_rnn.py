@@ -13,6 +13,7 @@ from keras.optimizers import SGD, Adam
 Scaling
 """
 from sklearn.preprocessing import MinMaxScaler
+import preprocessing as prep
 
 def defRNN(data_tr, data_ts):
 
@@ -25,17 +26,15 @@ def defRNN(data_tr, data_ts):
     data_ts.fillna(value=0, inplace=True) 
     X_tr, X_ts, y_tr, y_ts = [], [], [], []
     
+    #transforming datatype (object -> normal datatype)
+    tempdata_tr = prep.trans_datatype(tempdata_tr) 
+    tempdata_ts = prep.trans_datatype(tempdata_ts)
+
     #scaling
-    sc = MinMaxScaler(feature_range=(0, 1))
-    tempdata_tr = sc.fit_transform(tempdata_tr)
-    tempdata_ts = sc.fit_transform(tempdata_ts)
-
-    #feature_name = data_tr.keys().tolist()
-    #feature_name.remove('Label')
+    tempdata_tr = prep.feature_scaling(tempdata_tr)
+    tempdata_ts = prep.feature_scaling(tempdata_ts)
+    
     n = 10  # 10 packets per group
-    #temp_features = [feature_name for _ in range(n)]
-    #print(temp_features) 
-
     for i in range(data_tr.shape[0] - n):
         X_tr.append(tempdata_tr[i:i+n])  # i - i+n-1
         y_tr.append(data_tr['Label'].iloc[i+n-1])  # i+n-1
@@ -78,3 +77,30 @@ def simpleRNN(feature_dim, atv, loss):
 data_ts = pd.read_csv("../dataset/NUSW20000.csv", low_memory=False)
 defRNN(data_tr, data_ts)
  """
+
+def detailAccuracyRNN(predict, actual):
+    B_G, G_G, G_B, B_B = 0, 0, 0, 0
+    n = len(predict)
+
+    for i in range(len(predict)):
+        if (actual[i] == 0) & (predict[i] == 0):
+            G_G = G_G+1
+
+        elif (actual[i] == 0) & (predict[i] == 1):
+            G_B = G_B+1
+
+        elif (actual[i] == 1) & (predict[i] == 0):
+            B_G = B_G+1
+
+        elif (actual[i] == 1) & (predict[i] == 1):
+            B_B = B_B+1
+
+    print("===========================")
+    print("predict right:")
+    print("Good to Good: ", G_G/n)
+    print("Bad to Bad: ", B_B/n)
+    print("===========================")
+    print("predict wrong:")
+    print("Good to Bad: ", G_B/n)
+    print("Bad to Good: ", B_G/n)
+    
