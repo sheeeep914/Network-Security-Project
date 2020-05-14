@@ -11,16 +11,18 @@ states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR', 'INT', 'MAS',
 service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl', 'snmp', 'radius', 'irc']
 
 
-def seperate_att(packets):
+def seperate_att_lab(packets, method):
 
     attack_cat = packets['attack_cat'].to_numpy()
     del packets['attack_cat']
 
     label = packets['Label'].to_numpy()
-    del packets['Label']
+    if(method == 'dnn'):
+        del packets['Label']
+    #elif(method == 'rnn'):
+        #don't delete 'Label'
 
     return attack_cat, label, packets
-
 
 def proto_to_value(packets):
     """ proto = []
@@ -193,7 +195,7 @@ def normalization(packets, features):
 def trans_datatype(packets):
     feature_name = packets.keys().tolist()
 
-    #transforming datatype
+    #transforming datatype (the default datatype of dataframe is "object", which cannot be used for arithemetic operations in the feature scaling function)
     for f in feature_name:
         packets[f] = pd.to_numeric(packets[f], errors='coerce')
         
