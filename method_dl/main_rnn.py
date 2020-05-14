@@ -36,7 +36,7 @@ def init(packets):
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
 
     #if we want to do get only non-flow features
-    packets = prep.get_imp(packets)
+    #packets = prep.get_imp(packets)
 
     return packets
 
@@ -55,8 +55,10 @@ def label_to_nparr(label_list):
 
 if __name__ == "__main__":
 
-    train_df = pd.read_csv("../dataset/NUSW10000.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW20000.csv", low_memory=False)
+    train_df = pd.read_csv(
+        "../dataset/NUSW-1-20000-100000_80000_mix_time.csv", low_memory=False)
+    test_df = pd.read_csv(
+        "../dataset/NUSW-1-100000-180000_80000_mix_time.csv", low_memory=False)
     
     train_df = init(train_df)
     test_df = init(test_df)
