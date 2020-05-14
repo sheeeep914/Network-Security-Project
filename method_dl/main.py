@@ -24,9 +24,7 @@ import sep_train_test as sep
 Keras Method
 """
 from keras.models import Sequential
-import method_dnn as dnn 
-import method_rnn as rnn
-
+import model as models
 
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
@@ -51,7 +49,7 @@ if __name__ == "__main__":
 
     data_tr = sep.load_data("../dataset/NUSW_mix_4.csv")
     data_ts = sep.load_data("../dataset/NUSW_mix.csv")
-    #dataset_train, dataset_test, label_tr, label_ts = rnn.seperateRNN(
+    #dataset_train, dataset_test, label_tr, label_ts = sep.seperateRNN(
     #    data_tr, data_ts)
 
     train_packets = init(data_tr)
@@ -101,11 +99,11 @@ if __name__ == "__main__":
 
     
 
-    # simpleDNN(feature_dim, units, atv, loss, opt)
-    model = dnn.simpleDNN(feature_dim, 10, 'relu', 'mse')
-    
+    # simple(feature_dim, units, atv, loss, opt)
+    #model = models.simpleDNN(feature_dim, 10, 'relu', 'mse')
+
     # simpleRNN(train_packets, atv, loss)
-    #model = rnn.simpleRNN(train_packets, 'relu', 'mse')
+    model = models.simpleRNN(train_packets, 'relu', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
