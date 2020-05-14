@@ -13,6 +13,7 @@ from keras.optimizers import SGD, Adam
 Scaling
 """
 from sklearn.preprocessing import MinMaxScaler
+import preprocessing as prep
 
 def defRNN(data_tr, data_ts):
 
@@ -25,6 +26,10 @@ def defRNN(data_tr, data_ts):
     data_ts.fillna(value=0, inplace=True) 
     X_tr, X_ts, y_tr, y_ts = [], [], [], []
     
+    #transforming datatype (object -> normal datatype)
+    tempdata_tr = prep.trans_datatype(tempdata_tr) 
+    tempdata_ts = prep.trans_datatype(tempdata_ts)
+
     #scaling
     sc = MinMaxScaler(feature_range=(0, 1))
     tempdata_tr = sc.fit_transform(tempdata_tr)
