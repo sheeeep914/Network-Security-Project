@@ -200,3 +200,10 @@ def trans_datatype(packets):
         packets[f] = pd.to_numeric(packets[f], errors='coerce')
         
     return packets
+
+
+def np_fillna(packets):
+    
+    arr = np.isnan(packets)
+    packets[arr] = 0
+    return packets
