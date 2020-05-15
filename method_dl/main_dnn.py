@@ -22,6 +22,8 @@ normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', '
 
 
 def init(packets):
+    #deal with missing
+    packets.fillna(value=0, inplace=True)  # fill missing with 0
 
     packets = prep.proto_to_value(packets)    
     packets = prep.state_to_value(packets)    
@@ -50,8 +52,12 @@ def label_to_nparr(label_list):
 if __name__ == "__main__":
 
 
-    train_df = pd.read_csv("../dataset/NUSW_mix_4.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW_mix.csv", low_memory=False)
+    train_df = pd.read_csv("../dataset/NUSW_mix.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/test.csv", low_memory=False)
+
+    """ pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
+    print(train_df.head()) """
 
     train_df, trainlabel_list, train_att_cat = init(train_df)
     test_df, testlabel_list, test_att_cat = init(test_df)
@@ -76,8 +82,8 @@ if __name__ == "__main__":
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np.shape[1] # how mant features
 
-    # simpleDNN(feature_dim, units, atv, loss, opt)
-    model = dnn.simpleDNN(feature_dim, 10, 'relu', 'mse')
+    # simpleDNN(feature_dim, units, atv, loss)
+    model = dnn.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
@@ -93,7 +99,9 @@ if __name__ == "__main__":
                                 mode='max')
 
     #training
-    model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, callbacks=[earlystopping, checkpoint, csv_logger])
+    """ model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, callbacks=[
+            earlystopping, checkpoint, csv_logger], shuffle=True) """
+    model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
