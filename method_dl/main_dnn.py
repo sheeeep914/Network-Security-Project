@@ -52,8 +52,8 @@ def label_to_nparr(label_list):
 if __name__ == "__main__":
 
 
-    train_df = pd.read_csv("../dataset/NUSW_mix4_train.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW20000.csv", low_memory=False)
+    train_df = pd.read_csv("../dataset/NUSW_mix.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/NUSW_mix4_test.csv", low_memory=False)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -88,10 +88,10 @@ if __name__ == "__main__":
     feature_dim = train_np.shape[1] # how mant features
 
     # simpleDNN(feature_dim, units, atv, loss)
-    model = dnn.simpleDNN(feature_dim, 15, 'relu', 'mse')
+    #model = dnn.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
     # simpleDNN_dropout(feature_dim, units, atv, loss)
-    #model = dnn.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse')
+    model = dnn.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
