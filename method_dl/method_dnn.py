@@ -28,12 +28,14 @@ def simpleDNN(feature_dim, units, atv, loss):
 #DNN model with dropout
 def simpleDNN_dropout(feature_dim, units, atv, loss):
     model = Sequential()
-    model.add(Dropout(0.2, input_shape=(feature_dim,)))
-    model.add(Dense( units=units, activation=atv))
+
+    model.add(Dense(input_dim=feature_dim, units=units,
+        activation = atv)) 
 
     for i in range(10):
         model.add(Dense(units=units-i, activation=atv))
 
+    model.add(Dropout(0.2, input_shape=(units-i+1,)))
     model.add(Dense(units=2, activation='softmax'))
     opt = Adam(learning_rate=0.01)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
