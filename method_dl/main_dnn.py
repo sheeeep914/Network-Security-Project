@@ -52,8 +52,8 @@ def label_to_nparr(label_list):
 if __name__ == "__main__":
 
 
-    train_df = pd.read_csv("../dataset/NUSW_mix4_train.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW10000.csv", low_memory=False)
+    train_df = pd.read_csv("../dataset/NUSW_mix_4.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/NUSW_mix.csv", low_memory=False)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     train_df, trainlabel_list, train_att_cat = init(train_df)
     test_df, testlabel_list, test_att_cat = init(test_df)
 
-
+    
     #transforming datatype
     train_df = prep.trans_datatype(train_df)
     test_df = prep.trans_datatype(test_df)
@@ -80,6 +80,7 @@ if __name__ == "__main__":
     trainlabel_np, train_np = np.array(trainlabel_list), np.array(train_df)
     testlabel_np, test_np = np.array(testlabel_list), np.array(test_df)
 
+    
     #deal with problem of key 'ct_ftp_cmd'
     train_np = prep.np_fillna(train_np)
     test_np = prep.np_fillna(test_np)
