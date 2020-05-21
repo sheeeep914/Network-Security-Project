@@ -36,7 +36,7 @@ def init(packets):
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
 
     #if we want to do get only non-flow features
-    #packets = prep.get_imp(packets)
+    packets = prep.get_imp(packets)
 
     return packets
 
@@ -58,7 +58,8 @@ if __name__ == "__main__":
     train_df = pd.read_csv(
         "../dataset/NUSW-1-20000-100000_80000_mix_time.csv", low_memory=False)
     test_df = pd.read_csv(
-        "../dataset/NUSW-1-100000-180000_80000_mix_time.csv", low_memory=False)
+        "../dataset/NUSW10000.csv", low_memory=False)
+    
     
     train_df = init(train_df)
     test_df = init(test_df)
@@ -85,8 +86,13 @@ if __name__ == "__main__":
     trainlabel_np = np.array(trainlabel_list_oneHot)
     testlabel_np = np.array(testlabel_list_oneHot)
 
+    train_np = prep.np_fillna(train_np)
+    test_np = prep.np_fillna(test_np)
+
+
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np[0].shape   # input dimention
+
 
     # simpleRNN(feature_dim, atv, loss)
     model = rnn.simpleRNN(feature_dim, 'relu', 'mse')
@@ -107,8 +113,8 @@ if __name__ == "__main__":
     #training
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, callbacks=[earlystopping, checkpoint, csv_logger])
 
-    """result = model.evaluate(test_np,  testlabel_np)
-    print("testing accuracy = ", result[1])"""
+    result = model.evaluate(test_np,  testlabel_np)
+    print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
     rnn.detailAccuracyRNN(predictLabel, testlabel_list)

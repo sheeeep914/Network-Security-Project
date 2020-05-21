@@ -102,6 +102,8 @@ def ip_to_value(packets):
     #print(type(packets.loc[1]['srcip']))
 
     n = len(packets)
+    
+    
 
     srcip = packets['srcip']
     dstip = packets['dstip']
@@ -109,11 +111,15 @@ def ip_to_value(packets):
     srcip1, srcip2, dstip1, dstip2 = [], [], [], []
 
     for i in range(n):
-        
-        if type(srcip[i]) != type("str"):
+
+        if(type(srcip[i]) == type(1)):
+            print("a ", i)
+        elif(type(dstip[i]) == type(1)):
+            print("b ", i)
+        """ if type(srcip[i]) != type("str"):
             srcip[i] = "0.0.0.0"
         elif type(dstip[i]) != type("str"):
-            dstip[i] = "0.0.0.0"
+            dstip[i] = "0.0.0.0" """
 
         srcip_split = srcip[i].split(".")
         dstip_split = dstip[i].split(".")
