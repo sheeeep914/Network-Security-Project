@@ -2,10 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
 
-imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
-                'dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin',
-                'stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 
-                'attack_cat', 'Label']
+imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'Sload', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
 imp_features2 = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
                 'dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin',
                 'stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 
@@ -112,7 +109,12 @@ def ip_to_value(packets):
     srcip1, srcip2, dstip1, dstip2 = [], [], [], []
 
     for i in range(n):
-        #print(srcip[i])
+        
+        if type(srcip[i]) != type("str"):
+            srcip[i] = "0.0.0.0"
+        elif type(dstip[i]) != type("str"):
+            dstip[i] = "0.0.0.0"
+
         srcip_split = srcip[i].split(".")
         dstip_split = dstip[i].split(".")
 
