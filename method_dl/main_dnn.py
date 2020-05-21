@@ -32,7 +32,7 @@ def init(packets):
     
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'dnn')
 
-    #if we want to do get only non-flow features
+    #if we want to do get specfic
     #packets = prep.get_imp(packets)
     
     return packets, label, attack_cat
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
 
     train_df = pd.read_csv("../dataset/NUSW_mix_4.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW_mix.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/NUSW10000.csv", low_memory=False)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
