@@ -52,8 +52,8 @@ def label_to_nparr(label_list):
 if __name__ == "__main__":
 
 
-    train_df = pd.read_csv("../dataset/NUSW_mix_4.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/NUSW10000.csv", low_memory=False)
+    train_df = pd.read_csv("../dataset/mix_4.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/1_0-1_mix_time.csv", low_memory=False)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
