@@ -36,7 +36,7 @@
 
         - [x] 異常分析(把normal 跟 melicious分開 分別下去train 看結果如何)
 
-    - **問題**
+    - **問題與發現**
         1. DBSCAN離群值怎麼半
         2. 怎麼predict testing data(沒有函式可以叫 dbscan也不能直接顯示群心 寫了一個func -> DBscan_predict 但是不確定那樣對不對)
         3. PCA降為前後的group number怎麼對應
@@ -245,9 +245,28 @@
         *(**ex:** 假定資料來自NB15-1, 從第0筆到第1萬筆, label0, 1混合(mix), 則資料集名稱為: **1_s0-e1_mix_time** )*
         - **否**: 原始資料為第幾個資料集_0w(+有幾筆)_1w(+有幾筆)_是否shuffle(yshf/nshf)_時間特性(notime)
         *(**ex:** 假定資料來自NB15-1, 0,1 各取1萬筆資料(共兩萬筆), 沒把0,1 shuffle, 則資料集名稱為: **1_0w1_1w1_nshf_notime**)*
-        
+    
+    - **簡易流程**
+        1. 從wireshark拿到pcap檔
+        2. preprocessing(將pacp檔內容轉成我們train好的model所需的feature)
+        3. 餵進model看accuracy
+        4. 將分析出來的攻擊封包drop掉
+        *PS:希望能在專題展前完成1. 2. 3.部分* 
+    
     - **問題與發現**
-        - 
+        - DNN model適合用在shuffle過，0,1資料量平衡的dataset
+        - RNN model適合用在照時間順序抓下來的data，0,1沒平衡沒有差
+
+    - **testing結果**
+        model   | test data 特性 | 是否只取特定feature(與log無關的) | 結果(正確率) - Test | 
+        :------:|:-----:|:-----:|:----:
+        DNN     | 與時間順序無關, 0和1平衡| 否 | 99.6%
+        DNN     | 與時間順序無關, 0和1平衡| 是 | 97.4%
+        DNN     | 與時間順序有關, 0和1不平衡| 否 | 95.4% 
+        DNN     | 與時間順序有關, 0和1不平衡| 是 | 浮動(幅度大) 
+        RNN     | 與時間順序有關, 0和1不平衡| 否 | 99.5
+        RNN     | 與時間順序有關, 0和1不平衡| 是 | 98.3
+
 
 ---
 ### *補充：Clone fork 差別*
