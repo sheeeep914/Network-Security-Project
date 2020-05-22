@@ -15,7 +15,35 @@ Scaling
 from sklearn.preprocessing import MinMaxScaler
 import preprocessing as prep
 
-def defRNN(data_tr, data_ts):
+def defRNN(data):
+
+    tempdata = data.copy()
+    del tempdata['Label']
+    
+    #deal with missing
+    data.fillna(value=0, inplace=True)  # fill missing with 0
+    X, y = [], []
+    
+    #transforming datatype (object -> normal datatype)
+    tempdata = prep.trans_datatype(tempdata) 
+    
+    #scaling
+    tempdata = prep.feature_scaling(tempdata)
+    
+    n = 10  # 10 packets per group
+    for i in range(data.shape[0] - n):
+        X.append(tempdata[i:i+n])  # i - i+n-1
+        y.append(data['Label'].iloc[i+n-1])  # i+n-1
+
+        #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
+
+    X = np.array(X)
+    y = np.array(y)
+
+    return X, y
+
+
+""" def defRNN(data_tr, data_ts): 
 
     tempdata_tr = data_tr.copy()
     del tempdata_tr['Label']
@@ -23,17 +51,17 @@ def defRNN(data_tr, data_ts):
     del tempdata_ts['Label']
     #deal with missing
     data_tr.fillna(value=0, inplace=True)  # fill missing with 0
-    data_ts.fillna(value=0, inplace=True) 
+    data_ts.fillna(value=0, inplace=True)
     X_tr, X_ts, y_tr, y_ts = [], [], [], []
-    
+
     #transforming datatype (object -> normal datatype)
-    tempdata_tr = prep.trans_datatype(tempdata_tr) 
+    tempdata_tr = prep.trans_datatype(tempdata_tr)
     tempdata_ts = prep.trans_datatype(tempdata_ts)
 
     #scaling
     tempdata_tr = prep.feature_scaling(tempdata_tr)
     tempdata_ts = prep.feature_scaling(tempdata_ts)
-    
+
     n = 10  # 10 packets per group
     for i in range(data_tr.shape[0] - n):
         X_tr.append(tempdata_tr[i:i+n])  # i - i+n-1
@@ -52,10 +80,8 @@ def defRNN(data_tr, data_ts):
     y_ts = np.array(y_ts)
 
 
-
     return X_tr, X_ts, y_tr, y_ts
-
-
+"""
 
 
 #RNN model
@@ -72,11 +98,6 @@ def simpleRNN(feature_dim, atv, loss):
 
     return model
 
-
-""" data_tr = pd.read_csv("../dataset/NUSW10000.csv", low_memory=False)
-data_ts = pd.read_csv("../dataset/NUSW20000.csv", low_memory=False)
-defRNN(data_tr, data_ts)
- """
 
 def detailAccuracyRNN(predict, actual):
     B_G, G_G, G_B, B_B = 0, 0, 0, 0
