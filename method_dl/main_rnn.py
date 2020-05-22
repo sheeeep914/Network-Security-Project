@@ -53,41 +53,30 @@ def label_to_nparr(label_list):
     return label_np
 
 
-if __name__ == "__main__":
+def processed_data(datapath):
+    data_df = pd.read_csv(datapath, low_memory=False)
 
-    train_df = pd.read_csv(
-        "../dataset/1_2-10_mix_time.csv", low_memory=False)
-    test_df = pd.read_csv(
-        "../dataset/1_0-1_mix_time.csv", low_memory=False)
-    
-    
-    train_df = init(train_df)
-    test_df = init(test_df)
+    data_df = init(data_df)
 
-    """ print("train_df key:\n")
-    print(train_df.keys()) """
-    train_np, test_np, trainlabel_list, testlabel_list = rnn.defRNN(train_df, test_df)
-
-    """ #transforming datatype (object -> normal datatype)
-    packets = prep.trans_datatype(packets) """
-
-    """ #scaling
-    train_np = prep.feature_scaling(train_np)
-    test_np = prep.feature_scaling(test_np) """
-
-    """ pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None) """
+    data_np, datalabel_list = rnn.defRNN(data_df)
 
     #create an one-hot list for label list
-    trainlabel_list_oneHot = label_to_nparr(trainlabel_list)
-    testlabel_list_oneHot = label_to_nparr(testlabel_list)
+    datalabel_list_oneHot = label_to_nparr(datalabel_list)
 
     #turn dataframe and list to np array
-    trainlabel_np = np.array(trainlabel_list_oneHot)
-    testlabel_np = np.array(testlabel_list_oneHot)
+    datalabel_np = np.array(datalabel_list_oneHot)
 
-    train_np = prep.np_fillna(train_np)
-    test_np = prep.np_fillna(test_np)
+    data_np = prep.np_fillna(data_np)
+
+    return data_np, datalabel_np, datalabel_list
+
+
+
+if __name__ == "__main__":
+
+    train_path = "../dataset/1_2-10_mix_time.csv"
+    
+    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
 
 
     dataset_size = train_np.shape[0]  # how many data
@@ -100,7 +89,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='best.h5',
+    checkpoint = ModelCheckpoint(filepath='rnn_best.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -113,8 +102,12 @@ if __name__ == "__main__":
     #training
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, callbacks=[earlystopping, checkpoint, csv_logger])
 
-    result = model.evaluate(test_np,  testlabel_np)
+    #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
+
+
+    """ result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
     rnn.detailAccuracyRNN(predictLabel, testlabel_list)
+ """
