@@ -79,7 +79,46 @@ def get_flow_index(flows, pcaps):
     return index
 
 def merge_flow(flows, index):
+    for i, flow in enumerate(flows):
+        print(i,flow)
+    
+    n = len(flows)
+    del_list=[]
+    mark = [0]*n
 
+    for i, header_i in enumerate(flows):
+
+        if mark[i] == 1:
+            continue
+        
+        src_i, dst_i, sport_i, dport_i, proto_i = header_i[0], header_i[1], header_i[2], header_i[3], header_i[4] 
+
+        for j, header_j in enumerate(flows[i+1:n]):
+            
+            if j <= i: continue 
+            if mark[j] == 1: continue
+            
+            src_j, dst_j, sport_j, dport_j, proto_j = header_j[0], header_j[1], header_j[2], header_j[3], header_j[4] 
+            
+            #bidirectional connection with src and dst switch
+            if (src_i==dst_j) & (dst_i==src_j) & (sport_i==dport_j) & (dport_i==sport_j) & (proto_i==proto_j):
+                
+                index[i].extend(index[j])
+                del_list.append(j)
+                mark[j] = 1
+
+    for item in del_list:
+        del index[item]
+        del flows[item]
+
+    print(del_list)
+    """print("==================================")
+    for flow in flows:
+        print((flow))
+    print("======================")
+    for i in index:
+        print(i)"""
+                
 
 if __name__ == '__main__':
     pcaps = sp.rdpcap('test.pcap')
