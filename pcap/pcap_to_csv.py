@@ -1,8 +1,10 @@
 import scapy.all as sp
 import copy
 import numpy as np
+import pandas as pd
+import statistics
 
-def get_packet_layers(packet):
+def get_pcap_layers(packet):
     counter = 0
     while True:
         layer = packet.getlayer(counter)
@@ -11,23 +13,6 @@ def get_packet_layers(packet):
 
         yield layer
         counter += 1
-
-def exception_handler(header, layers):
-
-    flow = []
-
-    if layers[1] == 'ARP':
-        arp = header.getlayer('ARP')
-        flow = [arp.psrc, arp.pdst, 0, 0, 'arp']
-
-    elif layers[2] == 'ICMP':
-        ip = header.getlayer('IP')
-        flow = [ip.src, ip.dst, 0, 0, 'icmp']
-
-    else:
-        flow = ['0.0.0.0', '0.0.0.0', 0, 0, '-']
-
-    return flow
 
 
 def create_flow(pcaps):
@@ -40,7 +25,7 @@ def create_flow(pcaps):
         layers = []
         flow = []
 
-        for layer in get_packet_layers(header):
+        for layer in get_pcap_layers(header):
             layers.append(layer.name)
 
         try :
@@ -67,71 +52,152 @@ def create_flow(pcaps):
 
     return flows, pcap_list
         
-def get_flow_index(flows, pcaps):
+def get_flow_index(zeek, pcaps):
 
-    index = np.empty((len(flows), 0)).tolist()
+    n = len(zeek.index)
+    index = np.empty((n, 0)).tolist()
+    direction = [0 for i in range (len(pcaps))]
 
-    for i, flow in enumerate(flows):
+    for i in range(n):
+        row = zeek.iloc[i, :]
+        srcip, dstip, sport, dsport = row['srcip'], row['dstip'], row['sport'], row['dsport']
+
         for j, pcap in enumerate(pcaps):
-            if flow == pcap:
-                index[i].append(j)
 
-    return index
+            layers = []
+            for layer in get_pcap_layers(pcap):
+                layers.append(layer.name)
 
-def merge_flow(flows, index):
-    for i, flow in enumerate(flows):
-        print(i,flow)
-    
-    n = len(flows)
-    del_list=[]
-    mark = [0]*n
+            try:
+                ip = layers[1]
+                trans = layers[2]
 
-    for i, header_i in enumerate(flows):
+                #packets from src to dst
+                if ((srcip == pcap.getlayer(ip).src) & (dstip == pcap.getlayer(ip).dst) & 
+                    (sport == pcap.getlayer(trans).sport) & (dsport == pcap.getlayer(trans).dport)):
+                    index[i].append(j)
+                    direction[j] = 0
 
-        if mark[i] == 1:
+                #packets from dst to src
+                elif ((srcip == pcap.getlayer(ip).dst) & (dstip == pcap.getlayer(ip).src) & 
+                    (sport == pcap.getlayer(trans).dport) & (dsport == pcap.getlayer(trans).sport)):
+                    index[i].append(j)
+                    direction[j] = 1
+
+            except:continue
+
+    return index, direction
+
+
+def preprossing(zeek):
+
+    #if the log file hasn't been filtered in linux
+    del zeek['uid']
+    del zeek['local_orig']
+    del zeek['local_resp']
+    del zeek['missed_bytes']
+    del zeek['history']
+    del zeek['orig_ip_bytes']
+    del zeek['resp_ip_bytes']
+    del zeek['tunnel_parents']
+
+    #change the key name to the same as NUSW dataset
+    zeek.columns = ['Stime', 'srcip', 'sport', 'dstip', 'dsport', 'proto', 'service', 'dur', 'sbytes', 'dbytes', 'state', 'Spkts', 'Dpkts']
+
+    return zeek
+
+def fill_tcp_feature(zeek, pcaps, index, direction):
+
+    swin, dwin, stcpb, dtcpb =[], [], [], []
+
+    print(index)
+
+    for i, idx in enumerate(index):
+
+        if idx == []: 
+            swin.append(0)
+            dwin.append(0)
+            stcpb.append(0)
+            dtcpb.append(0)
             continue
+
+        flow = zeek.iloc[i, :]
+        swin_avg, dwin_avg = [], []
+        flag_s=0
+        flag_d=0
         
-        src_i, dst_i, sport_i, dport_i, proto_i = header_i[0], header_i[1], header_i[2], header_i[3], header_i[4] 
+        first_pck = pcaps[idx[0]]
 
-        for j, header_j in enumerate(flows[i+1:n]):
-            
-            if j <= i: continue 
-            if mark[j] == 1: continue
-            
-            src_j, dst_j, sport_j, dport_j, proto_j = header_j[0], header_j[1], header_j[2], header_j[3], header_j[4] 
-            
-            #bidirectional connection with src and dst switch
-            if (src_i==dst_j) & (dst_i==src_j) & (sport_i==dport_j) & (dport_i==sport_j) & (proto_i==proto_j):
+        if first_pck.haslayer('TCP') == False: 
+            swin.append(0)
+            dwin.append(0)
+            stcpb.append(0)
+            dtcpb.append(0)
+            continue
+
+        for value in idx:
+
+            #first packet in each direction : can get base sequence number and window size
+            if (direction[value] == 0) & (flag_s==0):
+                flag_s=1
+                stcpb.append(pcaps[value].getlayer('TCP').seq)
+                swin_avg.append(pcaps[value].getlayer('TCP').window)
+
+            elif (direction[value] == 1) & (flag_d==0):
+                flag_d=1
+                dtcpb.append(pcaps[value].getlayer('TCP').seq)
+                dwin_avg.append(pcaps[value].getlayer('TCP').window)
                 
-                index[i].extend(index[j])
-                del_list.append(j)
-                mark[j] = 1
+            elif direction[value] == 0:
+                swin_avg.append(pcaps[value].getlayer('TCP').window)
+            
+            elif direction[value] == 1:
+                dwin_avg.append(pcaps[value].getlayer('TCP').window)
+        
 
-    for item in del_list:
-        del index[item]
-        del flows[item]
+        if flag_d == 0:
+            dtcpb.append(0)
+        
+        #calculate average window size for each flow
+        try:
+            swin.append(int(statistics.mean(swin_avg)))
+        except:
+            swin.append(0)
 
-    print(del_list)
-    """print("==================================")
-    for flow in flows:
-        print((flow))
-    print("======================")
-    for i in index:
-        print(i)"""
+        try:
+            dwin.append(int(statistics.mean(dwin_avg)))
+        except:
+            dwin.append(0)
+
+            
+    zeek = zeek.assign(swin = pd.Series(swin).values, dwin = pd.Series(dwin).values)
+    zeek = zeek.assign(stcpb = pd.Series(stcpb).values, dtcpb = pd.Series(dtcpb).values)
+    print(zeek)
+
+    return zeek
+    
                 
 
 if __name__ == '__main__':
-    pcaps = sp.rdpcap('test.pcap')
+    pcaps = sp.rdpcap('./logfile/test.pcap')
     n = len(pcaps)
 
+
+    zeek = pd.read_csv('./logfile/conn.log.csv', low_memory=False)
+    zeek = preprossing(zeek)
+
+    #print(zeek.keys())
     #print(type(pcaps[230].getlayer('IP').id))
 
     #create flows with same src ip/ dst ip/ src port/ dst port/ proto
-    flows, pcap_list = create_flow(pcaps)
+
+
+    #flows, pcap_list = create_flow(pcaps)
 
     #in each flow, get the index of the original packets
-    index = get_flow_index(flows, pcap_list)
+    index, direction = get_flow_index(zeek, pcaps)
 
-    #if srcip, srcport and dstip, dstport is swap, see as the same bidirectional connection
-    merge_flow(flows, index)
+    zeek = fill_tcp_feature(zeek, pcaps, index, direction)
+
+
 
