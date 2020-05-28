@@ -49,11 +49,12 @@ def label_to_nparr(label_list):
         
     return label_np
 
+
 if __name__ == "__main__":
 
 
     train_df = pd.read_csv("../dataset/2_0w4_1w4_yshf_notime.csv", low_memory=False)
-    test_df = pd.read_csv("../dataset/1_0-1_mix_time.csv", low_memory=False)
+    test_df = pd.read_csv("../dataset/1_0-1_mix_time.csv", low_memory=False) 
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -72,13 +73,12 @@ if __name__ == "__main__":
     test_df = prep.feature_scaling(test_df)
 
     #create an one-hot list for label list
-
-    trainlabel_list = label_to_nparr(trainlabel_list)
-    testlabel_list = label_to_nparr(testlabel_list)
+    trainlabel_list_oneHot = label_to_nparr(trainlabel_list)
+    testlabel_list_oneHot = label_to_nparr(testlabel_list)
 
     #turn dataframe and list into np array
-    trainlabel_np, train_np = np.array(trainlabel_list), np.array(train_df)
-    testlabel_np, test_np = np.array(testlabel_list), np.array(test_df)
+    trainlabel_np, train_np = np.array(trainlabel_list_oneHot), np.array(train_df)
+    testlabel_np, test_np = np.array(testlabel_list_oneHot), np.array(test_df)
 
     
     #deal with problem of key 'ct_ftp_cmd'
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='best.h5',
+    checkpoint = ModelCheckpoint(filepath='dnn_best.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -114,3 +114,10 @@ if __name__ == "__main__":
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
+
+    
+
+    predictLabel = model.predict_classes(test_np)
+    #print(predictLabel)
+    dnn.detailAccuracyDNN(predictLabel, testlabel_list)
+
