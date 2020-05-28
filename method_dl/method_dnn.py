@@ -45,6 +45,7 @@ def simpleDNN_dropout(feature_dim, units, atv, loss):
 def detailAccuracyDNN(predict, actual):
     B_G, G_G, G_B, B_B = 0, 0, 0, 0
     n = len(predict)
+    bad_index_list = []
 
     for i in range(len(predict)):
         if (actual[i] == 0) & (predict[i] == 0):
@@ -58,6 +59,8 @@ def detailAccuracyDNN(predict, actual):
 
         elif (actual[i] == 1) & (predict[i] == 1):
             B_B = B_B+1
+            #must return its index for the usage in iptable
+            bad_index_list.append(i)
 
     print("===========================")
     print("predict right:")
@@ -67,4 +70,5 @@ def detailAccuracyDNN(predict, actual):
     print("predict wrong:")
     print("Good to Bad: ", G_B/n)
     print("Bad to Good: ", B_G/n)
-    
+
+    return bad_index_list

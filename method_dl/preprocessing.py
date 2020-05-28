@@ -3,10 +3,7 @@ import numpy as np
 import pandas as pd
 
 imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'Sload', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
-imp_features2 = ['srcip', 'sport', 'dstip', 'dsport', 'proto',
-                'dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin',
-                'stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 
-                'attack_cat', 'Label']
+imp_features2 = ['srcip', 'sport', 'dstip', 'dsport', 'proto','dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin','stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'attack_cat', 'Label']
 http_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
 proto = ['tcp', 'udp', 'arp', 'ospf', 'ip', 'icmp', 'unas']
 #proto = ['tcp', 'udp', 'sctp', 'sm', 'pnni', 'pgm', 'tcf', 'secure-vmtp', 'unas', 'ospf', 'st2', 'ipnip', 'scps', 'skip', 'aris', 'hmp', 'vmtp', 'arp', 'netblt', 'tp++', 'pipe', 'nvp', 'ip', 'ipip', 'ipx-n-ip', 'fc', 'nsfnet-igp', 'ddp', 'cbt', 'ipv6-frag', 'any', 'mobile', 'prm', 'bbn-rcc', 'ddx', 'uti', 'rsvp', 'xns-idp', 'trunk-1', 'stp', 'ifmp', 'wb-mon', 'smp', 'pim', 'sccopmce', 'leaf-1', 'xnet', 'pri-enc', 'iso-ip', 'gmtp', 'leaf-2', 'encap', 'gre', 'dgp', 'kryptolan', 'bna', 'ipv6-opts', 'ipv6-route', 'pup', 'igp', 'br-sat-mon', 'compaq-peer', 'irtp', 'snp','crtp', 'narp', 'rvd', 'sun-nd', 'idpr-cmtp', 'xtp', 'ipv6', 'mtp', 'ggp', 'vrrp', 'etherip', 'a/n', 'cpnx', 'eigrp', 'sprite-rpc', 'argus', 'wb-expak', 'ipcv', 'tlsp', 'mfe-nsp', 'micp', 'vines', 'cphb', 'iplt', 'sps', 'egp', 'ippc', 'fire', 'mux', 'i-nlsp', 'dcn', 'srp', 'swipe', 'zero', 'sat-expak', 'aes-sp3-d', 'crudp', 'larp', 'l2tp', 'ax.25', 'isis', 'rdp', 'merit-inp', 'cftp', 'emcon', 'il', 'pvp', 'wsn', 'sat-mon', 'ptp', 'idrp', 'chaos', 'sep', 'sdrp', 'ipv6-no', '3pc', 'mhrp', 'visa', 'ipcomp', 'qnx', 'iso-tp4', 'ttp', 'iatp', 'trunk-2', 'ib', 'idpr']
@@ -102,8 +99,6 @@ def ip_to_value(packets):
     #print(type(packets.loc[1]['srcip']))
 
     n = len(packets)
-    
-    
 
     srcip = packets['srcip']
     dstip = packets['dstip']
@@ -111,15 +106,6 @@ def ip_to_value(packets):
     srcip1, srcip2, dstip1, dstip2 = [], [], [], []
 
     for i in range(n):
-
-        if(type(srcip[i]) == type(1)):
-            print("a ", i)
-        elif(type(dstip[i]) == type(1)):
-            print("b ", i)
-        """ if type(srcip[i]) != type("str"):
-            srcip[i] = "0.0.0.0"
-        elif type(dstip[i]) != type("str"):
-            dstip[i] = "0.0.0.0" """
 
         srcip_split = srcip[i].split(".")
         dstip_split = dstip[i].split(".")
@@ -134,8 +120,10 @@ def ip_to_value(packets):
     packets['dstip1'], packets['dstip2'] = dstip1, dstip2
 
     del packets['srcip'], packets['dstip']
+    srcip_list = srcip.tolist()
+    dstip_list = dstip.tolist()
 
-    return packets
+    return packets, srcip_list, dstip_list
     #print(packets.keys())
 
 
