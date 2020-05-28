@@ -34,7 +34,7 @@ def init(packets):
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'dnn')
 
     #if we want to do get specfic
-    #packets = prep.get_imp(packets)
+    packets = prep.get_imp(packets)
     
     return packets, label, srcip, dstip
 

@@ -45,7 +45,7 @@ def get_bad_srcip(bad_index_list):
 
 if __name__ == "__main__":
 
-    test_path = "../dataset/1_0-1_mix_time.csv"
+    test_path = "../dataset/1_1-2_mix_time.csv"
     bad_index_list, test_srcip = fit_testdata(test_path)
     bad_srcip_list = get_bad_srcip(bad_index_list)
     

@@ -2,7 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
 
-imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'Sload', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
+imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'service', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz','dmeansz', 'trans_depth','res_bdy_len', 'Stime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
 imp_features2 = ['srcip', 'sport', 'dstip', 'dsport', 'proto','dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin','stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'attack_cat', 'Label']
 http_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
 proto = ['tcp', 'udp', 'arp', 'ospf', 'ip', 'icmp', 'unas']
