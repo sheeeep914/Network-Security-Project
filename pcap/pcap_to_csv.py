@@ -262,19 +262,20 @@ def fill_ip_feature(zeek, pcaps, index, direction):
 
 def fill_http_feature(zeek, pcaps, index):
     http = pd.read_csv('./logfile/http.log.csv')
-    trans_depth, res_len = [], []
+    trans_depth, res_len ,ct_flw_http_mthd = [], [], []
 
     for i in range (len(zeek.index)):
 
         flow = zeek.iloc[i,:]
         if flow['service'] != 'http':
-
+            ct_flw_http_mthd.append(0)
             trans_depth.append(0)
             res_len.append(0)
             continue
 
         len_avg = []
         depth_tmp = 0
+        mthd_n = 0
 
         for j in range(len(http.index)):
             
@@ -283,16 +284,112 @@ def fill_http_feature(zeek, pcaps, index):
                 
                 depth_tmp = int(pkt['trans_depth'])
                 len_avg.append(int(pkt['response_body_len']))
+                mthd_n = mthd_n+1
 
         
         trans_depth.append(depth_tmp)
+        ct_flw_http_mthd.append(mthd_n)
 
         try:
             res_len.append(int(statistics.mean(len_avg)))
         except:
             res_len.append(0)
 
-    zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values)
+    zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
+                        ct_flw_http_mthd = pd.Series(ct_flw_http_mthd).values)
+
+    return zeek
+
+def same_ip_port(zeek):
+    is_sm_ips_ports = []
+    for i in range(len(zeek.index)):
+        flow = zeek.iloc[i,:]
+        if (flow['srcip'] == flow['dstip']) & (flow['sport'] == flow['dsport']):
+            is_sm_ips_ports.append(1)
+        else:
+            is_sm_ips_ports.append(0)
+
+    zeek = zeek.assign(is_sm_ips_ports = pd.Series(is_sm_ips_ports).values)
+    return zeek
+
+def cnt_100_2(zeek, target):
+
+    n = 100
+    col = []
+    t1 = target[0]
+    t2 = target[1]
+
+    for i in range (len(zeek.index)):
+         
+        cnt = 0
+        if i < n:
+            for j in range(i):
+                if (zeek.iloc[i,:][t1] == zeek.iloc[j,:][t1]) & (zeek.iloc[i,:][t2] == zeek.iloc[j,:][t2]):
+                    cnt = cnt+1
+
+        else:
+            for j in range(i-1, i-101, -1):
+                if (zeek.iloc[i,:][t1] == zeek.iloc[j,:][t1]) & (zeek.iloc[i,:][t2] == zeek.iloc[j,:][t2]):
+                     cnt = cnt+1
+
+        col.append(cnt)
+        
+    return col
+
+def cnt_100_1(zeek, target):
+
+    n = 100
+    col = []
+    t1 = target[0]
+
+    for i in range (len(zeek.index)):
+         
+        cnt = 0
+        if i < n:
+            for j in range(i):
+                if (zeek.iloc[i,:][t1] == zeek.iloc[j,:][t1]):
+                    cnt = cnt+1
+
+        else:
+            for j in range(i-1, i-101, -1):
+                if (zeek.iloc[i,:][t1] == zeek.iloc[j,:][t1]):
+                     cnt = cnt+1
+
+        col.append(cnt)
+        
+    return col
+
+def statis(zeek):
+
+    zeek = same_ip_port(zeek)
+
+    target = ['service', 'srcip']
+    col = cnt_100_2(zeek, target)
+    zeek = zeek.assign(ct_srv_src = pd.Series(col).values)
+
+    target = ['service', 'dstip']
+    col = cnt_100_2(zeek, target)
+    zeek = zeek.assign(ct_srv_dst = pd.Series(col).values)
+
+    target = ['srcip', 'dsport']
+    col = cnt_100_2(zeek, target)
+    zeek = zeek.assign(ct_src_dport_ltm = pd.Series(col).values)
+
+    target = ['dstip', 'sport']
+    col = cnt_100_2(zeek, target)
+    zeek = zeek.assign(ct_dst_sport_ltm = pd.Series(col).values)
+
+    target = ['srcip', 'dstip']
+    col = cnt_100_2(zeek, target)
+    zeek = zeek.assign(ct_dst_src_ltm = pd.Series(col).values)
+
+    target = ['dstip']
+    col = cnt_100_1(zeek, target)
+    zeek = zeek.assign(ct_dst_ltm = pd.Series(col).values)
+
+    target = ['srcip']
+    col = cnt_100_1(zeek, target)
+    zeek = zeek.assign(ct_src_ltm = pd.Series(col).values)
 
     return zeek
                 
@@ -312,11 +409,15 @@ if __name__ == '__main__':
     index, direction = get_flow_index(zeek, pcaps)
 
     print(index)
-    
+    zeek = statis(zeek)
+    print(zeek.iloc[74,:])
     zeek = fill_http_feature(zeek, pcaps, index)
     zeek = fill_general_feature(zeek, index, srcip_bytes, dstip_bytes)
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
     zeek = fill_ip_feature(zeek, pcaps, index, direction)
+    
+    
+    
     
     
 
