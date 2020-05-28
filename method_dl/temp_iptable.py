@@ -18,12 +18,14 @@ def fit_testdata(test_path):
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
-    return model
-
-def get_bad_srcip(model):
     predictLabel = model.predict_classes(test_np)
     #print(predictLabel)
     bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
+
+    return bad_index_list, test_srcip
+
+def get_bad_srcip(bad_index_list):
+    
 
     bad_srcip_list, temp = [], []
     for index in bad_index_list:
@@ -44,19 +46,20 @@ def get_bad_srcip(model):
 if __name__ == "__main__":
 
     test_path = "../dataset/1_0-1_mix_time.csv"
-    model = fit_testdata(test_path)
-    bad_srcip_list = get_bad_srcip(model)
+    bad_index_list, test_srcip = fit_testdata(test_path)
+    bad_srcip_list = get_bad_srcip(bad_index_list)
     
     
+    for ip_item in bad_srcip_list:
 
-    rule = iptc.Rule()
-    rule.in_interface = "eth+"
-    rule.src  = "127.0.0.1/255.0.0.0"
-    target = rule.create_target("DROP")
+        rule = iptc.Rule()
+        rule.in_interface = "eth+"
+        rule.src  = ip_item
+        target = rule.create_target("DROP")
 
-    chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
-    chain.insert_rule(rule)
-   
+        chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
+        chain.insert_rule(rule)
+
 
     table = iptc.Table(iptc.Table.FILTER)
     for chain in table.chains:
@@ -64,11 +67,10 @@ if __name__ == "__main__":
         print("Chain", chain.name)
         for rule in chain.rules:
             print("Rule", "proto: ", rule.protocol, "src: ", rule.src, "dst: ", rule.dst, "in: ", rule.in_interface, "out: ", rule.out_interface)
-            print"Matches: ",
+            print("Matches: ")
             for match in rule.matches:
-                print match.name,
-            print "Target: ",
-            print rule.target.name
+                print (match.name)
+            print ("Target: ",rule.target.name)
 
         print("=============")
 
