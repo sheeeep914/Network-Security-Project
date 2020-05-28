@@ -17,7 +17,7 @@ Keras Method
 """
 from keras.models import Sequential
 import method_dnn as dnn 
-import temp_iptable as iptable
+#import temp_iptable as iptable
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
 
@@ -75,23 +75,11 @@ def processed_data(datapath):
 
     return data_np, datalabel_np, datalabel_list, data_srcip, data_dstip
 
-def testing_predict(model, testlabel_list, srcip_list):
-    predictLabel = model.predict_classes(test_np)
-    #print(predictLabel)
-    bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
-    #print(bad_index_list)
-
-    bad_srcip_list = []
-
-    for index in bad_index_list:
-        bad_srcip_list.append(srcip_list[index])
-
-    return bad_srcip_list
-
+    
 
 if __name__ == "__main__":
     train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
-    test_path = "../dataset/1_0-1_mix_time.csv"
+    test_path = "../dataset/1_1-2_mix_time.csv"
 
     train_np, trainlabel_np, trainlabel_list, train_srcip, train_dstip = processed_data(train_path)
     test_np, testlabel_np, testlabel_list, test_srcip, test_dstip = processed_data(test_path)
@@ -107,7 +95,6 @@ if __name__ == "__main__":
     #model = dnn.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
 
-    """ 
     # simpleDNN_dropout(feature_dim, units, atv, loss)
     model = dnn.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse')
 
@@ -129,12 +116,26 @@ if __name__ == "__main__":
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    result = model.evaluate(test_np,  testlabel_np)
+    """ result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
-    #testing_predict(model, testlabel_list, test_srcip) """
+    #testing_predict(model, testlabel_list, test_srcip) 
 
-    iptable.test()
+    predictLabel = model.predict_classes(test_np)
+    #print(predictLabel)
+    bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
+    #print(bad_index_list)
 
-            
-   
+    bad_srcip_list, temp = [], []
+    for index in bad_index_list:
+        srcip = test_srcip[index]
+
+        if temp.count(srcip) == 0:
+            if test_srcip.count(srcip) >= 50:
+                temp.append(srcip)
+                bad_srcip_list.append(srcip)
+        elif temp.count(srcip) != 0:
+            print("exist before")
+            #have been counted, do nothing
+
+    print(bad_srcip_list) """
