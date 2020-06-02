@@ -2,8 +2,8 @@ import iptc
 import sys
 import os
 import keras.models as ks
-import method_dnn as dnn
-import main_dnn as main
+import method_rnn as rnn
+import main_rnn as main
 
 """ 
 chain = iptc.Chain(table, "INPUT")
@@ -13,21 +13,20 @@ print len(chain.rules)
 """
 
 def fit_testdata(test_path):
-    test_np, testlabel_np, testlabel_list, test_srcip, test_dstip = main.processed_data(test_path)
+    test_np, testlabel_np, testlabel_list, test_srcip = main.processed_data(test_path)
 
-    model = ks.load_model('dnn_best.h5')
+    model = ks.load_model('rnn_best.h5')
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
     #print(predictLabel)
-    bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
+    bad_index_list = rnn.detailAccuracyRNN(predictLabel, testlabel_list)
 
     return bad_index_list, test_srcip
 
 def get_bad_srcip(bad_index_list):
-    
 
     bad_srcip_list, temp = [], []
     for index in bad_index_list:

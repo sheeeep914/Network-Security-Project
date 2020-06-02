@@ -4,6 +4,8 @@ import pandas as pd
 """
 callback function
 """
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import EarlyStopping
@@ -33,15 +35,15 @@ def init(packets):
     
     packets = prep.service_to_value(packets)
     
-    #packets, srcip, dstip = prep.ip_to_value(packets)
+    packets, temp_srcip, temp_dstip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
 
     #if we want to do get only non-flow features
-    packets = prep.get_imp(packets)
+    #packets = prep.get_imp(packets)
 
-    return packets
+    return packets, temp_srcip
 
 #create np array for label
 def label_to_nparr(label_list):
@@ -59,7 +61,7 @@ def label_to_nparr(label_list):
 def processed_data(datapath):
     data_df = pd.read_csv(datapath, low_memory=False)
 
-    data_df = init(data_df)
+    data_df, data_srcip= init(data_df)
 
     data_np, datalabel_list = rnn.defRNN(data_df)
 
@@ -71,7 +73,7 @@ def processed_data(datapath):
 
     data_np = prep.np_fillna(data_np)
 
-    return data_np, datalabel_np, datalabel_list
+    return data_np, datalabel_np, datalabel_list, data_srcip
 
 
 
@@ -79,7 +81,7 @@ if __name__ == "__main__":
 
     train_path = "../dataset/1_2-10_mix_time.csv"
     
-    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
+    train_np, trainlabel_np, trainlabel_list, train_srcip = processed_data(train_path)
 
 
     dataset_size = train_np.shape[0]  # how many data

@@ -23,6 +23,7 @@ def defRNN(data):
     #deal with missing
     data.fillna(value=0, inplace=True)  # fill missing with 0
     X, y = [], []
+    #srcip = []
     
     #transforming datatype (object -> normal datatype)
     tempdata = prep.trans_datatype(tempdata) 
@@ -34,11 +35,12 @@ def defRNN(data):
     for i in range(data.shape[0] - n):
         X.append(tempdata[i:i+n])  # i - i+n-1
         y.append(data['Label'].iloc[i+n-1])  # i+n-1
-
+        #srcip.append(data['srcip'].iloc[i+n-1])
         #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
 
     X = np.array(X)
     y = np.array(y)
+    #srcip = np.array(srcip)
 
     return X, y
 
@@ -103,6 +105,7 @@ def simpleRNN(feature_dim, atv, loss):
 def detailAccuracyRNN(predict, actual):
     B_G, G_G, G_B, B_B = 0, 0, 0, 0
     n = len(predict)
+    bad_index_list = []
 
     for i in range(len(predict)):
         if (actual[i] == 0) & (predict[i] == 0):
@@ -116,7 +119,10 @@ def detailAccuracyRNN(predict, actual):
 
         elif (actual[i] == 1) & (predict[i] == 1):
             B_B = B_B+1
+            #must return its index for the usage in iptable
+            bad_index_list.append(i)
 
+    """
     print("===========================")
     print("predict right:")
     print("Good to Good: ", G_G/n)
@@ -125,4 +131,6 @@ def detailAccuracyRNN(predict, actual):
     print("predict wrong:")
     print("Good to Bad: ", G_B/n)
     print("Bad to Good: ", B_G/n)
+    """
     
+    return bad_index_list
