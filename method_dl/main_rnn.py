@@ -28,9 +28,12 @@ def init(packets):
 
     #one hard encoding
     packets = prep.proto_to_value(packets)
+    
     packets = prep.state_to_value(packets)
+    
     packets = prep.service_to_value(packets)
-    packets = prep.ip_to_value(packets)
+    
+    #packets, srcip, dstip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')

@@ -29,14 +29,14 @@ def init(packets):
     packets = prep.proto_to_value(packets)    
     packets = prep.state_to_value(packets)    
     packets = prep.service_to_value(packets)
-    packets, srcip, dstip = prep.ip_to_value(packets)
+    #packets, srcip, dstip = prep.ip_to_value(packets)
     
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'dnn')
 
     #if we want to do get specfic
-    #packets = prep.get_imp(packets)
+    packets = prep.get_imp(packets)
     
-    return packets, label, srcip, dstip
+    return packets, label
 
 #create np array for label
 def label_to_nparr(label_list):
@@ -53,7 +53,7 @@ def label_to_nparr(label_list):
 def processed_data(datapath):
     data_df = pd.read_csv(datapath, low_memory=False)
 
-    data_df, datalabel_list, data_srcip, data_dstip = init(data_df)
+    data_df, datalabel_list = init(data_df)
     #print("1 ", type(data_srcip))
 
     #transforming datatype
@@ -73,16 +73,16 @@ def processed_data(datapath):
     #deal with problem of key 'ct_ftp_cmd'
     data_np = prep.np_fillna(data_np)
 
-    return data_np, datalabel_np, datalabel_list, data_srcip, data_dstip
+    return data_np, datalabel_np, datalabel_list
 
     
 
 if __name__ == "__main__":
-    train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
-    test_path = "../dataset/1_1-2_mix_time.csv"
+    train_path = "../dataset/1_2-10_mix_time.csv"
+    test_path = "../dataset/1_0-1_mix_time.csv"
 
-    train_np, trainlabel_np, trainlabel_list, train_srcip, train_dstip = processed_data(train_path)
-    test_np, testlabel_np, testlabel_list, test_srcip, test_dstip = processed_data(test_path)
+    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
+    test_np, testlabel_np, testlabel_list = processed_data(test_path)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -116,7 +116,7 @@ if __name__ == "__main__":
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    """ result = model.evaluate(test_np,  testlabel_np)
+    result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     #print(predictLabel)
     bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
     #print(bad_index_list)
-
+    """
     bad_srcip_list, temp = [], []
     for index in bad_index_list:
         srcip = test_srcip[index]

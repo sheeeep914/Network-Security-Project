@@ -2,8 +2,10 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
 
-imp_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'Sload', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
-imp_features2 = ['srcip', 'sport', 'dstip', 'dsport', 'proto','dur', 'sbytes', 'dbytes','sttl','dttl', 'Sload','Spkts', 'Dpkts', 'swin', 'dwin','stcpb','dtcpb', 'smeansz', 'dmeansz', 'Stime', 'Ltime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'attack_cat', 'Label']
+#全部feature 不含srcip dstip
+imp_features = ['sport', 'dsport', 'proto',  'state', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'service', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_state_ttl','ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
+#部分feature 不含srcip dstip
+imp_features2 = ['sport', 'dsport', 'proto',  'state', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl',  'service', 'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len',  'Stime', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_dst_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'attack_cat', 'Label']
 http_features = ['srcip', 'sport', 'dstip', 'dsport', 'proto', 'dur', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'Label', 'attack_cat']
 proto = ['tcp', 'udp', 'arp', 'ospf', 'ip', 'icmp', 'unas']
 #proto = ['tcp', 'udp', 'sctp', 'sm', 'pnni', 'pgm', 'tcf', 'secure-vmtp', 'unas', 'ospf', 'st2', 'ipnip', 'scps', 'skip', 'aris', 'hmp', 'vmtp', 'arp', 'netblt', 'tp++', 'pipe', 'nvp', 'ip', 'ipip', 'ipx-n-ip', 'fc', 'nsfnet-igp', 'ddp', 'cbt', 'ipv6-frag', 'any', 'mobile', 'prm', 'bbn-rcc', 'ddx', 'uti', 'rsvp', 'xns-idp', 'trunk-1', 'stp', 'ifmp', 'wb-mon', 'smp', 'pim', 'sccopmce', 'leaf-1', 'xnet', 'pri-enc', 'iso-ip', 'gmtp', 'leaf-2', 'encap', 'gre', 'dgp', 'kryptolan', 'bna', 'ipv6-opts', 'ipv6-route', 'pup', 'igp', 'br-sat-mon', 'compaq-peer', 'irtp', 'snp','crtp', 'narp', 'rvd', 'sun-nd', 'idpr-cmtp', 'xtp', 'ipv6', 'mtp', 'ggp', 'vrrp', 'etherip', 'a/n', 'cpnx', 'eigrp', 'sprite-rpc', 'argus', 'wb-expak', 'ipcv', 'tlsp', 'mfe-nsp', 'micp', 'vines', 'cphb', 'iplt', 'sps', 'egp', 'ippc', 'fire', 'mux', 'i-nlsp', 'dcn', 'srp', 'swipe', 'zero', 'sat-expak', 'aes-sp3-d', 'crudp', 'larp', 'l2tp', 'ax.25', 'isis', 'rdp', 'merit-inp', 'cftp', 'emcon', 'il', 'pvp', 'wsn', 'sat-mon', 'ptp', 'idrp', 'chaos', 'sep', 'sdrp', 'ipv6-no', '3pc', 'mhrp', 'visa', 'ipcomp', 'qnx', 'iso-tp4', 'ttp', 'iatp', 'trunk-2', 'ib', 'idpr']
@@ -150,7 +152,7 @@ def get_http(packets):
 
 
 def get_imp(packets):
-    imp_features_n = len(imp_features)
+    imp_features_n = len(imp_features2)
     cnt = 0
 
     packets_imp = packets.copy()
@@ -158,11 +160,11 @@ def get_imp(packets):
         for i in range(imp_features_n):
 
             #important features, check the next column
-            if (col == imp_features[i]):
+            if (col == imp_features2[i]):
                 break
 
             #no important features match, and last feature has been checked
-            elif ((col != imp_features[i]) & (i == imp_features_n-1)):
+            elif ((col != imp_features2[i]) & (i == imp_features_n-1)):
                 del packets_imp[col]
 
     return packets_imp
