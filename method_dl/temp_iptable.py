@@ -1,4 +1,6 @@
 import iptc
+import sys
+import os
 import keras.models as ks
 import method_dnn as dnn
 import main_dnn as main
@@ -44,8 +46,14 @@ def get_bad_srcip(bad_index_list):
 
 
 if __name__ == "__main__":
+    os.system("sudo iptables -F")
 
-    test_path = "../dataset/1_1-2_mix_time.csv"
+    print("\n")
+    print("IPTABLE(before exe)")
+    print("===========================")
+    os.system("sudo iptables -nL --line-number")
+
+    test_path = "../dataset/1_10-18_mix_time.csv"
     bad_index_list, test_srcip = fit_testdata(test_path)
     bad_srcip_list = get_bad_srcip(bad_index_list)
     
@@ -60,7 +68,16 @@ if __name__ == "__main__":
         chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
         chain.insert_rule(rule)
 
+    print("===========================")
+    print("\n")
+    print("IPTABLE(after exe)")
+    print("===========================")
+    
+    os.system("sudo iptables -nL --line-number")
 
+    
+    
+    """
     table = iptc.Table(iptc.Table.FILTER)
     for chain in table.chains:
         print("=============")
@@ -73,6 +90,7 @@ if __name__ == "__main__":
             print ("Target: ",rule.target.name)
 
         print("=============")
+    """
 
     
 
