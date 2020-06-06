@@ -172,10 +172,6 @@ def fill_tcp_feature(zeek, pcaps, index, direction):
             elif direction[value] == 1:
                 dwin_avg.append(pcaps[value].getlayer('TCP').window)
 
-            
-            if pcaps[value].getlayer('TCP').flags == 'S':
-                syn = 1
-
         
 
         if flag_d == 0:
@@ -410,7 +406,7 @@ if __name__ == '__main__':
 
     print(index)
     zeek = statis(zeek)
-    print(zeek.iloc[74,:])
+    #print(zeek.iloc[74,:])
     zeek = fill_http_feature(zeek, pcaps, index)
     zeek = fill_general_feature(zeek, index, srcip_bytes, dstip_bytes)
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
@@ -419,6 +415,3 @@ if __name__ == '__main__':
     
     
     
-    
-
-

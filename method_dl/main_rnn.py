@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='rnn_best.h5',
+    checkpoint = ModelCheckpoint(filepath='./model/1-3-1.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',

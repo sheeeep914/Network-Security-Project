@@ -1,4 +1,4 @@
-import iptc
+#import iptc
 import sys
 import os
 import keras.models as ks
@@ -15,7 +15,7 @@ print len(chain.rules)
 def fit_testdata(test_path):
     test_np, testlabel_np, testlabel_list, test_srcip = main.processed_data(test_path)
 
-    model = ks.load_model('rnn_best.h5')
+    model = ks.load_model('./model/1-1-1.h5')
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
@@ -45,16 +45,16 @@ def get_bad_srcip(bad_index_list):
 
 
 if __name__ == "__main__":
-    os.system("sudo iptables -F")
+    """os.system("sudo iptables -F")
 
     print("\n")
     print("IPTABLE(before exe)")
     print("===========================")
     os.system("sudo iptables -nL --line-number")
-
-    test_path = "../dataset/1_10-18_mix_time.csv"
+"""
+    test_path = "../dataset/1_1-2_mix_time.csv"
     bad_index_list, test_srcip = fit_testdata(test_path)
-    bad_srcip_list = get_bad_srcip(bad_index_list)
+    """bad_srcip_list = get_bad_srcip(bad_index_list)
     
     
     for ip_item in bad_srcip_list:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     os.system("sudo iptables -nL --line-number")
 
     
-    
+    """
     """
     table = iptc.Table(iptc.Table.FILTER)
     for chain in table.chains:

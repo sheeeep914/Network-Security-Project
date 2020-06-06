@@ -9,6 +9,7 @@ from keras.layers import SimpleRNN
 from keras.layers.core import Activation, Dense, Dropout
 from keras.layers.recurrent import LSTM
 from keras.optimizers import SGD, Adam
+import keras.layers.advanced_activations
 """ 
 Scaling
 """
