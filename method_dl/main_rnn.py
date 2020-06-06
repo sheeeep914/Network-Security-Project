@@ -89,12 +89,12 @@ if __name__ == "__main__":
 
 
     # simpleRNN(feature_dim, atv, loss)
-    model = rnn.simpleRNN(feature_dim, 'relu', 'mse')
+    model = rnn.simpleRNN(feature_dim, 'hard_sigmoid', 'mse')
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='./model/1-3-1.h5',
+    checkpoint = ModelCheckpoint(filepath='./model/1-2-2.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
