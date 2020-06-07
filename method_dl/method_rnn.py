@@ -90,10 +90,11 @@ def defRNN(data):
 #RNN model
 def simpleRNN(feature_dim, atv, loss):
     model = Sequential()
-    model.add(LSTM(100, return_sequences=True, input_shape=feature_dim))
-    model.add(LSTM(100))
-    model.add(Dense(8))
-    model.add(Dense(8))
+    model.add(LSTM(110,  return_sequences=True,input_shape=feature_dim))
+    model.add(LSTM(80))
+    #model.add(Dense(80))
+    model.add(Dense(25))
+    model.add(Dense(10))
     model.add(Dense(units=2, kernel_initializer='uniform', activation=atv))
 
     adam = Adam(0.00006)
