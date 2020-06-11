@@ -200,7 +200,14 @@ def fill_ip_feature(zeek, pcaps, index, direction):
         flag_d = 0
 
         for value in idx:
-            
+
+            if(pcaps[value].haslayer('IP') == False):
+                sttl.append(0)
+                dttl.append(0)
+                flag_d = 1
+                flag_s = 1
+                break
+               
             if (flag_s == 0) & (direction[value] == 0):
                 sttl.append(pcaps[value].getlayer('IP').ttl)
                 flag_s = 1
@@ -225,7 +232,12 @@ def fill_http_feature(zeek, pcaps, index):
 
     #if http.log don't exist
     try : 
-        http = pd.read_csv('./logfile/http.log.csv')
+
+        #############################
+        #   place http.log file     #
+        #############################
+
+        http = pd.read_csv('./nmap/http.log.csv')
     except : 
         for i in range (len(zeek.index)):
             trans_depth.append(0)
@@ -370,30 +382,29 @@ def statis(zeek):
                 
 
 if __name__ == '__main__':
+    
+    #########################
+    #   place pcap file     #
+    #########################
 
-    #enter pcap file
-    pcaps = sp.rdpcap('./logfile/test.pcap')
+    pcaps = sp.rdpcap('./nmap/nmap.pcapng')
     n = len(pcaps)
 
+    #############################
+    #   place conn.log file     #
+    #############################
 
-    zeek = pd.read_csv('./logfile/conn.log.csv', low_memory=False)
+    zeek = pd.read_csv('./nmap/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
-
-    #print(zeek.keys())
-    #print(type(pcaps[230].getlayer('IP').id))
-    #print(pcaps[31].getlayer('TCP').options[2])
 
     #in each flow, get the index of the original packets
     index, direction = get_flow_index(zeek, pcaps)
 
-    print(index)
     zeek = statis(zeek)
-    #print(zeek.iloc[74,:])
+    zeek = fill_ip_feature(zeek, pcaps, index, direction)
     zeek = fill_http_feature(zeek, pcaps, index)
     zeek = fill_general_feature(zeek, index, srcip_bytes, dstip_bytes)
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
-    zeek = fill_ip_feature(zeek, pcaps, index, direction)
-    
-    
-    
-    
+
+       
+    zeek.to_csv('./nmap/nmap.csv', index=False)
