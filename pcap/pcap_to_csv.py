@@ -15,43 +15,6 @@ def get_pcap_layers(packet):
         counter += 1
 
 
-"""def create_flow(pcaps):
-    n = len(pcaps)
-    layers = []
-    flows = []
-
-    for i, header in enumerate(pcaps):
-        
-        layers = []
-        flow = []
-
-        for layer in get_pcap_layers(header):
-            layers.append(layer.name)
-
-        try :
-            ip = layers[1]
-            port = layers[2]
-
-            flow.append(header.getlayer(ip).src)
-            flow.append(header.getlayer(ip).dst)
-            flow.append(header.getlayer(port).sport)
-            flow.append(header.getlayer(port).dport)
-            flow.append(port.lower())
-
-        #protocols without port or ip
-        except:
-            flow = exception_handler(header, layers)
-
-        flows.append(flow)
-
-    pcap_list = copy.deepcopy(flows)
-
-    #merge duplicated (merge the same ip/port/proto for the same flow)
-    s = set(tuple(l) for l in flows)
-    flows = [list(t) for t in s]
-
-    return flows, pcap_list"""
-
 def id_eq_http(flow, pkt):
     
     if ((flow['srcip'] == pkt['id_orig_h']) & (flow['dstip'] == pkt['id_resp_h']) 
@@ -257,8 +220,24 @@ def fill_ip_feature(zeek, pcaps, index, direction):
     return zeek
 
 def fill_http_feature(zeek, pcaps, index):
-    http = pd.read_csv('./logfile/http.log.csv')
+
     trans_depth, res_len ,ct_flw_http_mthd = [], [], []
+
+    #if http.log don't exist
+    try : 
+        http = pd.read_csv('./logfile/http.log.csv')
+    except : 
+        for i in range (len(zeek.index)):
+            trans_depth.append(0)
+            res_len.append(0)
+            ct_flw_http_mthd.append(0)
+
+        zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
+                        ct_flw_http_mthd = pd.Series(ct_flw_http_mthd).values)
+
+        return zeek
+
+        
 
     for i in range (len(zeek.index)):
 
@@ -391,8 +370,11 @@ def statis(zeek):
                 
 
 if __name__ == '__main__':
+
+    #enter pcap file
     pcaps = sp.rdpcap('./logfile/test.pcap')
     n = len(pcaps)
+
 
     zeek = pd.read_csv('./logfile/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
