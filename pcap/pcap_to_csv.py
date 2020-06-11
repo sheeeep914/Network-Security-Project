@@ -396,6 +396,7 @@ if __name__ == '__main__':
 
     zeek = pd.read_csv('./nmap/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
+    print(srcip_bytes)
 
     #in each flow, get the index of the original packets
     index, direction = get_flow_index(zeek, pcaps)
@@ -407,4 +408,4 @@ if __name__ == '__main__':
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
 
        
-    zeek.to_csv('./nmap/nmap.csv', index=False)
+    #zeek.to_csv('./nmap/nmap.csv', index=False)
