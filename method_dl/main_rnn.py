@@ -31,19 +31,20 @@ def init(packets):
     #one hard encoding
     packets = prep.proto_to_value(packets)
     
-    packets = prep.state_to_value(packets)
+    #packets = prep.state_to_value(packets)
+    del packets['state']
     
     packets = prep.service_to_value(packets)
     
-    packets, temp_srcip, temp_dstip = prep.ip_to_value(packets)
+    #packets, temp_srcip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
     attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
 
     #if we want to do get only non-flow features
-    #packets = prep.get_imp(packets)
+    packets = prep.get_imp(packets)
 
-    return packets, temp_srcip
+    return packets
 
 #create np array for label
 def label_to_nparr(label_list):
@@ -61,7 +62,8 @@ def label_to_nparr(label_list):
 def processed_data(datapath):
     data_df = pd.read_csv(datapath, low_memory=False)
 
-    data_df, data_srcip= init(data_df)
+    data_df= init(data_df)
+    print(data_df.columns)
 
     data_np, datalabel_list = rnn.defRNN(data_df)
 
@@ -73,7 +75,7 @@ def processed_data(datapath):
 
     data_np = prep.np_fillna(data_np)
 
-    return data_np, datalabel_np, datalabel_list, data_srcip
+    return data_np, datalabel_np, datalabel_list
 
 
 
@@ -81,12 +83,13 @@ if __name__ == "__main__":
 
     train_path = "../dataset/1_2-10_mix_time.csv"
     
-    train_np, trainlabel_np, trainlabel_list, train_srcip = processed_data(train_path)
+    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
 
-
+    
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np[0].shape   # input dimention
 
+    print(feature_dim)
 
     # simpleRNN(feature_dim, atv, loss)
     model = rnn.simpleRNN(feature_dim, 'relu', 'mse')
@@ -94,7 +97,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='./model/2-1-1.h5',
+    checkpoint = ModelCheckpoint(filepath='rnn_best.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
