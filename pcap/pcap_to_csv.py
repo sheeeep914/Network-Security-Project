@@ -387,14 +387,14 @@ if __name__ == '__main__':
     #   place pcap file     #
     #########################
 
-    pcaps = sp.rdpcap('./nmap/nmap.pcapng')
+    pcaps = sp.rdpcap('./DDos/DDos.pcapng')
     n = len(pcaps)
 
     #############################
     #   place conn.log file     #
     #############################
 
-    zeek = pd.read_csv('./nmap/conn.log.csv', low_memory=False)
+    zeek = pd.read_csv('./DDos/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
     print(srcip_bytes)
 
@@ -408,4 +408,4 @@ if __name__ == '__main__':
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
 
        
-    #zeek.to_csv('./nmap/nmap.csv', index=False)
+    zeek.to_csv('./DDos/DDos.csv', index=False)
