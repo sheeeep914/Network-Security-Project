@@ -113,9 +113,9 @@ if __name__ == "__main__":
     #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
 
 
-    """ result = model.evaluate(test_np,  testlabel_np)
+    result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
     rnn.detailAccuracyRNN(predictLabel, testlabel_list)
- """
+ 

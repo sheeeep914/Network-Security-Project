@@ -18,6 +18,16 @@ service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl
 def seperate_att_lab(packets, method):
 
     attack_cat = packets['attack_cat'].to_numpy()
+    # Fuzzers, Analysis, Backdoors, DoS Exploits, Generic, Reconnaissance, Shellcode and Worms
+    for i, value in enumerate(attack_cat):
+        if value == 'Fuzzers':
+            attack_cat[i] = 1
+        elif value == 'Analysis':
+            attack_cat[i] = 2
+        elif value == 'Backdoors':
+            attack_cat[i] = 3
+
+
     del packets['attack_cat']
 
     label = packets['Label'].to_numpy()
