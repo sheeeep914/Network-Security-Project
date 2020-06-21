@@ -18,21 +18,37 @@ service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl
 def seperate_att_lab(packets, method):
 
     attack_cat = packets['attack_cat'].to_numpy()
-    # Fuzzers, Analysis, Backdoors, DoS Exploits, Generic, Reconnaissance, Shellcode and Worms
-    for i, value in enumerate(attack_cat):
+    
+    # Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode and Worms
+    for i,value in enumerate(attack_cat):
+
         if value == 'Fuzzers':
             attack_cat[i] = 1
         elif value == 'Analysis':
-            attack_cat[i] = 2
+            attack_cat[i]  = 2
         elif value == 'Backdoors':
-            attack_cat[i] = 3
-
-
-    del packets['attack_cat']
+            attack_cat[i]  = 3
+        elif value == 'Dos':
+            attack_cat[i]  = 4
+        elif value == 'Exploits':
+            attack_cat[i]  = 5
+        elif value == 'Generic':
+            attack_cat[i]  = 6
+        elif value == 'Reconnaissance':
+            attack_cat[i]  = 7
+        elif value == 'Shellcode':
+            attack_cat[i]  = 8
+        elif value == 'Worms':
+            attack_cat[i]  = 9
+        else:
+            attack_cat[i]  = 0
 
     label = packets['Label'].to_numpy()
-    if(method == 'dnn'):
-        del packets['Label']
+    del packets['attack_cat']
+
+    if(method != 'dnn'):
+        packets['attack_cat'] = attack_cat
+    del packets['Label']
     #elif(method == 'rnn'):
         #don't delete 'Label'
 

@@ -18,7 +18,7 @@ def simpleDNN(feature_dim, units, atv, loss):
     for i in range(10):
         model.add(Dense(units=units-i, activation=atv))
 
-    model.add(Dense(units=2, activation='softmax'))
+    model.add(Dense(units=10, activation='softmax'))
     opt = Adam(learning_rate=0.01)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
@@ -36,14 +36,38 @@ def simpleDNN_dropout(feature_dim, units, atv, loss):
         model.add(Dense(units=units-i, activation=atv))
 
     model.add(Dropout(0.2, input_shape=(units-i+1,)))
-    model.add(Dense(units=2, activation='softmax'))
+    model.add(Dense(units=10, activation='softmax'))
     opt = Adam(learning_rate=0.01)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
     return model
 
 def detailAccuracyDNN(predict, actual):
-    B_G, G_G, G_B, B_B = 0, 0, 0, 0
+    n = len(predict)
+    bad_index_list = []
+    total = [0 for i in range(10)]
+    x = [0 for i in range(10)]
+
+
+    for i, value in enumerate (actual):
+        total[value] = total[value]+1
+
+    for i, value in enumerate(predict):
+        if(predict[i] == actual[i]):
+            x[value] = x[value]+1
+
+
+    for index in range(10):
+        print("==========================")
+        print(index, ':',x[index], total[index]) 
+        try :
+            print(x[index]/total[index])
+        except ZeroDivisionError:
+            print(0.0)
+
+    print("=========================")
+
+    """B_G, G_G, G_B, B_B = 0, 0, 0, 0
     n = len(predict)
     bad_index_list = []
 
@@ -70,5 +94,5 @@ def detailAccuracyDNN(predict, actual):
     print("predict wrong:")
     print("Good to Bad: ", G_B/n)
     print("Bad to Good: ", B_G/n)
-
+"""
     return bad_index_list

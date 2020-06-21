@@ -52,9 +52,25 @@ def label_to_nparr(label_list):
     label_np = []
     for i in range(label_list.shape[0]):
         if(label_list[i] == 0):
-            label_np.append([1, 0])
+            label_np.append([1,0,0,0,0,0,0,0,0,0])
         elif(label_list[i] == 1):
-            label_np.append([0, 1])
+            label_np.append([0,1,0,0,0,0,0,0,0,0])
+        elif(label_list[i] == 2):
+            label_np.append([0,0,1,0,0,0,0,0,0,0])
+        elif(label_list[i] == 3):
+            label_np.append([0,0,0,1,0,0,0,0,0,0])
+        elif(label_list[i] == 4):
+            label_np.append([0,0,0,0,1,0,0,0,0,0])
+        elif(label_list[i] == 5):
+            label_np.append([0,0,0,0,0,1,0,0,0,0])
+        elif(label_list[i] == 6):
+            label_np.append([0,0,0,0,0,0,1,0,0,0])
+        elif(label_list[i] == 7):
+            label_np.append([0,0,0,0,0,0,0,1,0,0])
+        elif(label_list[i] == 8):
+            label_np.append([0,0,0,0,0,0,0,0,1,0])
+        elif(label_list[i] == 9):
+            label_np.append([0,0,0,0,0,0,0,0,0,1])
 
     return label_np
 
@@ -113,9 +129,9 @@ if __name__ == "__main__":
     #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
 
 
-    result = model.evaluate(test_np,  testlabel_np)
+    """result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
     rnn.detailAccuracyRNN(predictLabel, testlabel_list)
- 
+ """

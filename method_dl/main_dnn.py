@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import sys
 
 """
 callback function
@@ -36,7 +37,7 @@ def init(packets):
     #if we want to do get specfic
     packets = prep.get_imp(packets)
     
-    return packets, label
+    return packets, label, attack_cat
 
 #create np array for label
 def label_to_nparr(label_list):
@@ -50,10 +51,40 @@ def label_to_nparr(label_list):
         
     return label_np
 
+#create np array for label
+def attackcat_to_nparr(label_list):
+
+    label_np = []
+    for i in range(label_list.shape[0]):
+        if(label_list[i] == 0):
+            label_np.append([1,0,0,0,0,0,0,0,0,0])
+        elif(label_list[i] == 1):
+            label_np.append([0,1,0,0,0,0,0,0,0,0])
+        elif(label_list[i] == 2):
+            label_np.append([0,0,1,0,0,0,0,0,0,0])
+        elif(label_list[i] == 3):
+            label_np.append([0,0,0,1,0,0,0,0,0,0])
+        elif(label_list[i] == 4):
+            label_np.append([0,0,0,0,1,0,0,0,0,0])
+        elif(label_list[i] == 5):
+            label_np.append([0,0,0,0,0,1,0,0,0,0])
+        elif(label_list[i] == 6):
+            label_np.append([0,0,0,0,0,0,1,0,0,0])
+        elif(label_list[i] == 7):
+            label_np.append([0,0,0,0,0,0,0,1,0,0])
+        elif(label_list[i] == 8):
+            label_np.append([0,0,0,0,0,0,0,0,1,0])
+        elif(label_list[i] == 9):
+            label_np.append([0,0,0,0,0,0,0,0,0,1])
+
+    label_np = np.array(label_np)
+
+    return label_np
+
 def processed_data(datapath):
     data_df = pd.read_csv(datapath, low_memory=False)
 
-    data_df, datalabel_list = init(data_df)
+    data_df, datalabel_list, attack_cat = init(data_df)
     #print("1 ", type(data_srcip))
 
     #transforming datatype
@@ -66,6 +97,7 @@ def processed_data(datapath):
 
     #create an one-hot list for label list
     datalabel_list_oneHot = label_to_nparr(datalabel_list)
+    att_cat = attackcat_to_nparr(attack_cat)
 
     #turn dataframe and list to np array
     datalabel_np, data_np = np.array(datalabel_list_oneHot), np.array(data_df_scale)
@@ -73,7 +105,7 @@ def processed_data(datapath):
     #deal with problem of key 'ct_ftp_cmd'
     data_np = prep.np_fillna(data_np)
 
-    return data_np, datalabel_np, datalabel_list
+    return data_np, datalabel_np, datalabel_list, att_cat, attack_cat
 
     
 
@@ -81,8 +113,10 @@ if __name__ == "__main__":
     train_path = "../dataset/1_2-10_mix_time.csv"
     test_path = "../dataset/1_0-1_mix_time.csv"
 
-    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
-    test_np, testlabel_np, testlabel_list = processed_data(test_path)
+    train_np, trainlabel_np, trainlabel_list, train_attackcat, train_attack_cat_list = processed_data(train_path)
+    test_np, testlabel_np, testlabel_list, test_attackcat, test_attack_cat_list = processed_data(test_path)
+    print(len(train_attackcat[0]))
+    print((train_attackcat))
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -112,18 +146,19 @@ if __name__ == "__main__":
                                 mode='max')
 
     #training
-    model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, callbacks=[
+    model.fit(train_np, train_attackcat, batch_size=100, epochs=10, callbacks=[
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    result = model.evaluate(test_np,  testlabel_np)
+    result = model.evaluate(test_np,  test_attackcat)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
 
     predictLabel = model.predict_classes(test_np)
-    #print(predictLabel)
-    bad_index_list = dnn.detailAccuracyDNN(predictLabel, testlabel_list)
+    np.set_printoptions(threshold=sys.maxsize)
+    print(predictLabel)
+    bad_index_list = dnn.detailAccuracyDNN(predictLabel, test_attack_cat_list)
     #print(bad_index_list)
     """
     bad_srcip_list, temp = [], []

@@ -19,7 +19,7 @@ import preprocessing as prep
 def defRNN(data):
 
     tempdata = data.copy()
-    del tempdata['Label']
+    del tempdata['attack_cat']
     
     #deal with missing
     data.fillna(value=0, inplace=True)  # fill missing with 0
@@ -35,8 +35,9 @@ def defRNN(data):
     n = 10  # 10 packets per group
     for i in range(data.shape[0] - n):
         X.append(tempdata[i:i+n])  # i - i+n-1
-        y.append(data['Label'].iloc[i+n-1])  # i+n-1
-        #srcip.append(data['srcip'].iloc[i+n-1])
+        y.append(data['attack_cat'].iloc[i+n-1])  # i+n-1
+        #srcip.append(data['s
+        # rcip'].iloc[i+n-1])
         #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
 
     X = np.array(X)
@@ -93,9 +94,9 @@ def simpleRNN(feature_dim, atv, loss):
     model.add(LSTM(100,  return_sequences=True,input_shape=feature_dim))
     model.add(LSTM(100))
     #model.add(Dense(80))
-    model.add(Dense(8))
-    model.add(Dense(8))
-    model.add(Dense(units=2, kernel_initializer='uniform', activation=atv))
+    model.add(Dense(15))
+    model.add(Dense(15))
+    model.add(Dense(units=10, kernel_initializer='uniform', activation=atv))
 
     adam = Adam(0.00006)
 
@@ -105,11 +106,32 @@ def simpleRNN(feature_dim, atv, loss):
 
 
 def detailAccuracyRNN(predict, actual):
-    B_G, G_G, G_B, B_B = 0, 0, 0, 0
+    
     n = len(predict)
     bad_index_list = []
+    total = [0 for i in range(10)]
+    x = [0 for i in range(10)]
 
-    for i in range(len(predict)):
+
+    for i, value in enumerate (actual):
+        total[value] = total[value]+1
+
+    for i, value in enumerate(predict):
+        if(predict[i] == actual[i]):
+            x[value] = x[value]+1
+
+
+    for index in range(10):
+        print("==========================")
+        print(index, ':',x[index], total[index]) 
+        try :
+            print(x[index]/total[index])
+        except ZeroDivisionError:
+            print(0.0)
+
+    print("=========================")
+
+    """for i in range(len(predict)):
         if (actual[i] == 0) & (predict[i] == 0):
             G_G = G_G+1
 
@@ -122,17 +144,17 @@ def detailAccuracyRNN(predict, actual):
         elif (actual[i] == 1) & (predict[i] == 1):
             B_B = B_B+1
             #must return its index for the usage in iptable
-            bad_index_list.append(i)
+            bad_index_list.append(i)"""
 
     
-    print("===========================")
+    """print("===========================")
     print("predict right:")
     print("Good to Good: ", G_G/n)
     print("Bad to Bad: ", B_B/n)
     print("===========================")
     print("predict wrong:")
     print("Good to Bad: ", G_B/n)
-    print("Bad to Good: ", B_G/n)
+    print("Bad to Good: ", B_G/n)"""
    
     
     return bad_index_list
