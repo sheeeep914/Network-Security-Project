@@ -16,7 +16,7 @@ Scaling
 from sklearn.preprocessing import MinMaxScaler
 import preprocessing as prep
 
-def defRNN(data):
+def defRNN_cat(data):
 
     tempdata = data.copy()
     del tempdata['attack_cat']
@@ -46,6 +46,35 @@ def defRNN(data):
 
     return X, y
 
+def defRNN_label(data):
+    
+    tempdata = data.copy()
+    del tempdata['Label']
+    
+    #deal with missing
+    data.fillna(value=0, inplace=True)  # fill missing with 0
+    X, y = [], []
+    #srcip = []
+    
+    #transforming datatype (object -> normal datatype)
+    tempdata = prep.trans_datatype(tempdata) 
+    
+    #scaling
+    tempdata = prep.feature_scaling(tempdata)
+    
+    n = 10  # 10 packets per group
+    for i in range(data.shape[0] - n):
+        X.append(tempdata[i:i+n])  # i - i+n-1
+        y.append(data['Label'].iloc[i+n-1])  # i+n-1
+        #srcip.append(data['s
+        # rcip'].iloc[i+n-1])
+        #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
+
+    X = np.array(X)
+    y = np.array(y)
+    #srcip = np.array(srcip)
+
+    return X, y
 
 """ def defRNN(data_tr, data_ts): 
 

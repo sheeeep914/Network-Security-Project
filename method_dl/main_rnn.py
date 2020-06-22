@@ -39,7 +39,7 @@ def init(packets):
     #packets, temp_srcip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
-    attack_cat, label, packets = prep.seperate_att_lab(packets, 'rnn')
+    attack_cat, label, packets = prep.seperate_att_lab_label(packets, 'rnn')
 
     #if we want to do get only non-flow features
     packets = prep.get_imp(packets)
@@ -48,6 +48,20 @@ def init(packets):
 
 #create np array for label
 def label_to_nparr(label_list):
+
+    label_np = []
+    for i in range (label_list.shape[0]):
+        if(label_list[i] == 0):
+            label_np.append([1, 0])
+        elif(label_list[i] == 1):
+            label_np.append([0, 1])
+        
+    return label_np
+
+
+
+#create np array for label
+def cat_to_nparr(label_list):
 
     label_np = []
     for i in range(label_list.shape[0]):
@@ -81,15 +95,17 @@ def processed_data(datapath):
     data_df= init(data_df)
     print(data_df.columns)
 
-    data_np, datalabel_list = rnn.defRNN(data_df)
+    data_np, datalabel_list = rnn.defRNN_label(data_df)
+    
 
     #create an one-hot list for label list
-    datalabel_list_oneHot = label_to_nparr(datalabel_list)
+    datalabel_list_oneHot = cat_to_nparr(datalabel_list)
 
     #turn dataframe and list to np array
     datalabel_np = np.array(datalabel_list_oneHot)
 
     data_np = prep.np_fillna(data_np)
+    
 
     return data_np, datalabel_np, datalabel_list
 
@@ -113,7 +129,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='rnn_best.h5',
+    checkpoint = ModelCheckpoint(filepath='rnn_best_label.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -127,6 +143,7 @@ if __name__ == "__main__":
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=15, callbacks=[earlystopping, checkpoint, csv_logger], validation_split=0.1)
 
     #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
+    
 
 
     """result = model.evaluate(test_np,  testlabel_np)
