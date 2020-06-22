@@ -147,8 +147,8 @@ if __name__ == "__main__":
 
 
     """result = model.evaluate(test_np,  testlabel_np)
-    print("testing accuracy = ", result[1])
+    print("testing accuracy = ", result[1])"""
 
-    predictLabel = model.predict_classes(test_np)
-    rnn.detailAccuracyRNN(predictLabel, testlabel_list)
- """
+    """predictLabel = model.predict_classes(test_np)
+    rnn.detailAccuracyRNN(predictLabel, testlabel_list)"""
+ 

@@ -16,7 +16,7 @@ print len(chain.rules)
 def fit_testdata(test_path):
     test_np, testlabel_np, testlabel_list = main.processed_data(test_path)
 
-    model = ks.load_model('./rnn_best.h5')
+    model = ks.load_model('./rnn_best_label.h5')
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     print("===========================")
     os.system("sudo iptables -nL --line-number")
 """
-    test_path = "../dataset/1_1-2_mix_time.csv"
+    test_path = "../pcap/backdoor/backdoor.csv"
     bad_index_list = fit_testdata(test_path)
     """bad_srcip_list = get_bad_srcip(bad_index_list)
     
