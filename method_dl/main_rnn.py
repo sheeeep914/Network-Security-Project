@@ -124,7 +124,7 @@ if __name__ == "__main__":
                                 mode='max')
 
     #training
-    model.fit(train_np, trainlabel_np, batch_size=100, epochs=15, callbacks=[earlystopping, checkpoint, csv_logger])
+    model.fit(train_np, trainlabel_np, batch_size=100, epochs=15, callbacks=[earlystopping, checkpoint, csv_logger], validation_split=0.1)
 
     #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
 

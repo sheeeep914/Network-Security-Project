@@ -155,6 +155,6 @@ def detailAccuracyRNN(predict, actual):
     print("predict wrong:")
     print("Good to Bad: ", G_B/n)
     print("Bad to Good: ", B_G/n)"""
-   
+    
     
     return bad_index_list
