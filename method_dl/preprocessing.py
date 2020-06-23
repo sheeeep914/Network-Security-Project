@@ -48,6 +48,7 @@ def seperate_att_lab_cat(packets, method):
 
     if(method != 'dnn'):
         packets['attack_cat'] = attack_cat
+        
     del packets['Label']
     #elif(method == 'rnn'):
         #don't delete 'Label'

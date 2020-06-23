@@ -32,7 +32,7 @@ def defRNN_cat(data):
     #scaling
     tempdata = prep.feature_scaling(tempdata)
     
-    n = 10  # 10 packets per group
+    n = 5  # 10 packets per group
     for i in range(data.shape[0] - n):
         X.append(tempdata[i:i+n])  # i - i+n-1
         y.append(data['attack_cat'].iloc[i+n-1])  # i+n-1
@@ -62,7 +62,7 @@ def defRNN_label(data):
     #scaling
     tempdata = prep.feature_scaling(tempdata)
     
-    n = 10  # 10 packets per group
+    n = 5  # 10 packets per group
     for i in range(data.shape[0] - n):
         X.append(tempdata[i:i+n])  # i - i+n-1
         y.append(data['Label'].iloc[i+n-1])  # i+n-1

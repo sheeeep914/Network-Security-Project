@@ -21,12 +21,12 @@ def get_bad_srcip(bad_index_list):
     return bad_srcip_list
 
 if __name__ == "__main__":
-    test_path = "../pcap/DDos/DDos.csv"
+    test_path = "../pcap/nmap/nmap.csv"
     #test_path = "../pcap/Result.csv"
     #test_path = "../dataset/1_0-1_mix_time.csv"
     test_np, testlabel_np, testlabel_list = main.processed_data(test_path)
 
-    model = ks.load_model('rnn_best.h5')
+    model = ks.load_model('model/rnn_best_label_5.h5')
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
