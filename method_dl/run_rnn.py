@@ -1,5 +1,5 @@
 import keras.models as ks
-import method_rnn as rnn
+import method_rnn as method
 import main_rnn as main
 
 
@@ -21,10 +21,11 @@ def get_bad_srcip(bad_index_list):
     return bad_srcip_list
 
 if __name__ == "__main__":
-    test_path = "../pcap/nmap/nmap.csv"
+    test_path = "../pcap/ddos/ddos.csv"
     #test_path = "../pcap/Result.csv"
     #test_path = "../dataset/1_0-1_mix_time.csv"
-    test_np, testlabel_np, testlabel_list = main.processed_data(test_path)
+    expected_output = 'attack_cat'
+    test_np, testlabel_np, testlabel_list = main.processed_data(test_path, expected_output)
 
     model = ks.load_model('model/rnn_best_label_5.h5')
 
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
-    bad_index_list = rnn.detailAccuracyRNN(predictLabel, testlabel_list)
+    bad_index_list = method.detailAccuracyRNN(predictLabel, testlabel_list)
     #bad_srcip_list = get_bad_srcip(bad_index_list)
     #print(bad_srcip_list)
     #print(len(test_srcip), len(bad_index_list))

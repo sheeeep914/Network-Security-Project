@@ -15,7 +15,7 @@ states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR',
 service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl', 'snmp', 'radius', 'irc']
 
 
-def seperate_att_lab_cat(packets, method):
+def seperate_att_lab_cat(packets):
 
     attack_cat = packets['attack_cat'].to_numpy()
     
@@ -44,34 +44,20 @@ def seperate_att_lab_cat(packets, method):
             attack_cat[i]  = 0
 
     label = packets['Label'].to_numpy()
-    del packets['attack_cat']
-
-    if(method != 'dnn'):
-        packets['attack_cat'] = attack_cat
-        
+    #del packets['attack_cat']
     del packets['Label']
-    #elif(method == 'rnn'):
-        #don't delete 'Label'
+    
 
-    return attack_cat, label, packets
+    return packets
 
-def seperate_att_lab_label(packets, method):
+def seperate_att_lab_label(packets):
     
     attack_cat = packets['attack_cat'].to_numpy()
-    
-    # Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode and Worms
-
     label = packets['Label'].to_numpy()
     del packets['attack_cat']
-    del packets['Label']
+    #del packets['Label']
 
-    if(method != 'dnn'):
-        packets['Label'] = label
-
-    #elif(method == 'rnn'):
-        #don't delete 'Label'
-
-    return attack_cat, label, packets
+    return packets
 
 
 def proto_to_value(packets):
@@ -79,7 +65,7 @@ def proto_to_value(packets):
     for p in packets['proto']:
         if(p not in proto):
             proto.append(p)
- """
+    """
 
     for element in proto:   
 
@@ -97,7 +83,7 @@ def proto_to_value(packets):
 
 
     return packets
-    #print(packets.keys())
+
 
 
 def state_to_value(packets):
@@ -116,7 +102,7 @@ def state_to_value(packets):
     del packets['state']
 
     return packets
-    #print(packets.keys())
+    
 
 
 def service_to_value(packets):
@@ -141,7 +127,7 @@ def service_to_value(packets):
     del packets['service']
 
     return packets
-    #print(packets.keys())
+    
 
 
 def ip_to_value(packets):
@@ -174,8 +160,7 @@ def ip_to_value(packets):
     dstip_list = dstip.tolist()
 
     return packets, srcip_list, dstip_list
-    #print(packets.keys())
-
+    
 
 #important features
 def get_http(packets):
@@ -195,8 +180,6 @@ def get_http(packets):
                 del packets_http[col]
 
     return packets_http
-
-#important http feature
 
 
 def get_imp(packets):

@@ -32,7 +32,7 @@ def init(packets):
     packets = prep.service_to_value(packets)
     #packets, srcip, dstip = prep.ip_to_value(packets)
     
-    attack_cat, label, packets = prep.seperate_att_lab(packets, 'dnn')
+    attack_cat, label, packets = prep.seperate_att_lab(packets)
 
     #if we want to do get specfic
     packets = prep.get_imp(packets)

@@ -14,7 +14,7 @@ print len(chain.rules)
 """
 
 def fit_testdata(test_path):
-    test_np, testlabel_np, testlabel_list = main.processed_data(test_path)
+    test_np, testlabel_np, testlabel_list = main.processed_data(test_path, 'attack_cat')
 
     model = ks.load_model('./rnn_best_label.h5')
 

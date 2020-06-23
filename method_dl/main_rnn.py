@@ -18,13 +18,13 @@ import preprocessing as prep
 Keras Method
 """
 from keras.models import Sequential
-import method_rnn as rnn
+import method_rnn as method
 
 """ 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
 """
 
-def init(packets):
+def init(packets, result_opt):
     #deal with missing
     packets.fillna(value=0, inplace=True)  # fill missing with 0
 
@@ -32,14 +32,16 @@ def init(packets):
     packets = prep.proto_to_value(packets)
     
     #packets = prep.state_to_value(packets)
-    del packets['state']
+    del packets['state']  
     
     packets = prep.service_to_value(packets)
-    
+
     #packets, temp_srcip = prep.ip_to_value(packets)
 
-    #seperate attack category and label (in case of future comparing, don't return)
-    attack_cat, label, packets = prep.seperate_att_lab_label(packets, 'rnn')
+    if(result_opt == 'attack_cat'):
+        packets = prep.seperate_att_lab_cat(packets)
+    elif(result_opt == 'label'):
+        packets = prep.seperate_att_lab_label(packets)
 
     #if we want to do get only non-flow features
     packets = prep.get_imp(packets)
@@ -89,24 +91,24 @@ def cat_to_nparr(label_list):
     return label_np
 
 
-def processed_data(datapath):
+def processed_data(datapath, result_opt):
     data_df = pd.read_csv(datapath, low_memory=False)
+    data_df= init(data_df, result_opt)
 
-    data_df= init(data_df)
-    print(data_df.columns)
-
-    data_np, datalabel_list = rnn.defRNN_label(data_df)
+    if(result_opt == 'attack_cat'):
+        data_np, datalabel_list = method.defRNN_cat(data_df, 5)
+        #create an one-hot list for label list
+        datalabel_list_oneHot = cat_to_nparr(datalabel_list)
+    elif(result_opt == 'label'):  
+        data_np, datalabel_list = method.defRNN_label(data_df, 5)
+        #create an one-hot list for label list
+        datalabel_list_oneHot = label_to_nparr(datalabel_list)
     
-
-    #create an one-hot list for label list
-    datalabel_list_oneHot = cat_to_nparr(datalabel_list)
-
     #turn dataframe and list to np array
     datalabel_np = np.array(datalabel_list_oneHot)
 
     data_np = prep.np_fillna(data_np)
     
-
     return data_np, datalabel_np, datalabel_list
 
 
@@ -115,21 +117,25 @@ if __name__ == "__main__":
 
     train_path = "../dataset/1_2-10_mix_time.csv"
     
-    train_np, trainlabel_np, trainlabel_list = processed_data(train_path)
+    expected_output = 'attack_cat'
+    train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
 
     
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np[0].shape   # input dimention
 
-    print(feature_dim)
+    
 
     # simpleRNN(feature_dim, atv, loss)
-    model = rnn.simpleRNN(feature_dim, 'relu', 'mse')
+    if(expected_output == 'label'):
+        model = method.simpleRNN(feature_dim, 'relu', 'mse', 2)
+    elif(expected_output == 'attack_cat'):
+        model = method.simpleRNN(feature_dim, 'relu', 'mse', 10)
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='rnn_best_label_10.h5',
+    checkpoint = ModelCheckpoint(filepath='model/rnn_best_label_5.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -142,13 +148,3 @@ if __name__ == "__main__":
     #training
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=15, callbacks=[earlystopping, checkpoint, csv_logger], validation_split=0.1)
 
-    #model.save('rnn_model.h5')  # creates a HDF5 file 'rnn_model.h5'
-    
-
-
-    """result = model.evaluate(test_np,  testlabel_np)
-    print("testing accuracy = ", result[1])"""
-
-    """predictLabel = model.predict_classes(test_np)
-    rnn.detailAccuracyRNN(predictLabel, testlabel_list)"""
- 
