@@ -15,7 +15,7 @@ states = ['FIN', 'CON', 'REQ', 'URH', 'ACC', 'CLO',  'ECO', 'ECR',
 service = ['dns', 'smtp', 'http', 'ftp', 'ftp-data', 'pop3', 'ssh', 'dhcp', 'ssl', 'snmp', 'radius', 'irc']
 
 
-def seperate_att_lab_cat(packets):
+def seperate_attcat_lab(packets):
 
     attack_cat = packets['attack_cat'].to_numpy()
     
@@ -44,8 +44,7 @@ def seperate_att_lab_cat(packets):
             attack_cat[i]  = 0
 
     label = packets['Label'].to_numpy()
-    #del packets['attack_cat']
-    del packets['Label']
+    packets['attack_cat'] = attack_cat
     
 
     return packets
