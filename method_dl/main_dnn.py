@@ -33,7 +33,7 @@ def init(packets):
     packets = prep.service_to_value(packets)
     #packets, srcip = prep.ip_to_value(packets)
     
-    attack_cat, label, packets = prep.seperate_attcat_lab(packets)
+    packets, label, attack_cat = prep.seperate_attcat_lab(packets)
 
     #if we want to do get specfic
     packets = prep.get_imp(packets)
@@ -112,7 +112,7 @@ def processed_data(datapath):
 
 if __name__ == "__main__":
     train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
-    test_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
+    test_path = "../dataset/1_10-18_mix_time.csv"
 
     train_np, trainlabel_np, trainlabel_list, trainattcat_np, trainattcat_list = processed_data(train_path)
     test_np, testlabel_np, testlabel_list, testattcat_np, testattcat_list, = processed_data(test_path)
@@ -152,7 +152,19 @@ if __name__ == "__main__":
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    result = model.evaluate(test_np,  testattcat_np)
+    result = model.evaluate(train_np,  trainattcat_np)
+    print("testing accuracy = ", result[1])
+
+    #testing_predict(model, testlabel_list, test_srcip) 
+
+    predictLabel = model.predict_classes(train_np)
+    np.set_printoptions(threshold=sys.maxsize)
+    #print(predictLabel)
+    dnn.detailAccuracyDNN(predictLabel, trainattcat_list)
+    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    #print(bad_index_list)
+
+    """ result = model.evaluate(test_np,  testattcat_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
@@ -162,7 +174,9 @@ if __name__ == "__main__":
     #print(predictLabel)
     dnn.detailAccuracyDNN(predictLabel, testattcat_list)
     #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list)
+    #print(bad_index_list) """
+
+
     """
     bad_srcip_list, temp = [], []
     for index in bad_index_list:
