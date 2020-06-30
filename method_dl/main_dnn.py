@@ -28,11 +28,12 @@ def init(packets):
     packets.fillna(value=0, inplace=True)  # fill missing with 0
 
     packets = prep.proto_to_value(packets)    
-    packets = prep.state_to_value(packets)    
+    #packets = prep.state_to_value(packets)   
+    del packets['state'] 
     packets = prep.service_to_value(packets)
-    #packets, srcip, dstip = prep.ip_to_value(packets)
+    #packets, srcip = prep.ip_to_value(packets)
     
-    attack_cat, label, packets = prep.seperate_att_lab(packets, 'dnn')
+    attack_cat, label, packets = prep.seperate_attcat_lab(packets)
 
     #if we want to do get specfic
     packets = prep.get_imp(packets)
@@ -84,7 +85,7 @@ def attackcat_to_nparr(label_list):
 def processed_data(datapath):
     data_df = pd.read_csv(datapath, low_memory=False)
 
-    data_df, datalabel_list, attack_cat = init(data_df)
+    data_df, label_list, attcat_list = init(data_df)
     #print("1 ", type(data_srcip))
 
     #transforming datatype
@@ -96,27 +97,28 @@ def processed_data(datapath):
     #print("3 ", type(data_df))
 
     #create an one-hot list for label list
-    datalabel_list_oneHot = label_to_nparr(datalabel_list)
-    att_cat = attackcat_to_nparr(attack_cat)
+    datalabel_list_oneHot = label_to_nparr(label_list)
+    attcat_list_oneHot = attackcat_to_nparr(attcat_list)
 
     #turn dataframe and list to np array
-    datalabel_np, data_np = np.array(datalabel_list_oneHot), np.array(data_df_scale)
-
+    label_np, attcat_np, data_np = np.array(datalabel_list_oneHot), np.array(attcat_list_oneHot), np.array(data_df_scale)
+    
     #deal with problem of key 'ct_ftp_cmd'
     data_np = prep.np_fillna(data_np)
 
-    return data_np, datalabel_np, datalabel_list, att_cat, attack_cat
+    return data_np, label_np, label_list, attcat_np, attcat_list
 
     
 
 if __name__ == "__main__":
-    train_path = "../dataset/1_2-10_mix_time.csv"
-    test_path = "../dataset/1_0-1_mix_time.csv"
+    train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
+    test_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
 
-    train_np, trainlabel_np, trainlabel_list, train_attackcat, train_attack_cat_list = processed_data(train_path)
-    test_np, testlabel_np, testlabel_list, test_attackcat, test_attack_cat_list = processed_data(test_path)
-    print(len(train_attackcat[0]))
-    print((train_attackcat))
+    train_np, trainlabel_np, trainlabel_list, trainattcat_np, trainattcat_list = processed_data(train_path)
+    test_np, testlabel_np, testlabel_list, testattcat_np, testattcat_list, = processed_data(test_path)
+    #print(len(train_attackcat[0]))
+    print('train attack_np: ', trainattcat_np)
+    print('train attack_list: ', trainattcat_list)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -141,24 +143,25 @@ if __name__ == "__main__":
                                 monitor='accuracy',
                                 mode='max')
     earlystopping = EarlyStopping(monitor='accuracy',
-                                patience=3,
+                                patience=6,
                                 verbose=1,
                                 mode='max')
 
     #training
-    model.fit(train_np, train_attackcat, batch_size=100, epochs=10, callbacks=[
+    model.fit(train_np, trainattcat_np, batch_size=100, epochs=10, callbacks=[
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    result = model.evaluate(test_np,  test_attackcat)
+    result = model.evaluate(test_np,  testattcat_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
 
     predictLabel = model.predict_classes(test_np)
     np.set_printoptions(threshold=sys.maxsize)
-    print(predictLabel)
-    bad_index_list = dnn.detailAccuracyDNN(predictLabel, test_attack_cat_list)
+    #print(predictLabel)
+    dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list)
     """
     bad_srcip_list, temp = [], []

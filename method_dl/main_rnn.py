@@ -39,7 +39,7 @@ def init(packets):
     #packets, temp_srcip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
-    attack_cat, label, packets = prep.seperate_att_lab_label(packets, 'rnn')
+    attack_cat, label, packets = prep.seperate_attcat_lab(packets)
 
     #if we want to do get only non-flow features
     packets = prep.get_imp(packets)
@@ -95,7 +95,7 @@ def processed_data(datapath):
     data_df= init(data_df)
     print(data_df.columns)
 
-    data_np, datalabel_list = rnn.defRNN_label(data_df)
+    data_np, datalabel_list = rnn.defRNN_cat(data_df)
     
 
     #create an one-hot list for label list
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np[0].shape   # input dimention
 
-    print(feature_dim)
+    #print(feature_dim)
 
     # simpleRNN(feature_dim, atv, loss)
     model = rnn.simpleRNN(feature_dim, 'relu', 'mse')

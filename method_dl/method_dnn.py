@@ -44,7 +44,7 @@ def simpleDNN_dropout(feature_dim, units, atv, loss):
 
 def detailAccuracyDNN(predict, actual):
     n = len(predict)
-    bad_index_list = []
+    #bad_index_list = []
     total = [0 for i in range(10)]
     x = [0 for i in range(10)]
 
@@ -59,7 +59,7 @@ def detailAccuracyDNN(predict, actual):
 
     for index in range(10):
         print("==========================")
-        print(index, ':',x[index], total[index]) 
+        print(index, ': ','predict: ', x[index], 'total: ', total[index]) 
         try :
             print(x[index]/total[index])
         except ZeroDivisionError:
@@ -95,4 +95,4 @@ def detailAccuracyDNN(predict, actual):
     print("Good to Bad: ", G_B/n)
     print("Bad to Good: ", B_G/n)
 """
-    return bad_index_list
+    #return bad_index_list
