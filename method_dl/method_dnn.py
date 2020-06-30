@@ -8,6 +8,8 @@ from keras.layers.core import Activation, Dense, Dropout
 from keras.layers.recurrent import LSTM
 from keras.optimizers import SGD, Adam
 
+attack_cat = ['Normal', 'Fuzzers', 'Analysis',
+              'Backdoors', 'Dos', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
 
 #DNN model
 def simpleDNN(feature_dim, units, atv, loss):
@@ -59,7 +61,7 @@ def detailAccuracyDNN(predict, actual):
 
     for index in range(10):
         print("==========================")
-        print(index, ': ','predict: ', x[index], 'total: ', total[index]) 
+        print(index, attack_cat[index], ': ','predict: ', x[index], 'total: ', total[index]) 
         try :
             print(x[index]/total[index])
         except ZeroDivisionError:

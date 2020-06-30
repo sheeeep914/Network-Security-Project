@@ -47,7 +47,7 @@ def seperate_attcat_lab(packets):
     packets['attack_cat'] = attack_cat
     
 
-    return packets
+    return packets, label, attack_cat
 
 def seperate_att_lab_label(packets):
     
