@@ -147,7 +147,7 @@ if __name__ == "__main__":
                                 verbose=1,
                                 mode='max')
 
-    #training
+    """ #training
     model.fit(train_np, trainattcat_np, batch_size=100, epochs=10, callbacks=[
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
@@ -161,10 +161,10 @@ if __name__ == "__main__":
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
     dnn.detailAccuracyDNN(predictLabel, trainattcat_list)
-    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    #bad_index_list = dnn.det """ailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list)
 
-    """ result = model.evaluate(test_np,  testattcat_np)
+    result = model.evaluate(test_np,  testattcat_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     #print(predictLabel)
     dnn.detailAccuracyDNN(predictLabel, testattcat_list)
     #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list) """
+    #print(bad_index_list) 
 
 
     """
