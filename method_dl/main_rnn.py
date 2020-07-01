@@ -38,9 +38,9 @@ def init(packets, result_opt):
 
     #seperate attack category and label (in case of future comparing, don't return)
     if(result_opt == 'attack_cat'):
-        attack_cat, label, packets = prep.seperate_att_lab_catagory(packets)
+        packets, attack_cat = prep.seperate_att_lab_catagory(packets)
     elif(result_opt == 'label'):
-        packets = prep.seperate_att_lab_label(packets)
+        packets, label = prep.seperate_att_lab_label(packets)
 
     #if we want to do get only non-flow features
     packets = prep.get_imp(packets)
@@ -92,7 +92,7 @@ def cat_to_nparr(label_list):
 
 def processed_data(datapath, result_opt):
     data_df = pd.read_csv(datapath, low_memory=False)
-    data_df= init(data_df, result_opt)
+    data_df = init(data_df, result_opt)
 
     if(result_opt == 'attack_cat'):
         data_np, datalabel_list = method.defRNN_cat(data_df, 5)
