@@ -1,6 +1,9 @@
 import keras.models as ks
 import method_rnn as method
 import main_rnn as main
+import numpy as np
+import pandas as pd
+import sys
 
 
 def get_bad_srcip(bad_index_list):
@@ -34,7 +37,13 @@ if __name__ == "__main__":
     print("testing accuracy = ", result[1])
 
     predictLabel = model.predict_classes(test_np)
+    np.set_printoptions(threshold=sys.maxsize)
+
+    confusion_metrics = pd.crosstab(testlabel_list, predictLabel, rownames=['label'], colnames=['predict'])
+    print(confusion_metrics)
+
     bad_index_list = method.detailAccuracyRNN(predictLabel, testlabel_list)
+
     #bad_srcip_list = get_bad_srcip(bad_index_list)
     #print(bad_srcip_list)
     #print(len(test_srcip), len(bad_index_list))
