@@ -92,6 +92,7 @@ def simpleRNN(feature_dim, atv, loss, output_dim):
     adam = Adam(0.00006)
 
     model.compile(loss=loss, optimizer=adam, metrics=['accuracy'])
+    
 
     return model
 

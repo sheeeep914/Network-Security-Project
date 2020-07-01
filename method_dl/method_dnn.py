@@ -9,7 +9,7 @@ from keras.layers.recurrent import LSTM
 from keras.optimizers import SGD, Adam
 
 attack_cat = ['Normal', 'Fuzzers', 'Analysis',
-              'Backdoors', 'Dos', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
+'Backdoors', 'Dos', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
 
 #DNN model
 def simpleDNN(feature_dim, units, atv, loss):

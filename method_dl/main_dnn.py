@@ -201,6 +201,10 @@ if __name__ == "__main__":
     predictLabel = model.predict_classes(test_np)
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
+    
+    confusion_metrics = pd.crosstab(testlabel_list, predictLabel, rownames=['label'], colnames=['predict'])
+    print(confusion_metrics)
+
     dnn.detailAccuracyDNN(predictLabel, testlabel_list)
     #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list) 
