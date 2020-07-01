@@ -24,7 +24,8 @@ if __name__ == "__main__":
     #test_path = "../pcap/DDos/DDos.csv"
     #test_path = "../pcap/Result.csv"
     test_path = "../dataset/1_0-1_mix_time.csv"
-    test_np, testlabel_np, testlabel_list = main.processed_data(test_path)
+    expected_output = 'attack_cat'
+    test_np, testlabel_np, testlabel_list = main.processed_data(test_path, expected_output)
 
     model = ks.load_model('rnn_best_label.h5')
 

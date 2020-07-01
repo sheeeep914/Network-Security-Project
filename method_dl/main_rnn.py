@@ -30,16 +30,17 @@ def init(packets, result_opt):
 
     #one hard encoding
     packets = prep.proto_to_value(packets)
-    
     #packets = prep.state_to_value(packets)
     del packets['state']  
     
     packets = prep.service_to_value(packets)
-
     #packets, temp_srcip = prep.ip_to_value(packets)
 
     #seperate attack category and label (in case of future comparing, don't return)
-    attack_cat, label, packets = prep.seperate_attcat_lab(packets)
+    if(result_opt == 'attack_cat'):
+        attack_cat, label, packets = prep.seperate_att_lab_catagory(packets)
+    elif(result_opt == 'label'):
+        packets = prep.seperate_att_lab_label(packets)
 
     #if we want to do get only non-flow features
     packets = prep.get_imp(packets)
@@ -91,7 +92,6 @@ def cat_to_nparr(label_list):
 
 def processed_data(datapath, result_opt):
     data_df = pd.read_csv(datapath, low_memory=False)
-<<<<<<< HEAD
     data_df= init(data_df, result_opt)
 
     if(result_opt == 'attack_cat'):
@@ -102,13 +102,6 @@ def processed_data(datapath, result_opt):
         data_np, datalabel_list = method.defRNN_label(data_df, 5)
         #create an one-hot list for label list
         datalabel_list_oneHot = label_to_nparr(datalabel_list)
-=======
-
-    data_df= init(data_df)
-    print(data_df.columns)
-
-    data_np, datalabel_list = rnn.defRNN_cat(data_df)
->>>>>>> 6a3d07d
     
     #turn dataframe and list to np array
     datalabel_np = np.array(datalabel_list_oneHot)
@@ -130,11 +123,7 @@ if __name__ == "__main__":
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np[0].shape   # input dimention
 
-<<<<<<< HEAD
     
-=======
-    #print(feature_dim)
->>>>>>> 6a3d07d
 
     # simpleRNN(feature_dim, atv, loss)
     if(expected_output == 'label'):

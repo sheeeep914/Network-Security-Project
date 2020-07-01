@@ -23,7 +23,7 @@ import method_dnn as dnn
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
 
 
-def init(packets):
+def init(packets, result_opt):
     #deal with missing
     packets.fillna(value=0, inplace=True)  # fill missing with 0
 
@@ -33,12 +33,19 @@ def init(packets):
     packets = prep.service_to_value(packets)
     #packets, srcip = prep.ip_to_value(packets)
     
-    packets, label, attack_cat = prep.seperate_attcat_lab(packets)
-
-    #if we want to do get specfic
-    packets = prep.get_imp(packets)
+    if(result_opt == 'attack_cat'):
+        packets, attack_cat = prep.seperate_att_lab_catagory(packets)
+        #if we want to do get specfic
+        packets = prep.get_imp(packets)
+        return packets, attack_cat
+    elif(result_opt == 'label'):
+        packets, label = prep.seperate_att_lab_label(packets)
+        #if we want to do get specfic
+        packets = prep.get_imp(packets)
+        return packets, label
     
-    return packets, label, attack_cat
+    
+    
 
 #create np array for label
 def label_to_nparr(label_list):
@@ -82,31 +89,52 @@ def attackcat_to_nparr(label_list):
 
     return label_np
 
-def processed_data(datapath):
+
+def processed_data(datapath, result_opt):
     data_df = pd.read_csv(datapath, low_memory=False)
-
-    data_df, label_list, attcat_list = init(data_df)
-    #print("1 ", type(data_srcip))
-
-    #transforming datatype
-    data_df_transtype = prep.trans_datatype(data_df)
-    #print("2 ", type(data_df))
-
-    #scaling (data type changes after scaling, i.e. df -> np)
-    data_df_scale = prep.feature_scaling(data_df_transtype)
-    #print("3 ", type(data_df))
-
-    #create an one-hot list for label list
-    datalabel_list_oneHot = label_to_nparr(label_list)
-    attcat_list_oneHot = attackcat_to_nparr(attcat_list)
-
-    #turn dataframe and list to np array
-    label_np, attcat_np, data_np = np.array(datalabel_list_oneHot), np.array(attcat_list_oneHot), np.array(data_df_scale)
     
-    #deal with problem of key 'ct_ftp_cmd'
-    data_np = prep.np_fillna(data_np)
+    if(result_opt == 'attack_cat'):
+        data_df, attcat_list = init(data_df, result_opt)
+        #print("1 ", type(data_srcip))
 
-    return data_np, label_np, label_list, attcat_np, attcat_list
+        #transforming datatype
+        data_df_transtype = prep.trans_datatype(data_df)
+        #print("2 ", type(data_df))
+
+        #scaling (data type changes after scaling, i.e. df -> np)
+        data_df_scale = prep.feature_scaling(data_df_transtype)
+        #print("3 ", type(data_df))
+
+        #create an one-hot list for label list
+        attcat_list_oneHot = attackcat_to_nparr(attcat_list)
+
+        #turn dataframe and list to np array
+        attcat_np, data_np = np.array(attcat_list_oneHot), np.array(data_df_scale)
+        #deal with problem of key 'ct_ftp_cmd'
+        data_np = prep.np_fillna(data_np)
+
+        return data_np, attcat_np, attcat_list
+
+    elif(result_opt == 'label'):
+        data_df, label_list = init(data_df, result_opt)
+
+        #transforming datatype
+        data_df_transtype = prep.trans_datatype(data_df)
+        #print("2 ", type(data_df))
+
+        #scaling (data type changes after scaling, i.e. df -> np)
+        data_df_scale = prep.feature_scaling(data_df_transtype)
+        #print("3 ", type(data_df))
+
+        #create an one-hot list for label list
+        datalabel_list_oneHot = label_to_nparr(label_list)
+        
+        #turn dataframe and list to np array
+        label_np, data_np = np.array(datalabel_list_oneHot), np.array(data_df_scale)
+        #deal with problem of key 'ct_ftp_cmd'
+        data_np = prep.np_fillna(data_np)
+
+        return data_np, label_np, label_list, 
 
     
 
@@ -114,11 +142,12 @@ if __name__ == "__main__":
     train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
     test_path = "../dataset/1_10-18_mix_time.csv"
 
-    train_np, trainlabel_np, trainlabel_list, trainattcat_np, trainattcat_list = processed_data(train_path)
-    test_np, testlabel_np, testlabel_list, testattcat_np, testattcat_list, = processed_data(test_path)
+    expected_output = 'attack_cat'
+
+    #label depends on expected_output
+    train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
+    test_np, testlabel_np, testlabel_list = processed_data(test_path, expected_output)
     #print(len(train_attackcat[0]))
-    print('train attack_np: ', trainattcat_np)
-    print('train attack_list: ', trainattcat_list)
 
     """ pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
@@ -161,10 +190,10 @@ if __name__ == "__main__":
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
     dnn.detailAccuracyDNN(predictLabel, trainattcat_list)
-    #bad_index_list = dnn.det """ailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list)
+    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    #print(bad_index_list)"""
 
-    result = model.evaluate(test_np,  testattcat_np)
+    result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
@@ -172,7 +201,7 @@ if __name__ == "__main__":
     predictLabel = model.predict_classes(test_np)
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
-    dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    dnn.detailAccuracyDNN(predictLabel, testlabel_list)
     #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list) 
 
