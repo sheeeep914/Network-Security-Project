@@ -16,6 +16,8 @@ Scaling
 from sklearn.preprocessing import MinMaxScaler
 import preprocessing as prep
 
+attack_cat = ['Normal', 'Fuzzers', 'Analysis', 'Backdoors', 'Dos', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
+
 def defRNN_cat(data, group_num):
 
     tempdata = data.copy()
@@ -110,11 +112,10 @@ def detailAccuracyRNN(predict, actual):
         if(predict[i] == actual[i]):
             x[value] = x[value]+1
 
-
     for index in range(10):
         print("==========================")
-        print(index, ':',x[index], total[index]) 
-        try :
+        print(index, attack_cat[index], ': ', 'predict: ', x[index], 'total: ', total[index])
+        try:
             print(x[index]/total[index])
         except ZeroDivisionError:
             print(0.0)
