@@ -237,7 +237,7 @@ def fill_http_feature(zeek, pcaps, index):
         #   place http.log file     #
         #############################
 
-        http = pd.read_csv('./backdoor/http.log.csv')
+        http = pd.read_csv('./openvas/http.log.csv')
     except : 
         for i in range (len(zeek.index)):
             trans_depth.append(0)
