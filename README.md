@@ -269,6 +269,51 @@
         RNN     | 與時間順序有關, 0和1不平衡| 否 | 99.5
         RNN     | 與時間順序有關, 0和1不平衡| 是 | 98.3
 
+- **6/26-7/3**
+    - **進度**
+        - [x] dnn multiclass
+        - [x] rnn multiclass
+        - [x] 加上accuracy metrics
+        - [x] openvas攻擊
+        - [x] 架好收發攻擊封包的VM
+    - **問題與發現**
+        - Multiclass不論在dnn或rnn上效果都不好，dnn正確率只有6成(大部分判斷對的都是0)
+        - 某些攻擊種類太少導致成效不好
+
+    - **執行方式**
+        - dnn
+            1. 更改 `main_dnn.py` 裡的 `expected_output` (attack_cat/label)
+            2. `python main_dnn.py`即可同步執行train和test
+        - rnn
+            - **Train** 
+            1. 更改 `main_rnn.py` 裡的 `expected_output` (attack_cat/label) 
+            2. 可在 `main_rnn.py` 裡的 `processed_data(datapath, result_opt)` 更改每個rnn input的資料筆數
+            3. 執行 -> `python main_rnn.py` 
+            - **Testing**
+            1. 更改 `run_rnn.py` 裡的 `expected_output` (attack_cat/label) 這裡參數的要和使用的model相同
+            2. 執行 -> `python run_rnn.py` 
+    - **攻擊環境VM架設**
+        - [VM架設](https://hackmd.io/@annie520143/ry14CKOR8)
+
+    - **multiclass+自己打的攻擊流量結果**
+        - rnn (*training data為1_2-10_mix_time*)
+
+        testing data   | cat/lab | 幾筆資料為一組(5/10) | 攻擊種類 |  正確率(％) | 
+        :------:|:-----:|:-----:|:-----:|:----:
+        DDos | cat | 5 | DDos| 0
+        DDos | cat | 10 | DDos|0
+        DDos | lab | 5 | DDos|91
+        DDos | lab | 10 |DDos| 88
+        sqlmap | cat | 5 | Exploits| 0
+        sqlmap | cat | 10 | Exploits| 0
+        sqlmap | lab | 5 | Exploits| 37
+        sqlmap | lab | 5 | Exploits| 11
+        backdoor | cat | 5 | Backdoors| 0
+        backdoor | lab | 5 | Backdoors| 0
+
+        
+
+
 
 ---
 ### *補充：Clone fork 差別*
