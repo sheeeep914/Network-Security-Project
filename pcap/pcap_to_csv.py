@@ -387,14 +387,14 @@ if __name__ == '__main__':
     #   place pcap file     #
     #########################
 
-    pcaps = sp.rdpcap('./backdoor/backdoor.pcapng')
+    pcaps = sp.rdpcap('./openvas/openvas.pcapng')
     n = len(pcaps)
 
     #############################
     #   place conn.log file     #
     #############################
 
-    zeek = pd.read_csv('./backdoor/conn.log.csv', low_memory=False)
+    zeek = pd.read_csv('./openvas/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
     print(srcip_bytes)
 
@@ -408,4 +408,4 @@ if __name__ == '__main__':
     zeek = fill_tcp_feature(zeek, pcaps, index, direction)
 
        
-    zeek.to_csv('./backdoor/backdoor.csv', index=False)
+    zeek.to_csv('./openvas/openvas.csv', index=False)

@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 """
 Import the Keras libraries and packages
 """
@@ -28,7 +30,7 @@ def simpleDNN(feature_dim, units, atv, loss):
 
 
 #DNN model with dropout
-def simpleDNN_dropout(feature_dim, units, atv, loss):
+def simpleDNN_dropout(feature_dim, units, atv, loss, output_dim):
     model = Sequential()
 
     model.add(Dense(input_dim=feature_dim, units=units,
@@ -38,13 +40,21 @@ def simpleDNN_dropout(feature_dim, units, atv, loss):
         model.add(Dense(units=units-i, activation=atv))
 
     model.add(Dropout(0.2, input_shape=(units-i+1,)))
-    model.add(Dense(units=10, activation='softmax'))
+    model.add(Dense(units=output_dim, activation='softmax'))
     opt = Adam(learning_rate=0.01)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
     return model
 
-def detailAccuracyDNN(predict, actual):
+
+def metricsDNN(predict, actual):
+    print("=========================")
+    confusion_metrics = pd.crosstab(actual, predict, rownames=['label'], colnames=['predict'])
+    print(confusion_metrics)
+    print("=========================")
+
+
+def detailAccuracyDNN(predict, actual, method):
     n = len(predict)
     #bad_index_list = []
     total = [0 for i in range(10)]
@@ -58,16 +68,25 @@ def detailAccuracyDNN(predict, actual):
         if(predict[i] == actual[i]):
             x[value] = x[value]+1
 
+    if(method == 'attack_cat'):
+        for index in range(10):
+            print("==========================")
+            print(index, attack_cat[index], ': ','predict: ', x[index], 'total: ', total[index])
+            try:
+                print("acc: ", x[index]/total[index])
+            except ZeroDivisionError:
+                print("acc: ", 0.0)
+    elif(method == 'label'):
+        for index in range(2):
+            print("==========================")
+            print(index, ': ', 'predict: ', x[index], 'total: ', total[index])
+            try:
+                print("acc: ", x[index]/total[index])
+            except ZeroDivisionError:
+                print("acc: ", 0.0)
 
-    for index in range(10):
-        print("==========================")
-        print(index, attack_cat[index], ': ','predict: ', x[index], 'total: ', total[index]) 
-        try :
-            print(x[index]/total[index])
-        except ZeroDivisionError:
-            print(0.0)
-
-    print("=========================")
+    ("==========================")
+    
 
     """B_G, G_G, G_B, B_B = 0, 0, 0, 0
     n = len(predict)

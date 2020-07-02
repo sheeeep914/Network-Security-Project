@@ -95,11 +95,11 @@ def processed_data(datapath, result_opt):
     data_df = init(data_df, result_opt)
 
     if(result_opt == 'attack_cat'):
-        data_np, datalabel_list = method.defRNN_cat(data_df, 5)
+        data_np, datalabel_list = method.defRNN_cat(data_df, 10)
         #create an one-hot list for label list
         datalabel_list_oneHot = cat_to_nparr(datalabel_list)
     elif(result_opt == 'label'):  
-        data_np, datalabel_list = method.defRNN_label(data_df, 5)
+        data_np, datalabel_list = method.defRNN_label(data_df, 10)
         #create an one-hot list for label list
         datalabel_list_oneHot = label_to_nparr(datalabel_list)
     
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='model/rnn_best_label_5.h5',
+    checkpoint = ModelCheckpoint(filepath='model/rnn_best_cat_10.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',

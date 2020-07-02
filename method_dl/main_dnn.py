@@ -17,7 +17,7 @@ import preprocessing as prep
 Keras Method
 """
 from keras.models import Sequential
-import method_dnn as dnn 
+import method_dnn as method 
 #import temp_iptable as iptable
 
 normalize_all = ['sport', 'dsport', 'dur', 'sbytes', 'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'Sload', 'Dload', 'Spkts', 'Dpkts', 'smeansz', 'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 'Dintpkt', 'is_sm_ips_ports', 'ct_state_ttl', 'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 'ct_dst_ltm', 'ct_src_ ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 'ct_dst_src_ltm', 'srcip1', 'srcip2', 'dstip1', 'dstip2']
@@ -139,10 +139,10 @@ def processed_data(datapath, result_opt):
     
 
 if __name__ == "__main__":
-    train_path = "../dataset/2_0w4_1w4_yshf_notime.csv"
-    test_path = "../dataset/1_10-18_mix_time.csv"
+    train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
+    test_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
 
-    expected_output = 'attack_cat'
+    expected_output = 'label'
 
     #label depends on expected_output
     train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
@@ -157,16 +157,19 @@ if __name__ == "__main__":
     feature_dim = train_np.shape[1] # how mant features
 
     # simpleDNN(feature_dim, units, atv, loss)
-    #model = dnn.simpleDNN(feature_dim, 15, 'relu', 'mse')
+    #model = method.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
 
     # simpleDNN_dropout(feature_dim, units, atv, loss)
-    model = dnn.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse')
+    if(expected_output == 'label'):
+        model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 2)
+    elif(expected_output == 'attack_cat'):
+        model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 10)
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='dnn_best.h5',
+    checkpoint = ModelCheckpoint(filepath='model/dnn_best_lab_10.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -189,24 +192,19 @@ if __name__ == "__main__":
     predictLabel = model.predict_classes(train_np)
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
-    dnn.detailAccuracyDNN(predictLabel, trainattcat_list)
-    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    method.detailAccuracyDNN(predictLabel, trainattcat_list)
+    #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list)"""
 
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
-
-    #testing_predict(model, testlabel_list, test_srcip) 
-
-    predictLabel = model.predict_classes(test_np)
-    np.set_printoptions(threshold=sys.maxsize)
-    #print(predictLabel)
     
-    confusion_metrics = pd.crosstab(testlabel_list, predictLabel, rownames=['label'], colnames=['predict'])
-    print(confusion_metrics)
+    predictLabel = model.predict_classes(train_np)
+    np.set_printoptions(threshold=sys.maxsize)
 
-    dnn.detailAccuracyDNN(predictLabel, testlabel_list)
-    #bad_index_list = dnn.detailAccuracyDNN(predictLabel, testattcat_list)
+    method.metricsDNN(predictLabel, testlabel_list)
+    method.detailAccuracyDNN(predictLabel, testlabel_list, expected_output)
+    #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list) 
 
 

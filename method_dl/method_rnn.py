@@ -97,8 +97,15 @@ def simpleRNN(feature_dim, atv, loss, output_dim):
     return model
 
 
+def metricsRNN(predict, actual):
+
+    print("==========================")
+    confusion_metrics = pd.crosstab(actual, predict, rownames=['label'], colnames=['predict'])
+    print(confusion_metrics)
+    print("==========================")
+
 #RNN details
-def detailAccuracyRNN(predict, actual):
+def detailAccuracyRNN(predict, actual, method):
     
     n = len(predict)
     bad_index_list = []
@@ -113,15 +120,27 @@ def detailAccuracyRNN(predict, actual):
         if(predict[i] == actual[i]):
             x[value] = x[value]+1
 
-    for index in range(10):
-        print("==========================")
-        print(index, attack_cat[index], ': ', 'predict: ', x[index], 'total: ', total[index])
-        try:
-            print(x[index]/total[index])
-        except ZeroDivisionError:
-            print(0.0)
+    if(method == 'attack_cat'):
+        for index in range(10):
+            print("==========================")
+            print(index, attack_cat[index], ': ','predict: ', x[index], 'total: ', total[index])
+            try:
+                print("acc: ", x[index]/total[index])
+            except ZeroDivisionError:
+                print("acc: ", 0.0)
+    elif(method == 'label'):
+        for index in range(2):
+            print("==========================")
+            print(index, ': ', 'predict: ', x[index], 'total: ', total[index])
+            try:
+                print("acc: ", x[index]/total[index])
+            except ZeroDivisionError:
+                print("acc: ", 0.0)
+
 
     print("=========================")
+
+    
 
     """for i in range(len(predict)):
         if (actual[i] == 0) & (predict[i] == 0):
