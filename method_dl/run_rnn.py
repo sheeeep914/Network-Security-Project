@@ -26,9 +26,9 @@ def get_bad_srcip(bad_index_list):
 """
 
 if __name__ == "__main__":
-    test_path = "../pcap/sqlmap/sqlmap.csv"
+    #test_path = "../pcap/sqlmap/sqlmap.csv"
     #test_path = "../pcap/Result.csv"
-    #test_path = "../dataset/1_0-1_mix_time.csv"
+    test_path = "../dataset/1_2-10_mix_time.csv"
 
     expected_output = 'attack_cat'
     test_np, testlabel_np, testlabel_list = main.processed_data(test_path, expected_output)
