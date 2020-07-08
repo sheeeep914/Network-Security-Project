@@ -1,17 +1,24 @@
 # 檔案內容
 
 1. ### ./Dataset/
-    - UNSW-NB15 dataset
-    - 命名方式:
+    - **描述: UNSW-NB15 dataset**
+    - 命名方式(依照**是否依照時間順序抓取資料**來決定命名方式)：
+        - **是**: 原始資料為第幾個資料集_起始-終點_label特性(mix/label0/label1)_時間特性(time)
+        ***ps:筆數以10000為單位***
+        *(**ex:** 假定資料來自NB15-1, 從第0筆到第1萬筆, label0, 1混合(mix), 則資料集名稱為: **1_s0-e1_mix_time** )*
+            - 此資料集將使用在**rnn model**
+        - **否**: 原始資料為第幾個資料集_0w(+有幾筆)_1w(+有幾筆)_是否shuffle(yshf/nshf)_時間特性(notime)
+        *(**ex:** 假定資料來自NB15-1, 0,1 各取1萬筆資料(共兩萬筆), 沒把0,1 shuffle, 則資料集名稱為: **1_0w1_1w1_nshf_notime**)*
+            - 此資料集將使用在**dnn model**
    
 2. ### ./method_dl/
-    - 所有跟DL(DNN, RNN)有關的model training, testing
+    - **描述: 所有跟DL(DNN, RNN)有關的model training, testing**
     - main_dnn.py, main_rnn.py: dnn, rnn的主要training/testing執行檔
     - run_dnn.py, run_rnn.py: dnn, rnn的testing執行檔(但run_dnn.py當前不可用)
     - preprocessing.py: 資料前處理，包含選取特徵、one-hot encoding、scaling
     - method_dnn.py, method_rnn.py: dnn/rnn的模型
 3. ### ./pcap/
-    - 自己收集的dataset
+    - **描述: 自己收集的dataset**
     - 子資料夾名稱為收集的方法或攻擊的類別
     - 子資料夾下含該次收集的log檔(已轉成csv)、pcap檔
     - pcap_to_csv.py, pcap_to_csv_class.py: 將上述log檔、pcap檔轉成符合UNSW-NB15格式的dataset
@@ -20,6 +27,10 @@
     - zeek log to csv: https://github.com/geekscrapy/bro2csv
 
 
+---
+# 實驗
+1. ### Model Build
+    - 
 ---
 # 開發流程
 
