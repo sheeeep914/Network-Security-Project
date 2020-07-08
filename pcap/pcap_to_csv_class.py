@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import statistics
 
-log_path = './DDos/'
-filename = 'DDos'
+log_path = './openvas/'
+filename = 'openvas'
 
 def get_pcap_layers(packet):
     counter = 0
