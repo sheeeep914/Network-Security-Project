@@ -42,8 +42,10 @@ def defRNN_cat(data, group_num):
         # rcip'].iloc[i+n-1])
         #indexes_tr.append(data_tr.index[i+n-1])     #i+n-1
 
+    
     X = np.array(X)
     y = np.array(y)
+    print(X.shape)
     #srcip = np.array(srcip)
 
     return X, y
