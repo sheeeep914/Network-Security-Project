@@ -1,3 +1,18 @@
+# 執行方式
+1. ### DNN
+    1. 更改 `main_dnn.py` 裡的 `expected_output` (attack_cat/label)
+    2. `python main_dnn.py`即可同步執行train和test
+2. ### RNN
+    - **Train** 
+    1. 更改 `main_rnn.py` 裡的 `expected_output` (attack_cat/label) 
+    2. 可在 `main_rnn.py` 裡的 `processed_data(datapath, result_opt)` 更改每個rnn input的資料筆數
+    3. 執行 -> `python main_rnn.py` 
+    - **Testing**
+    1. 更改 `run_rnn.py` 裡的 `expected_output` (attack_cat/label) 這裡參數的要和使用的model相同
+    2. 執行 -> `python run_rnn.py` 
+
+---
+
 # 檔案內容
 
 1. ### ./Dataset/
@@ -12,11 +27,12 @@
             - 此資料集將使用在**dnn model**
    
 2. ### ./method_dl/
-    - **描述: 所有跟DL(DNN, RNN)有關的model training, testing**
+    - **描述: 所有與DL(DNN, RNN)有關的model training, testing**
     - main_dnn.py, main_rnn.py: dnn, rnn的主要training/testing執行檔
+    - method_dnn.py, method_rnn.py: dnn/rnn的模型
     - run_dnn.py, run_rnn.py: dnn, rnn的testing執行檔(但run_dnn.py當前不可用)
     - preprocessing.py: 資料前處理，包含選取特徵、one-hot encoding、scaling
-    - method_dnn.py, method_rnn.py: dnn/rnn的模型
+    
 3. ### ./pcap/
     - **描述: 自己收集的dataset**
     - 子資料夾名稱為收集的方法或攻擊的類別
@@ -29,8 +45,33 @@
 
 ---
 # 實驗
-1. ### Model Build
-    - 
+1. ### RNN + 分10種攻擊
+    - 經過preprocessing後，總共挑出**27**個features，且RNN的input為5筆資料當作一組，最後會分成**10**種攻擊，所以model的input layer node為**5 * 27 = 135**，output layer mode為**10**
+    - Classifier of the output layer: RELU
+    - Optimization function: Adam
+    - Loss Objective Function: MSE
+
+    - **Optimum Model Parameter** 
+
+    Learning Rate | Hiding Layer | Batch Size | Epoch | 
+    :----:|:----:|:----:|:----:
+    0.00006 | 100 | 100 | 15
+
+    - **Bi-Directional LSTM Network Architecture** 
+
+    Layer | Dimensions | Activation 
+    :----:|:----:|:----:|
+    Input | 135 | - | 
+    LSTM  | 100 | - | 
+    LSTM  | 100 | - | 
+    Dense | 15  | - | 
+    Dense | 15  | - | 
+    Dense | 10  | RELU |
+
+    - **Result** 
+    
+
+
 ---
 # 開發流程
 

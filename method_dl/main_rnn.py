@@ -96,6 +96,7 @@ def processed_data(datapath, result_opt):
 
     if(result_opt == 'attack_cat'):
         data_np, datalabel_list = method.defRNN_cat(data_df, 10)
+        
         #create an one-hot list for label list
         datalabel_list_oneHot = cat_to_nparr(datalabel_list)
     elif(result_opt == 'label'):  
@@ -125,7 +126,7 @@ if __name__ == "__main__":
 
     
 
-    # simpleRNN(feature_dim, atv, loss)
+    # simpleRNN(feature_dim, atv, loss, output dim)
     if(expected_output == 'label'):
         model = method.simpleRNN(feature_dim, 'relu', 'mse', 2)
     elif(expected_output == 'attack_cat'):
