@@ -4,7 +4,7 @@
     2. `python main_dnn.py`即可同步執行train和test
 2. ### RNN
     - **Train** 
-    1. 更改 `main_rnn.py` 裡的 `expected_output` (attack_cat/label) 
+    1. 更改 `main_rnn.py` 裡的 `expected_output` (attack_cat/label)，來選擇使用binary或multiclass模式
     2. 可在 `main_rnn.py` 裡的 `processed_data(datapath, result_opt)` 更改每個rnn input的資料筆數
     3. 執行 -> `python main_rnn.py` 
     - **Testing**
