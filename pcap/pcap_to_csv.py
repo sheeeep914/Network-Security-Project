@@ -1,5 +1,4 @@
 import scapy.all as sp
-import copy
 import numpy as np
 import pandas as pd
 import statistics
@@ -160,13 +159,12 @@ def fill_tcp_feature(zeek, pcaps, index, direction):
 
 def fill_general_feature(zeek, index, srcip_bytes, dstip_bytes):
     
-    smeansz, dmeansz, Ltime = [], [], []
+    smeansz, dmeansz = [], [], []
     for i, idx in enumerate(index):
 
         if idx == []:
             smeansz.append(0)
             dmeansz.append(0)
-            Ltime.append(0)
             continue
 
         flow = zeek.iloc[i,:]
@@ -237,17 +235,17 @@ def fill_http_feature(zeek, pcaps, index):
         #   place http.log file     #
         #############################
 
-        http = pd.read_csv('./backdoor/http.log.csv')
+        http = pd.read_csv('./openvas/http.log.csv')
     except : 
         for i in range (len(zeek.index)):
             trans_depth.append(0)
             res_len.append(0)
             ct_flw_http_mthd.append(0)
 
-        zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
+    zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
                         ct_flw_http_mthd = pd.Series(ct_flw_http_mthd).values)
 
-        return zeek
+    return zeek
 
         
 
@@ -396,7 +394,7 @@ if __name__ == '__main__':
 
     zeek = pd.read_csv('./openvas/conn.log.csv', low_memory=False)
     zeek, srcip_bytes, dstip_bytes = preprossing(zeek)
-    print(srcip_bytes)
+    #print(srcip_bytes)
 
     #in each flow, get the index of the original packets
     index, direction = get_flow_index(zeek, pcaps)
