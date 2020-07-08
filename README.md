@@ -1,3 +1,26 @@
+# 檔案內容
+
+1. ### ./Dataset/
+    - UNSW-NB15 dataset
+    - 命名方式:
+   
+2. ### ./method_dl/
+    - 所有跟DL(DNN, RNN)有關的model training, testing
+    - main_dnn.py, main_rnn.py: dnn, rnn的主要training/testing執行檔
+    - run_dnn.py, run_rnn.py: dnn, rnn的testing執行檔(但run_dnn.py當前不可用)
+    - preprocessing.py: 資料前處理，包含選取特徵、one-hot encoding、scaling
+    - method_dnn.py, method_rnn.py: dnn/rnn的模型
+3. ### ./pcap/
+    - 自己收集的dataset
+    - 子資料夾名稱為收集的方法或攻擊的類別
+    - 子資料夾下含該次收集的log檔(已轉成csv)、pcap檔
+    - pcap_to_csv.py, pcap_to_csv_class.py: 將上述log檔、pcap檔轉成符合UNSW-NB15格式的dataset
+    
+4. ### 其他
+    - zeek log to csv: https://github.com/geekscrapy/bro2csv
+
+
+---
 # 開發流程
 
 1. 各自clone下來，開新的branch寫。
