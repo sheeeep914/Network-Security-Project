@@ -165,6 +165,7 @@ def fill_general_feature(zeek, index, srcip_bytes, dstip_bytes):
         if idx == []:
             smeansz.append(0)
             dmeansz.append(0)
+
             continue
 
         flow = zeek.iloc[i,:]
@@ -242,10 +243,10 @@ def fill_http_feature(zeek, pcaps, index):
             res_len.append(0)
             ct_flw_http_mthd.append(0)
 
-    zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
+        zeek = zeek.assign(trans_depth = pd.Series(trans_depth).values, res_len = pd.Series(res_len).values,
                         ct_flw_http_mthd = pd.Series(ct_flw_http_mthd).values)
 
-    return zeek
+        return zeek
 
         
 
