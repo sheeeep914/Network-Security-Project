@@ -115,7 +115,7 @@ def processed_data(datapath, result_opt):
 
 if __name__ == "__main__":
 
-    train_path = "../dataset/1_2-10_mix_time.csv"
+    train_path = "../dataset/UNSW_NB15_training-set.csv"
     
     expected_output = 'attack_cat'
     train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
