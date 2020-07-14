@@ -8,6 +8,7 @@ callback function
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import EarlyStopping
+import keras.models as ks
 
 """
 preprocessing
@@ -37,6 +38,7 @@ def init(packets, result_opt):
         packets, attack_cat = prep.seperate_att_lab_catagory(packets)
         #if we want to do get specfic
         packets = prep.get_imp(packets)
+
         return packets, attack_cat
     elif(result_opt == 'label'):
         packets, label = prep.seperate_att_lab_label(packets)
@@ -139,25 +141,24 @@ def processed_data(datapath, result_opt):
     
 
 if __name__ == "__main__":
-    train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
-    test_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
+    train_path = "../dataset/2_0w4_1w4_nshf_notime.csv"
+    test_path = "../dataset/1_1-2_mix_time.csv"
 
-    expected_output = 'label'
+    expected_output = 'attack_cat'
 
     #label depends on expected_output
     train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
     test_np, testlabel_np, testlabel_list = processed_data(test_path, expected_output)
     #print(len(train_attackcat[0]))
 
-    """ pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
-    print(train_df.head()) """
 
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np.shape[1] # how mant features
 
     # simpleDNN(feature_dim, units, atv, loss)
-    #model = method.simpleDNN(feature_dim, 15, 'relu', 'mse')
+    model = method.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
 
     # simpleDNN_dropout(feature_dim, units, atv, loss)
@@ -169,22 +170,22 @@ if __name__ == "__main__":
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='model/dnn_best_lab_10.h5',
+    checkpoint = ModelCheckpoint(filepath='model/dnn_best_cat_10.h5',
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
                                 mode='max')
     earlystopping = EarlyStopping(monitor='accuracy',
-                                patience=6,
+                                patience=10,
                                 verbose=1,
                                 mode='max')
 
-    """ #training
-    model.fit(train_np, trainattcat_np, batch_size=100, epochs=10, callbacks=[
+    #training
+    model.fit(train_np, trainlabel_np, batch_size=100, epochs=50, callbacks=[
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
-    result = model.evaluate(train_np,  trainattcat_np)
+    result = model.evaluate(train_np,  trainlabel_np)
     print("testing accuracy = ", result[1])
 
     #testing_predict(model, testlabel_list, test_srcip) 
@@ -192,14 +193,15 @@ if __name__ == "__main__":
     predictLabel = model.predict_classes(train_np)
     np.set_printoptions(threshold=sys.maxsize)
     #print(predictLabel)
-    method.detailAccuracyDNN(predictLabel, trainattcat_list)
+    method.detailAccuracyDNN(predictLabel, trainlabel_list, expected_output)
     #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list)"""
+    #print(bad_index_list)
 
+    model = ks.load_model('model/dnn_best_cat_10.h5')
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
     
-    predictLabel = model.predict_classes(train_np)
+    predictLabel = model.predict_classes(test_np)
     np.set_printoptions(threshold=sys.maxsize)
 
     method.metricsDNN(predictLabel, testlabel_list)
@@ -207,18 +209,3 @@ if __name__ == "__main__":
     #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
     #print(bad_index_list) 
 
-
-    """
-    bad_srcip_list, temp = [], []
-    for index in bad_index_list:
-        srcip = test_srcip[index]
-
-        if temp.count(srcip) == 0:
-            if test_srcip.count(srcip) >= 50:
-                temp.append(srcip)
-                bad_srcip_list.append(srcip)
-        elif temp.count(srcip) != 0:
-            print("exist before")
-            #have been counted, do nothing
-
-    print(bad_srcip_list) """

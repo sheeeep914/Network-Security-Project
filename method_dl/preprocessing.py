@@ -22,13 +22,13 @@ def seperate_att_lab_catagory(packets):
     # Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode and Worms
     for i,value in enumerate(attack_cat):
 
-        if value == ' Fuzzers':
+        if value == 'Fuzzers':
             attack_cat[i] = 1
         elif value == 'Analysis':
             attack_cat[i]  = 2
         elif value == 'Backdoors':
             attack_cat[i]  = 3
-        elif value == 'Dos':
+        elif value == 'DoS':
             attack_cat[i]  = 4
         elif value == 'Exploits':
             attack_cat[i]  = 5

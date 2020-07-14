@@ -11,7 +11,7 @@ from keras.layers.recurrent import LSTM
 from keras.optimizers import SGD, Adam
 
 attack_cat = ['Normal', 'Fuzzers', 'Analysis',
-'Backdoors', 'Dos', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
+'Backdoors', 'DoS', 'Exploits', 'Generic', 'Reconnaissance', 'Shellcode', 'Worms']
 
 #DNN model
 def simpleDNN(feature_dim, units, atv, loss):
@@ -48,6 +48,8 @@ def simpleDNN_dropout(feature_dim, units, atv, loss, output_dim):
 
 
 def metricsDNN(predict, actual):
+    print(predict.shape)
+    print(actual.shape)
     print("=========================")
     confusion_metrics = pd.crosstab(actual, predict, rownames=['label'], colnames=['predict'])
     print(confusion_metrics)
