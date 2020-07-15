@@ -147,7 +147,7 @@ def info():
 
 
 train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
-test_path = "../dataset/UNSW-NB15_3.csv"
+test_path = "../pcap/openvas/openvas.csv"
 
 expected_output = 'attack_cat'
 used_model = 'model/dnn_cat_selfdef1.h5'
@@ -213,6 +213,7 @@ if __name__ == "__main__":
     print("testing accuracy = ", result[1])
     
     predictLabel = model.predict_classes(test_np)
+    print(predictLabel)
     np.set_printoptions(threshold=sys.maxsize)
 
     method.metricsDNN(predictLabel, testlabel_list)
