@@ -136,15 +136,25 @@ def processed_data(datapath, result_opt):
         #deal with problem of key 'ct_ftp_cmd'
         data_np = prep.np_fillna(data_np)
 
-        return data_np, label_np, label_list, 
+        return data_np, label_np, label_list
 
-    
+def info():
+    print('Basic info:')
+    print('training dataset:', train_path)
+    print('testing dataset: ', test_path)
+    print('model: ', used_model)
+    print('===================================')
+
+
+train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
+test_path = "../dataset/UNSW-NB15_3.csv"
+
+expected_output = 'attack_cat'
+used_model = 'model/dnn_cat_selfdef1.h5'
+
 
 if __name__ == "__main__":
-    train_path = "../dataset/2_0w4_1w4_nshf_notime.csv"
-    test_path = "../dataset/1_1-2_mix_time.csv"
 
-    expected_output = 'attack_cat'
 
     #label depends on expected_output
     train_np, trainlabel_np, trainlabel_list = processed_data(train_path, expected_output)
@@ -167,10 +177,10 @@ if __name__ == "__main__":
     elif(expected_output == 'attack_cat'):
         model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 10)
 
-    # Setting callback functions
+    """# Setting callback functions
     csv_logger = CSVLogger('training.log')
 
-    checkpoint = ModelCheckpoint(filepath='model/dnn_best_cat_10.h5',
+    checkpoint = ModelCheckpoint(filepath=used_model,
                                 verbose=1,
                                 save_best_only=True,
                                 monitor='accuracy',
@@ -195,9 +205,10 @@ if __name__ == "__main__":
     #print(predictLabel)
     method.detailAccuracyDNN(predictLabel, trainlabel_list, expected_output)
     #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list)
+    #print(bad_index_list)"""
 
-    model = ks.load_model('model/dnn_best_cat_10.h5')
+    model = ks.load_model(used_model)
+    print(info())
     result = model.evaluate(test_np,  testlabel_np)
     print("testing accuracy = ", result[1])
     

@@ -6,6 +6,7 @@ Import the Keras libraries and packages
 from keras.models import Sequential
 from keras.utils import np_utils
 from keras.layers import SimpleRNN
+from keras.layers.normalization import BatchNormalization
 from keras.layers.core import Activation, Dense, Dropout
 from keras.layers.recurrent import LSTM
 from keras.optimizers import SGD, Adam
@@ -18,9 +19,11 @@ def simpleDNN(feature_dim, units, atv, loss):
     
     model = Sequential()
     model.add(Dense(input_dim=feature_dim, units=units,
-                    activation = atv)) 
+                    activation = atv))
+    model.add(BatchNormalization())
     for i in range(10):
         model.add(Dense(units=units-i, activation=atv))
+        model.add(BatchNormalization())
 
     model.add(Dense(units=10, activation='softmax'))
     opt = Adam(learning_rate=0.01)
