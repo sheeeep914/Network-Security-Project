@@ -70,6 +70,13 @@
 
     - **Result** 
     
+    
+2. #DNN + 分10種攻擊類別
+    - `method_dl/model/dnn_cat_selfdef1_best.h5`為當前訓練出極好的模型
+  
+    
+
+    
 
 
 ---
@@ -93,6 +100,28 @@
 
 ---
 # 進度
+- **7/09-7/16**
+    - **進度**
+        - [x] 觀察UNSW-NB15 dataset的flow之間、之內特性，看可不可以找到rnn的依據、或不同類別間的差異
+        - [x] 將大資料集套入測試中
+        - [x] 重啟dnn模型
+        
+    - **問題與發現**
+        1. UNSW坑人!!!實際上attack category的名稱和他自己在介紹裡的不一樣((乾，這也是為什麼上次看數量時很多都是0
+        2. 攻擊資料成2-4群出現，且沒有一定規律，推測有可能是他們產攻擊封包的電腦都在同一時間運作。所以推測五個一群的binary rnn才會運作的還不錯，但因為攻擊類別的出現並無規律，所以category rnn才會運作的。而現實的駭客可能不會是這樣操作的，而因為先前察覺大封包順序間沒有關聯，所以想重啟dnn
+        3. 有些資料筆會重複2-4次，不知道是不適又是UNSW的bug
+        4. 肉眼其實觀察不出每個attack category間的差別
+        5. 在訓練dnn時，每次結果不太一樣，推測卡在local optinum, 將Learning rate調高情況沒有好轉
+        6. dnn加上batch normalization
+        7. 訓練到一次很好的模型，存在`dnn_cat_selfdef1_best.h5`
+        
+    - **結果**
+        - 採用`dnn_cat_selfdef1_best.h5`訓練的結果
+        - testing set `UNSW-NB15_2`
+        - 結果
+        - 討論
+
+
 - **4/10-4/17**
     - **預計進度**
         - [x] 用feature inverse回去看pca的重要feature有哪些?\
