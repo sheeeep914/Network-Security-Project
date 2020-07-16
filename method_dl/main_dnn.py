@@ -147,7 +147,7 @@ def info():
 
 
 train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
-test_path = "../pcap/openvas/openvas.csv"
+test_path = "../dataset/UNSW-NB15_2.csv"
 
 expected_output = 'attack_cat'
 used_model = 'model/dnn_cat_selfdef1.h5'
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     elif(expected_output == 'attack_cat'):
         model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 10)
 
-    """# Setting callback functions
+    # Setting callback functions
     csv_logger = CSVLogger('training.log')
 
     checkpoint = ModelCheckpoint(filepath=used_model,
@@ -191,7 +191,7 @@ if __name__ == "__main__":
                                 mode='max')
 
     #training
-    model.fit(train_np, trainlabel_np, batch_size=100, epochs=50, callbacks=[
+    model.fit(train_np, trainlabel_np, batch_size=100, epochs=100, callbacks=[
             earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
@@ -205,7 +205,7 @@ if __name__ == "__main__":
     #print(predictLabel)
     method.detailAccuracyDNN(predictLabel, trainlabel_list, expected_output)
     #bad_index_list = method.detailAccuracyDNN(predictLabel, testattcat_list)
-    #print(bad_index_list)"""
+    #print(bad_index_list)
 
     model = ks.load_model(used_model)
     print(info())
@@ -213,7 +213,7 @@ if __name__ == "__main__":
     print("testing accuracy = ", result[1])
     
     predictLabel = model.predict_classes(test_np)
-    print(predictLabel)
+    #print(predictLabel)
     np.set_printoptions(threshold=sys.maxsize)
 
     method.metricsDNN(predictLabel, testlabel_list)
