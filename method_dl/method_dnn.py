@@ -44,7 +44,7 @@ def simpleDNN_dropout(feature_dim, units, atv, loss, output_dim):
 
     model.add(Dropout(0.2, input_shape=(units-i+1,)))
     model.add(Dense(units=output_dim, activation='softmax'))
-    opt = Adam(learning_rate=0.01)
+    opt = Adam(learning_rate=0.01, decay=1e-4)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
     return model

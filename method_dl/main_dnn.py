@@ -146,11 +146,11 @@ def info():
     print('===================================')
 
 
-train_path = "../dataset/1_0w1_1w1_yshf_notime.csv"
-test_path = "../dataset/UNSW-NB15_2.csv"
+train_path = "../dataset/label7,9.csv"
+test_path = "../dataset/label7.csv"
 
 expected_output = 'attack_cat'
-used_model = 'model/dnn_cat_selfdef1.h5'
+used_model = 'model/dnn_7,9.h5'
 
 
 if __name__ == "__main__":
@@ -186,13 +186,13 @@ if __name__ == "__main__":
                                 monitor='accuracy',
                                 mode='max')
     earlystopping = EarlyStopping(monitor='accuracy',
-                                patience=10,
+                                patience=25,
                                 verbose=1,
                                 mode='max')
 
     #training
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=100, callbacks=[
-            earlystopping, checkpoint, csv_logger], shuffle=True)
+            checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
     result = model.evaluate(train_np,  trainlabel_np)
