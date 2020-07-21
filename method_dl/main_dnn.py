@@ -62,6 +62,22 @@ def label_to_nparr(label_list):
     return label_np
 
 #create np array for label
+def attackcat_to_nparr_specify(label_list):
+
+    label_np = []
+    for i in range (label_list.shape[0]):
+        if(label_list[i] == 5):
+            label_np.append([1, 0, 0, 0])
+        elif(label_list[i] == 6):
+            label_np.append([0, 1, 0, 0])
+        elif(label_list[i] == 7):
+                label_np.append([0, 0, 1, 0])
+        elif(label_list[i] == 8):
+            label_np.append([0, 0, 0, 1])
+        
+    return label_np
+
+#create np array for label
 def attackcat_to_nparr(label_list):
 
     label_np = []
@@ -108,7 +124,7 @@ def processed_data(datapath, result_opt):
         #print("3 ", type(data_df))
 
         #create an one-hot list for label list
-        attcat_list_oneHot = attackcat_to_nparr(attcat_list)
+        attcat_list_oneHot = attackcat_to_nparr_specify(attcat_list)
 
         #turn dataframe and list to np array
         attcat_np, data_np = np.array(attcat_list_oneHot), np.array(data_df_scale)
@@ -146,11 +162,11 @@ def info():
     print('===================================')
 
 
-train_path = "../dataset/label7,9.csv"
-test_path = "../dataset/label7.csv"
+train_path = "../dataset/label5,6,7,8.csv"
+test_path = "../dataset/label5,6,7,8_test.csv"
 
 expected_output = 'attack_cat'
-used_model = 'model/dnn_7,9.h5'
+used_model = 'model/dnn_5,6,7,8.h5'
 
 
 if __name__ == "__main__":
@@ -167,15 +183,13 @@ if __name__ == "__main__":
     dataset_size = train_np.shape[0]  # how many data
     feature_dim = train_np.shape[1] # how mant features
 
-    # simpleDNN(feature_dim, units, atv, loss)
-    model = method.simpleDNN(feature_dim, 15, 'relu', 'mse')
 
 
     # simpleDNN_dropout(feature_dim, units, atv, loss)
     if(expected_output == 'label'):
         model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 2)
     elif(expected_output == 'attack_cat'):
-        model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 10)
+        model = method.simpleDNN_specify(feature_dim, 15, 'relu', 'mse', 10)
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')
@@ -190,6 +204,8 @@ if __name__ == "__main__":
                                 verbose=1,
                                 mode='max')
 
+    print(trainlabel_np.shape)
+    model.summary()
     #training
     model.fit(train_np, trainlabel_np, batch_size=100, epochs=100, callbacks=[
             checkpoint, csv_logger], shuffle=True)

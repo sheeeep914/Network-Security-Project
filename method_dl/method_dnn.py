@@ -26,7 +26,7 @@ def simpleDNN(feature_dim, units, atv, loss):
         model.add(BatchNormalization())
 
     model.add(Dense(units=10, activation='softmax'))
-    opt = Adam(learning_rate=0.01)
+    opt = Adam(learning_rate=0.01, decay=1e-4)
     model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
     return model
@@ -49,6 +49,24 @@ def simpleDNN_dropout(feature_dim, units, atv, loss, output_dim):
 
     return model
 
+#DNN model
+def simpleDNN_specify(feature_dim, units, atv, loss, output_dim):
+    
+    model = Sequential()
+    model.add(Dense(input_dim=feature_dim, units=units,
+                    activation = atv))
+    model.add(BatchNormalization())
+    for i in range(10):
+        model.add(Dense(units=units-i, activation=atv))
+        model.add(BatchNormalization())
+
+    model.add(Dropout(0.2, input_shape=(units-i+1,)))
+    model.add(Dense(units=4, activation='softmax'))
+    opt = Adam(learning_rate=0.01, decay=1e-4)
+    model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
+
+    return model
+
 
 def metricsDNN(predict, actual):
     print(predict.shape)
@@ -64,6 +82,7 @@ def detailAccuracyDNN(predict, actual, method):
     #bad_index_list = []
     total = [0 for i in range(10)]
     x = [0 for i in range(10)]
+    att_accuracy = 0
 
 
     for i, value in enumerate (actual):
@@ -78,9 +97,18 @@ def detailAccuracyDNN(predict, actual, method):
             print("==========================")
             print(index, attack_cat[index], ': ','predict: ', x[index], 'total: ', total[index])
             try:
-                print("acc: ", x[index]/total[index])
+                acc = x[index]/total[index]       
             except ZeroDivisionError:
-                print("acc: ", 0.0)
+                acc = 0.0
+                
+            print("acc: ", acc)
+            rate = total[index]/n
+            att_accuracy = att_accuracy + rate*acc
+        
+        print("=============================")
+        print('attack accuracy: ', att_accuracy)
+
+        
     elif(method == 'label'):
         for index in range(2):
             print("==========================")
