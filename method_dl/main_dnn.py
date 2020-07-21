@@ -124,7 +124,7 @@ def processed_data(datapath, result_opt):
         #print("3 ", type(data_df))
 
         #create an one-hot list for label list
-        attcat_list_oneHot = attackcat_to_nparr_specify(attcat_list)
+        attcat_list_oneHot = attackcat_to_nparr(attcat_list)
 
         #turn dataframe and list to np array
         attcat_np, data_np = np.array(attcat_list_oneHot), np.array(data_df_scale)
@@ -162,11 +162,11 @@ def info():
     print('===================================')
 
 
-train_path = "../dataset/label5,6,7,8.csv"
-test_path = "../dataset/label5,6,7,8_test.csv"
+train_path = "../dataset/1_0w1_1w1_yshf_notime_balance.csv"
+test_path = "../dataset/UNSW-NB15_2.csv"
 
 expected_output = 'attack_cat'
-used_model = 'model/dnn_5,6,7,8.h5'
+used_model = 'model/dnn_selfdef1.h5'
 
 
 if __name__ == "__main__":
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     if(expected_output == 'label'):
         model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 2)
     elif(expected_output == 'attack_cat'):
-        model = method.simpleDNN_specify(feature_dim, 15, 'relu', 'mse', 10)
+        model = method.simpleDNN_dropout(feature_dim, 15, 'relu', 'mse', 10)
 
     # Setting callback functions
     csv_logger = CSVLogger('training.log')

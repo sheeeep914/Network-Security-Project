@@ -91,6 +91,8 @@ def detailAccuracyDNN(predict, actual, method):
     for i, value in enumerate(predict):
         if(predict[i] == actual[i]):
             x[value] = x[value]+1
+    
+    attack_n = n - total[0]
 
     if(method == 'attack_cat'):
         for index in range(10):
@@ -102,8 +104,9 @@ def detailAccuracyDNN(predict, actual, method):
                 acc = 0.0
                 
             print("acc: ", acc)
-            rate = total[index]/n
-            att_accuracy = att_accuracy + rate*acc
+            rate = total[index]/attack_n
+            if index != 0:
+                att_accuracy = att_accuracy + rate*acc
         
         print("=============================")
         print('attack accuracy: ', att_accuracy)
@@ -120,33 +123,3 @@ def detailAccuracyDNN(predict, actual, method):
 
     ("==========================")
     
-
-    """B_G, G_G, G_B, B_B = 0, 0, 0, 0
-    n = len(predict)
-    bad_index_list = []
-
-    for i in range(len(predict)):
-        if (actual[i] == 0) & (predict[i] == 0):
-            G_G = G_G+1
-
-        elif (actual[i] == 0) & (predict[i] == 1):
-            G_B = G_B+1
-
-        elif (actual[i] == 1) & (predict[i] == 0):
-            B_G = B_G+1
-
-        elif (actual[i] == 1) & (predict[i] == 1):
-            B_B = B_B+1
-            #must return its index for the usage in iptable
-            bad_index_list.append(i)
-
-    print("===========================")
-    print("predict right:")
-    print("Good to Good: ", G_G/n)
-    print("Bad to Bad: ", B_B/n)
-    print("===========================")
-    print("predict wrong:")
-    print("Good to Bad: ", G_B/n)
-    print("Bad to Good: ", B_G/n)
-"""
-    #return bad_index_list
