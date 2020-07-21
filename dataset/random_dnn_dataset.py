@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 file_name = 'UNSW-NB15_1.csv'
 path = file_name
@@ -20,6 +21,23 @@ for label in packets['Label']:
 df0 = pd.DataFrame(label0, columns=packets.keys())
 df1 = pd.DataFrame(label1, columns=packets.keys())
 
-df0.to_csv('NUSW40000-label0.csv')
+"""df0.to_csv('NUSW40000-label0.csv')
 df1.to_csv('NUSW40000-label1.csv')
+"""
 
+n0 = len(df0.index)
+n1 = len(df1.index)
+
+
+row1 = random.sample(range(n0), 10000)
+row2 = random.sample(range(n1), 10000)
+
+df = pd.DataFrame(columns = packets.keys())
+
+for index in row1:
+    df = df.append(df0.iloc[index], ignore_index=True)
+
+for index in row2:
+    df = df.append(df1.iloc[index], ignore_index=True)
+
+df.to_csv('UNSW-NB15_1_random(2w).csv')
