@@ -162,11 +162,11 @@ def info():
     print('===================================')
 
 
-train_path = "../dataset/1_0w1_1w1_yshf_notime_balance.csv"
+train_path = "../dataset/UNSW-NB15_1_random(2w).csv"
 test_path = "../dataset/UNSW-NB15_2.csv"
 
 expected_output = 'attack_cat'
-used_model = 'model/dnn_selfdef1.h5'
+used_model = 'model/dnn_selfdef1_random.h5'
 
 
 if __name__ == "__main__":
@@ -200,15 +200,14 @@ if __name__ == "__main__":
                                 monitor='accuracy',
                                 mode='max')
     earlystopping = EarlyStopping(monitor='accuracy',
-                                patience=25,
+                                patience=50,
                                 verbose=1,
                                 mode='max')
 
-    print(trainlabel_np.shape)
-    model.summary()
+    #model.summary()
     #training
-    model.fit(train_np, trainlabel_np, batch_size=100, epochs=100, callbacks=[
-            checkpoint, csv_logger], shuffle=True)
+    model.fit(train_np, trainlabel_np, batch_size=100, epochs=500, callbacks=[
+            earlystopping, checkpoint, csv_logger], shuffle=True)
     #model.fit(train_np, trainlabel_np, batch_size=100, epochs=10, shuffle=True)
 
     result = model.evaluate(train_np,  trainlabel_np)
