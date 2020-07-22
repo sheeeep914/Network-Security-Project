@@ -108,8 +108,8 @@
         - [x] 觀察每類流量的特徵，並看是否有對應在封包上
         - [x] 觀察dataset
         - [x] 訓練出穩定的模型
-        - [] 刪除duplicate
-        - [] confusion metric的類別從數字代表改成英文
+        - [ ] 刪除duplicate
+        - [ ] confusion metric的類別從數字代表改成英文
         
     - **問題與發現**
         1. dnn模型中的optimizer調整初始learning rate與加入decay，並沒辦法穩定模型的weight，若Learnining rate初始是大的話accuracy會一開始就卡住不動，若learning初始一般但加入decay，模型仍會卡在數個不同的accuracy
