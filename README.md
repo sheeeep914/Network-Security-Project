@@ -100,6 +100,24 @@
 
 ---
 # 進度
+- **7/16-7/22**
+    - **進度**
+        - [x] Training資料挑選方法改成隨機
+        - [x] 只做異常的accuracy
+        - [x] 類別7跟9、類別5678做category classification
+        - [x] 觀察每類流量的特徵，並看是否有對應在封包上
+        - [x] 觀察dataset
+        - [x] 訓練出穩定的模型
+        - [] 刪除duplicate
+        - [] confusion metric的類別從數字代表改成英文
+        
+    - **問題與發現**
+        1. dnn模型中的optimizer調整初始learning rate與加入decay，並沒辦法穩定模型的weight，若Learnining rate初始是大的話accuracy會一開始就卡住不動，若learning初始一般但加入decay，模型仍會卡在數個不同的accuracy
+        2. 單獨7跟9、5678的category classification表現不錯
+        3. 以文獻討論7跟9，兩者都是Port scanning
+        4. 以觀察的方法比較7跟9的封包，7大部分是tcp跟udp，少部分http；但9大部分是http。以udp來說，9的封包較7大(sbytes, sload, smeansz)。但http跟tcp，兩者就沒甚麼分別。
+        5. 由上次的基礎，補足數量不足的第八類封包訓練出的結果，其他類別的封包都會有一些分到第8類去，不過也有可能是模型不穩定的問題。
+
 - **7/09-7/16**
     - **進度**
         - [x] 觀察UNSW-NB15 dataset的flow之間、之內特性，看可不可以找到rnn的依據、或不同類別間的差異
