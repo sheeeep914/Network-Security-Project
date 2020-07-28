@@ -76,7 +76,6 @@ def metricsDNN(predict, actual):
     print(confusion_metrics)
     print("=========================")
 
-####
 
 def detailAccuracyDNN(predict, actual, method):
     n = len(predict)
